@@ -13,24 +13,10 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\Handlers">
-      <UniqueIdentifier>{9db0c2f9-df79-407c-ac78-277a94e1806f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Handlers">
-      <UniqueIdentifier>{c70e073e-f1d7-417e-990e-451c7d98b00a}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Handler.cpp">
-      <Filter>Source Files\Handlers</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Handler.h">
-      <Filter>Header Files\Handlers</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

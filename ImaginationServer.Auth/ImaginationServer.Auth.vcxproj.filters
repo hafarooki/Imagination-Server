@@ -13,23 +13,26 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\Handlers">
-      <UniqueIdentifier>{9db2918f-be91-4b7d-ac09-1299b674d701}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Handlers">
-      <UniqueIdentifier>{c827d9ae-021d-404d-8f79-4c8313be4f39}</UniqueIdentifier>
+      <UniqueIdentifier>{10441563-d835-4eee-a2d6-383f114bd92d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Handlers">
+      <UniqueIdentifier>{a631a259-579f-43e3-8d80-f91bb5890aab}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Handler.cpp">
+    <ClCompile Include="HandshakeHandler.cpp">
       <Filter>Source Files\Handlers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Handler.h">
+    <ClInclude Include="HandlerList.h">
+      <Filter>Header Files\Handlers</Filter>
+    </ClInclude>
+    <ClInclude Include="HandshakeHandler.h">
       <Filter>Header Files\Handlers</Filter>
     </ClInclude>
   </ItemGroup>
