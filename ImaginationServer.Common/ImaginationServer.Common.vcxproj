@@ -22,6 +22,7 @@
     <ClInclude Include="Handler.h" />
     <ClInclude Include="Packets.h" />
     <ClInclude Include="Server.h" />
+    <ClInclude Include="User.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Handler.cpp" />
