@@ -8,11 +8,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImaginationServer.Auth", "I
 		{96B721A6-0DCF-488E-A631-79CEFF96C158} = {96B721A6-0DCF-488E-A631-79CEFF96C158}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImaginationServer.Char", "ImaginationServer.Char\ImaginationServer.Char.vcxproj", "{4743DAB7-95F3-4477-A048-90543AA2EE39}"
-	ProjectSection(ProjectDependencies) = postProject
-		{96B721A6-0DCF-488E-A631-79CEFF96C158} = {96B721A6-0DCF-488E-A631-79CEFF96C158}
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImaginationServer.World", "ImaginationServer.World\ImaginationServer.World.vcxproj", "{9B685FC4-F532-4832-9469-55C65B647690}"
 	ProjectSection(ProjectDependencies) = postProject
 		{96B721A6-0DCF-488E-A631-79CEFF96C158} = {96B721A6-0DCF-488E-A631-79CEFF96C158}
@@ -36,14 +31,6 @@ Global
 		{B47F79C4-7BAC-4E5C-9AEF-BA20DB601696}.Release|x64.Build.0 = Release|x64
 		{B47F79C4-7BAC-4E5C-9AEF-BA20DB601696}.Release|x86.ActiveCfg = Release|Win32
 		{B47F79C4-7BAC-4E5C-9AEF-BA20DB601696}.Release|x86.Build.0 = Release|Win32
-		{4743DAB7-95F3-4477-A048-90543AA2EE39}.Debug|x64.ActiveCfg = Debug|x64
-		{4743DAB7-95F3-4477-A048-90543AA2EE39}.Debug|x64.Build.0 = Debug|x64
-		{4743DAB7-95F3-4477-A048-90543AA2EE39}.Debug|x86.ActiveCfg = Debug|Win32
-		{4743DAB7-95F3-4477-A048-90543AA2EE39}.Debug|x86.Build.0 = Debug|Win32
-		{4743DAB7-95F3-4477-A048-90543AA2EE39}.Release|x64.ActiveCfg = Release|x64
-		{4743DAB7-95F3-4477-A048-90543AA2EE39}.Release|x64.Build.0 = Release|x64
-		{4743DAB7-95F3-4477-A048-90543AA2EE39}.Release|x86.ActiveCfg = Release|Win32
-		{4743DAB7-95F3-4477-A048-90543AA2EE39}.Release|x86.Build.0 = Release|Win32
 		{9B685FC4-F532-4832-9469-55C65B647690}.Debug|x64.ActiveCfg = Debug|x64
 		{9B685FC4-F532-4832-9469-55C65B647690}.Debug|x64.Build.0 = Debug|x64
 		{9B685FC4-F532-4832-9469-55C65B647690}.Debug|x86.ActiveCfg = Debug|Win32

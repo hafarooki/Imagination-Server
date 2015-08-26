@@ -9,7 +9,7 @@ public:
 	virtual unsigned char GetType() override
 	{ return AUTH; }
 	virtual unsigned char GetCode() override
-	{ return LOGIN_REQUEST; }
+	{ return MSG_AUTH_LOGIN_REQUEST; }
 
 	explicit AuthHandler(char* address);
 	virtual void Handle(Packet* packet, RakPeerInterface* peer) override;

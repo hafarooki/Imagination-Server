@@ -25,12 +25,17 @@
     <ClInclude Include="PacketData.h" />
     <ClInclude Include="Packets.h" />
     <ClInclude Include="Server.h" />
+    <ClInclude Include="sqlite\sqlite3.h" />
+    <ClInclude Include="sqlite\sqlite3ext.h" />
     <ClInclude Include="User.h" />
+    <ClInclude Include="Map.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Handler.cpp" />
     <ClCompile Include="Packets.cpp" />
     <ClCompile Include="Server.cpp" />
+    <ClCompile Include="sqlite\shell.c" />
+    <ClCompile Include="sqlite\sqlite3.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{96B721A6-0DCF-488E-A631-79CEFF96C158}</ProjectGuid>

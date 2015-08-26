@@ -19,10 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CharacterListHandler.cpp" />
     <ClCompile Include="HandshakeHandler.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CharacterListHandler.h" />
     <ClInclude Include="HandshakeHandler.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
