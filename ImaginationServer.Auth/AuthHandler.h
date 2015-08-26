@@ -2,7 +2,6 @@
 
 #include <Handler.h>
 #include <Packets.h>
-#include <User.h>
 
 class AuthHandler : public Handler
 {

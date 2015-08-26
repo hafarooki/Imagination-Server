@@ -12,11 +12,12 @@ int main(char* args)
 {
 	Server server("Auth");
 	
-	Handler *handshakeHandler = new HandshakeHandler();
-	Handler *authHandler = new AuthHandler();
-	server.AddHandler(handshakeHandler);
-	server.AddHandler(authHandler);
+	HandshakeHandler handshakeHandler;
+	AuthHandler authHandler;
+	server.AddHandler(&handshakeHandler);
+	server.AddHandler(&authHandler);
 	server.Start(SERVER_PORT, MAX_CLIENTS, SERVER_ADDRESS);
 	server.Listen();
+	delete &server;
 	delete &server;
 }

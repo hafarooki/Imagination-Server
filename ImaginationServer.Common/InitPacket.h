@@ -27,8 +27,8 @@ struct InitPacket : PacketData
 		IpString = inet_ntoa(addr);
 	}
 
-	virtual void Serialize(BitStream& output) override
+	virtual void Serialize(BitStream* output) override
 	{
-		output.Write(reinterpret_cast<char*>(this), sizeof(this));
+		output->Write(reinterpret_cast<char*>(this), sizeof(this));
 	}
 };

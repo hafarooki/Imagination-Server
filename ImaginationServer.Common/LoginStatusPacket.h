@@ -68,52 +68,52 @@ struct LoginStatusPacket : PacketData
 		ExtraBytesLength = 324;
 	}
 
-	virtual void Serialize(BitStream &output) override
+	virtual void Serialize(BitStream* output) override
 	{
-		output.Write(LoginStatus);
-		WriteStringToBitStream(TalkLikeAPirate.c_str(), 18, 33, &output);
+		output->Write(LoginStatus);
+		WriteStringToBitStream(TalkLikeAPirate.c_str(), 18, 33, output);
 		for (auto i = 0; i < 7; i++)
 		{
-			WriteStringToBitStream(UnknownString.c_str(), 0, 33, &output);
+			WriteStringToBitStream(UnknownString.c_str(), 0, 33, output);
 		}
-		output.Write(ClientVersion1);
-		output.Write(ClientVersion2);
-		output.Write(ClientVersion3); 
-		WriteStringToBitStream(UserKey.c_str(), 66, 66, &output);
-		WriteStringToBitStream(RedirectIp.c_str(), sizeof(RedirectIp), 33, &output);
-		WriteStringToBitStream(ChatIp.c_str(), sizeof(ChatIp), 33, &output);
-		output.Write(RedirectPort);
-		output.Write(ChatPort);
-		WriteStringToBitStream(AnotherIp.c_str(), sizeof(AnotherIp), 33, &output);
-		WriteStringToBitStream(PossibleGuid.c_str(), 37, 37, &output);
-		output.Write(ZeroShort);
-		output.Write(LocalizationChar);
-		output.Write(FirstLoginSubscription);
-		output.Write(Subscribed);
-		output.Write(ZeroLong);
-		output.Write(ErrorMsgLength);
-		WriteStringToBitStream(ErrorMsg.c_str(), ErrorMsgLength, 1, &output);
-		output.Write(ExtraBytesLength);
-		CreateExtraPacketData(0, 0, 2803442767, &output);
-		CreateExtraPacketData(7, 37381, 2803442767, &output);
-		CreateExtraPacketData(8, 6, 2803442767, &output);
-		CreateExtraPacketData(9, 0, 2803442767, &output);
-		CreateExtraPacketData(10, 0, 2803442767, &output);
-		CreateExtraPacketData(11, 1, 2803442767, &output);
-		CreateExtraPacketData(14, 1, 2803442767, &output);
-		CreateExtraPacketData(15, 0, 2803442767, &output);
-		CreateExtraPacketData(17, 1, 2803442767, &output);
-		CreateExtraPacketData(5, 0, 2803442767, &output);
-		CreateExtraPacketData(6, 1, 2803442767, &output);
-		CreateExtraPacketData(20, 1, 2803442767, &output);
-		CreateExtraPacketData(19, 30854, 2803442767, &output);
-		CreateExtraPacketData(21, 0, 2803442767, &output);
-		CreateExtraPacketData(22, 0, 2803442767, &output);
-		CreateExtraPacketData(23, 4114, 2803442767, &output);
-		CreateExtraPacketData(27, 4114, 2803442767, &output);
-		CreateExtraPacketData(28, 1, 2803442767, &output);
-		CreateExtraPacketData(29, 0, 2803442767, &output);
-		CreateExtraPacketData(30, 30854, 2803442767, &output);
+		output->Write(ClientVersion1);
+		output->Write(ClientVersion2);
+		output->Write(ClientVersion3); 
+		WriteStringToBitStream(UserKey.c_str(), 66, 66, output);
+		WriteStringToBitStream(RedirectIp.c_str(), sizeof(RedirectIp), 33, output);
+		WriteStringToBitStream(ChatIp.c_str(), sizeof(ChatIp), 33, output);
+		output->Write(RedirectPort);
+		output->Write(ChatPort);
+		WriteStringToBitStream(AnotherIp.c_str(), sizeof(AnotherIp), 33, output);
+		WriteStringToBitStream(PossibleGuid.c_str(), 37, 37, output);
+		output->Write(ZeroShort);
+		output->Write(LocalizationChar);
+		output->Write(FirstLoginSubscription);
+		output->Write(Subscribed);
+		output->Write(ZeroLong);
+		output->Write(ErrorMsgLength);
+		WriteStringToBitStream(ErrorMsg.c_str(), ErrorMsgLength, 1, output);
+		output->Write(ExtraBytesLength);
+		CreateExtraPacketData(0, 0, 2803442767, output);
+		CreateExtraPacketData(7, 37381, 2803442767, output);
+		CreateExtraPacketData(8, 6, 2803442767, output);
+		CreateExtraPacketData(9, 0, 2803442767, output);
+		CreateExtraPacketData(10, 0, 2803442767, output);
+		CreateExtraPacketData(11, 1, 2803442767, output);
+		CreateExtraPacketData(14, 1, 2803442767, output);
+		CreateExtraPacketData(15, 0, 2803442767, output);
+		CreateExtraPacketData(17, 1, 2803442767, output);
+		CreateExtraPacketData(5, 0, 2803442767, output);
+		CreateExtraPacketData(6, 1, 2803442767, output);
+		CreateExtraPacketData(20, 1, 2803442767, output);
+		CreateExtraPacketData(19, 30854, 2803442767, output);
+		CreateExtraPacketData(21, 0, 2803442767, output);
+		CreateExtraPacketData(22, 0, 2803442767, output);
+		CreateExtraPacketData(23, 4114, 2803442767, output);
+		CreateExtraPacketData(27, 4114, 2803442767, output);
+		CreateExtraPacketData(28, 1, 2803442767, output);
+		CreateExtraPacketData(29, 0, 2803442767, output);
+		CreateExtraPacketData(30, 30854, 2803442767, output);
 	}
 
 	void CreateExtraPacketData(unsigned long stampId, signed long bracketNum, unsigned long afterNum, BitStream* bitStream) const

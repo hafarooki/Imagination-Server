@@ -18,5 +18,5 @@ public:
 	{
 	}
 
-	virtual void Serialize(BitStream &output) {}
+	virtual void Serialize(BitStream* output) {}
 };
