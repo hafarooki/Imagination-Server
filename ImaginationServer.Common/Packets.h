@@ -101,61 +101,6 @@ enum WorldPacketID : unsigned char
 	CLIENT_STRING_CHECK
 };
 
-struct InitPacket
-{
-	unsigned long VersionId; // The game version
-	unsigned long Unknown1; // Dunno what this is...
-	unsigned long RemoteConnectionType; // This the remote connection type (1 = auth, 4 = other)
-	unsigned long ProcessId; // The process ID of the server
-	unsigned short Unknown2; // Dunno what this is either... it is "FF FF" in hex
-	string IpString; // The IP string of the server (will be changed programmatically)
-
-	InitPacket(bool isAuth)
-	{
-		// Set the variables
-		VersionId = 171022;
-		Unknown1 = 147;
-		RemoteConnectionType = isAuth ? 1 : 4; // Make sure to set this!!!! Determines whether RemoteConnectionType should be 1 or 4
-		ProcessId = 5136;
-		Unknown2 = 65535;
-		IpString = "172.24.8.139";
-	}
-};
-
-struct LoginStatusPacket
-{
-	unsigned char loginStatus; // This is the Connection ID
-	string talkLikeAPirate; // Always is "Talk_Like_A_Pirate", yet 33 bytes long
-	string unknownString; // Have NO idea what this is... Is it relevant?
-
-	unsigned short clientVersion1; // For some reason, the client version
-	unsigned short clientVersion2; // is split up over 3 unsigned shorts
-	unsigned short clientVersion3; // I believe...
-
-	string unknown; // This is 237 bytes long...
-
-	string userKey; // Generated User Key - Should be wstring
-	string redirectIp; // Redirect IP Address
-	string chatIp; // Chat IP Address
-	unsigned short redirectPort; // Redirect Port
-	unsigned short chatPort; // Chat Port
-	string anotherIp; // Another IP Address? 33 bytes long
-	string possibleGuid; // In the form of a UUID (maybe a GUID?)
-	unsigned short zeroShort; // Always 0 for some reason...
-	unsigned char localizationChar[3]; // Can be IT, US, etc... Always seems to end in 0
-	unsigned char firstLoginSubscription; // Check - Is this the first login after subscribing? 
-	unsigned char subscribed; // 0 if subscribed, 1 if not subscribed (for LUNI, always 0)
-	unsigned long long zeroLong; // This is all zeros...
-	unsigned short errorMsgLength; // This is the length of the error msg
-	string ErrorMsg; // This is the error message displayed if connection ID is 0x05. Can be X bytes long (I believe) - Should be wstring
-
-	// Extra bytes
-	unsigned short ExtraBytesLength; // This is the number of bytes left (number of each chunk of extra data = 16 bytes * x chunks + these 4 bytes
-
-	// Initializer
-	LoginStatusPacket()
-	{
-	}
-};
+void WriteStringToBitStream(const char* myString, int stringSize, int maxChars, RakNet::BitStream* output);
 
 void CreatePacketHeader(MessageID messageId, unsigned short connectionType, unsigned long internalPacketId, BitStream* output);

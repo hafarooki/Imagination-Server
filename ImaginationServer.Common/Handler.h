@@ -4,9 +4,13 @@
 class Handler
 {
 public:
-	virtual const unsigned char GetType() { return 0; }
-	virtual const unsigned char GetCode() { return 0; }
-	Handler();
-	~Handler();
-	virtual void Handle(Packet *packet, RakPeerInterface *peer) { }
+	virtual ~Handler()
+	{
+	}
+
+	virtual unsigned char GetType();
+
+	virtual unsigned char GetCode();
+
+	virtual void Handle(Packet* packet, RakPeerInterface* peer);
 };

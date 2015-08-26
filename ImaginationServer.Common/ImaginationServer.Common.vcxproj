@@ -20,6 +20,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Handler.h" />
+    <ClInclude Include="InitPacket.h" />
+    <ClInclude Include="LoginStatusPacket.h" />
+    <ClInclude Include="PacketData.h" />
     <ClInclude Include="Packets.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="User.h" />

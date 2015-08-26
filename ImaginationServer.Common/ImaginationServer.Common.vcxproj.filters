@@ -19,6 +19,9 @@
     <Filter Include="Source Files\Handlers">
       <UniqueIdentifier>{1a1010bc-1ad7-4a7c-ad6b-60da0c9bd0ff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\PacketData">
+      <UniqueIdentifier>{11bbc00a-618e-409b-ad87-88d659f6202c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Handler.h">
@@ -32,6 +35,15 @@
     </ClInclude>
     <ClInclude Include="User.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketData.h">
+      <Filter>Header Files\PacketData</Filter>
+    </ClInclude>
+    <ClInclude Include="InitPacket.h">
+      <Filter>Header Files\PacketData</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginStatusPacket.h">
+      <Filter>Header Files\PacketData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

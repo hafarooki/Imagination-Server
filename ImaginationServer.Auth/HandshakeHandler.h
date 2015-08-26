@@ -6,8 +6,10 @@
 class HandshakeHandler : public Handler
 {
 public:
-	virtual const unsigned char GetType() { return GENERAL; }
-	virtual const unsigned char GetCode() { return VERSION_CONFIRM; }
+	virtual unsigned char GetType() override
+	{ return GENERAL; }
+	virtual unsigned char GetCode() override
+	{ return VERSION_CONFIRM; }
 
-	virtual void Handle(Packet *packet, RakPeerInterface *peer);
+	virtual void Handle(Packet *packet, RakPeerInterface *peer) override;
 };

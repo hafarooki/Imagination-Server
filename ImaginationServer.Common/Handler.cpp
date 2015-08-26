@@ -1,10 +1,10 @@
 #include "Handler.h"
 
-Handler::Handler()
-{
-}
+unsigned char Handler::GetType()
+{ return 0; }
 
+unsigned char Handler::GetCode()
+{ return 0; }
 
-Handler::~Handler()
-{
-}
+void Handler::Handle(Packet* packet, RakPeerInterface* peer)
+{ }

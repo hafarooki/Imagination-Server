@@ -8,13 +8,13 @@ using namespace RakNet;
 #define SERVER_PORT 1001
 #define SERVER_ADDRESS "127.0.0.1"
 
-HandshakeHandler handshakeHandler = HandshakeHandler();
-
 int main(char* args)
 {
 	Server server("Auth");
 	
+	Handler handshakeHandler = HandshakeHandler();
 	server.AddHandler(handshakeHandler);
+	server.AddHandler(AuthHandler());
 	server.Start(SERVER_PORT, MAX_CLIENTS, SERVER_ADDRESS);
 	server.Listen();
 	delete &server;
