@@ -11,5 +11,7 @@ public:
 	virtual unsigned char GetCode() override
 	{ return LOGIN_REQUEST; }
 
+	explicit AuthHandler(char* address);
 	virtual void Handle(Packet* packet, RakPeerInterface* peer) override;
+	char* Address;
 };

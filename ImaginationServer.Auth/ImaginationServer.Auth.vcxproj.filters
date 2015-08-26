@@ -32,9 +32,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HandlerList.h">
-      <Filter>Header Files\Handlers</Filter>
-    </ClInclude>
     <ClInclude Include="HandshakeHandler.h">
       <Filter>Header Files\Handlers</Filter>
     </ClInclude>

@@ -16,11 +16,11 @@
     <Filter Include="Header Files\Handlers">
       <UniqueIdentifier>{9e95a00b-db7d-4081-8303-8bc44dd8ce4f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Handlers">
-      <UniqueIdentifier>{1a1010bc-1ad7-4a7c-ad6b-60da0c9bd0ff}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\PacketData">
       <UniqueIdentifier>{11bbc00a-618e-409b-ad87-88d659f6202c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Handlers">
+      <UniqueIdentifier>{4725d88d-522a-477e-8d40-65a56f71daeb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -47,14 +47,14 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Handler.cpp">
-      <Filter>Source Files\Handlers</Filter>
-    </ClCompile>
     <ClCompile Include="Server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Packets.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Handler.cpp">
+      <Filter>Source Files\Handlers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
