@@ -4,36 +4,36 @@
 
 #include <RakPeerInterface.h>
 #include "Handler.h"
-#include "sqlite/sqlite3.h"
 #include <unordered_map>
 
 using namespace std;
 using namespace RakNet;
+using namespace System::Collections::Generic;
+using namespace System;
 
-class Server
+public ref class Server
 {
-public:
+	static Server^ _instance;
+public:	
+	static void CreateInstance(char* name)
+	{
+		_instance = gcnew Server(name);
+	}
+
+	static Server^ Instance()
+	{
+		return _instance;
+	}
+
 	RakPeerInterface* Peer;
-	unordered_map<unsigned short, Handler*> Handlers;
+	Dictionary<Tuple<char, char>^, Handler^>^ Handlers;
 	char* Name;
-	sqlite3* SQLite;
 
 	explicit Server(char* name);
-	~Server();
 
-	void Start(unsigned short port, int maxConnections, char* address) const;
+	void Start(unsigned short port, int maxConnections, char* address);
+	void Stop();
 
 	void Listen();
-	void AddHandler(Handler* handler);
+	void AddHandler(Handler^ handler);
 };
-
-static Server *Instance;
-
-static Server *ServerInstance(char* name = nullptr)
-{
-	if (!Instance)
-	{
-		Instance = new Server(name);
-	}
-	return Instance;
-}

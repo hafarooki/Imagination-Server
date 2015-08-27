@@ -3,7 +3,7 @@
 #include <Handler.h>
 #include <Packets.h>
 
-class HandshakeHandler : public Handler
+public ref class HandshakeHandler : Handler
 {
 public:
 	virtual unsigned char GetType() override

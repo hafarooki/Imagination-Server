@@ -1,5 +1,3 @@
-// Credit to LUNI for most of this.
-
 #pragma once
 
 #include <iostream>
@@ -217,6 +215,31 @@ enum WorldServerPacketID : unsigned char
 	MSG_CLIENT_UPDATE_FREE_TRIAL_STATUS = 0x41
 };
 
-void WriteStringToBitStream(const char* myString, int stringSize, int maxChars, RakNet::BitStream* output);
+void WriteStringToBitStream(const char* myString, int stringSize, int maxChars, RakNet::BitStream* output)
+{
+	// Write the string to provided BitStream along with the size
+	output->Write(myString, stringSize);
 
-void CreatePacketHeader(MessageID messageId, unsigned short connectionType, unsigned long internalPacketId, BitStream* output);
+	// Check to see if there are any bytes remaining according to user
+	// specification
+	auto remaining = maxChars - stringSize;
+
+	// If so, fill with 0x00
+	for (auto i = 0; i < remaining; i++)
+	{
+		unsigned char zero = 0;
+
+		output->Write(zero);
+	}
+}
+
+static void CreatePacketHeader(MessageID messageId, unsigned short connectionType, unsigned long internalPacketId, BitStream* output)
+{
+	unsigned char unknown1 = 0; // This is an unknown uchar
+
+								// Write data to provided BitStream
+	output->Write(messageId);
+	output->Write(connectionType);
+	output->Write(internalPacketId);
+	output->Write(unknown1);
+}
