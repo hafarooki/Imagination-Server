@@ -11,7 +11,7 @@ public:
 	virtual unsigned char GetCode() override
 	{ return MSG_SERVER_VERSION_CONFIRM; }
 
-	HandshakeHandler(char* address);
+	explicit HandshakeHandler(char* address);
 	virtual void Handle(Packet *packet, RakPeerInterface *peer) override;
 	char* Address;
 };

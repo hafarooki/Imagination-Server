@@ -1,6 +1,7 @@
+#pragma once
+
 #include <RakPeerInterface.h>
 
-#pragma once
 class Handler
 {
 public:
@@ -9,8 +10,7 @@ public:
 	}
 
 	virtual unsigned char GetType();
-
 	virtual unsigned char GetCode();
 
-	virtual void Handle(Packet* packet, RakPeerInterface* peer);
+	virtual void Handle(Packet* packet, RakPeerInterface *peer);
 };

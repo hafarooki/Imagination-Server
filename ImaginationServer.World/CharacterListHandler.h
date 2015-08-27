@@ -15,5 +15,5 @@ public:
 		return MSG_WORLD_CLIENT_CHARACTER_LIST_REQUEST;
 	}
 
-	virtual void Handle(Packet *packet, RakPeerInterface *peer);
+	virtual void Handle(Packet *packet, RakPeerInterface *server) override;
 };

@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
@@ -19,19 +15,20 @@
     <Filter Include="Header Files\PacketData">
       <UniqueIdentifier>{11bbc00a-618e-409b-ad87-88d659f6202c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Handlers">
-      <UniqueIdentifier>{4725d88d-522a-477e-8d40-65a56f71daeb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="SQLite">
       <UniqueIdentifier>{29241f28-9e9b-4442-ac05-5d1996e1e7d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Handlers">
+      <UniqueIdentifier>{4725d88d-522a-477e-8d40-65a56f71daeb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Handler.h">
       <Filter>Header Files\Handlers</Filter>
-    </ClInclude>
-    <ClInclude Include="Server.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Packets.h">
       <Filter>Header Files</Filter>
@@ -57,6 +54,12 @@
     <ClInclude Include="sqlite\sqlite3ext.h">
       <Filter>SQLite</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Server.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Server.cpp">
@@ -74,5 +77,15 @@
     <ClCompile Include="sqlite\sqlite3.c">
       <Filter>SQLite</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ImaginationServer.Common.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Imagination Server Logo.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

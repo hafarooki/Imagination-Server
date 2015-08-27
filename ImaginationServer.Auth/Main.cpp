@@ -1,4 +1,4 @@
-#include <Server.h>
+#include <Server.hpp>
 #include "HandshakeHandler.h"
 #include "AuthHandler.h"
 
@@ -11,13 +11,13 @@ using namespace RakNet;
 
 int main(char* args)
 {
-	Server server("Auth");
+	ServerInstance("Auth");
 	
 	HandshakeHandler handshakeHandler(SERVER_ADDRESS);
 	AuthHandler authHandler(SERVER_ADDRESS);
-	server.AddHandler(&handshakeHandler);
-	server.AddHandler(&authHandler);
-	server.Start(SERVER_PORT, MAX_CLIENTS, SERVER_ADDRESS);
-	server.Listen();
-	delete &server;
+	ServerInstance()->AddHandler(&handshakeHandler);
+	ServerInstance()->AddHandler(&authHandler);
+	ServerInstance()->Start(SERVER_PORT, MAX_CLIENTS, SERVER_ADDRESS);
+	ServerInstance()->Listen();
+	delete ServerInstance();
 }
