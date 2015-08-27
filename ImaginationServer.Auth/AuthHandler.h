@@ -3,7 +3,7 @@
 #include <Handler.h>
 #include <Packets.h>
 
-public ref class AuthHandler : Handler
+class AuthHandler : public Handler
 {
 public:
 	virtual unsigned char GetType() override

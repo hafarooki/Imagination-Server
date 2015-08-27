@@ -2,15 +2,15 @@
 
 #include <RakPeerInterface.h>
 
-public ref class Handler
+class Handler
 {
 public:
 	virtual ~Handler()
 	{
 	}
 
-	virtual unsigned char GetType() { return -1; }
-	virtual unsigned char GetCode() { return -1; }
+	virtual unsigned char GetType();
+	virtual unsigned char GetCode();
 
-	virtual void Handle(Packet* packet, RakPeerInterface *peer) {}
+	virtual void Handle(Packet* packet, RakPeerInterface *peer);
 };

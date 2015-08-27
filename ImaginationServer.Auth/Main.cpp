@@ -11,13 +11,13 @@ using namespace RakNet;
 
 int main(char* args)
 {
-	Server::CreateInstance("Auth");
+	ServerInstance("Auth");
 	
-	HandshakeHandler^ handshakeHandler = gcnew HandshakeHandler(SERVER_ADDRESS);
-	AuthHandler^ authHandler = gcnew AuthHandler(SERVER_ADDRESS);
-	Server::Instance()->AddHandler(handshakeHandler);
-	Server::Instance()->AddHandler(authHandler);
-	Server::Instance()->Start(SERVER_PORT, MAX_CLIENTS, SERVER_ADDRESS);
-	Server::Instance()->Listen();
-	delete Server::Instance();
+	HandshakeHandler handshakeHandler(SERVER_ADDRESS);
+	AuthHandler authHandler(SERVER_ADDRESS);
+	ServerInstance()->AddHandler(&handshakeHandler);
+	ServerInstance()->AddHandler(&authHandler);
+	ServerInstance()->Start(SERVER_PORT, MAX_CLIENTS, SERVER_ADDRESS);
+	ServerInstance()->Listen();
+	delete ServerInstance();
 }
