@@ -1,0 +1,37 @@
+﻿'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Users\Hameed\OneDrive\Games\LEGO Universe\Imagination Server\Debug\ImaginationServer.Auth.exe'. Symbols loaded.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\ntdll.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\kernel32.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\KernelBase.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\ws2_32.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\sechost.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\rpcrt4.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\sspicli.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\cryptbase.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\bcryptprimitives.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\nsi.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\advapi32.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\msvcrt.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\mswsock.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\NapiNSP.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\pnrpnsp.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\nlaapi.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\user32.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\gdi32.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\imm32.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\msctf.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\dnsapi.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\winrnr.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\wshbth.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\IPHLPAPI.DLL'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\winnsi.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\FWPUCLNT.DLL'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\bcrypt.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\rasadhlp.dll'. Cannot find or open the PDB file.
+'ImaginationServer.Auth.exe' (Win32): Loaded 'C:\Windows\SysWOW64\kernel.appcore.dll'. Cannot find or open the PDB file.
+The thread 0x20d0 has exited with code 0 (0x0).
+The thread 0x2d64 has exited with code 0 (0x0).
+The thread 0x20bc has exited with code 0 (0x0).
+The thread 0x3284 has exited with code 0 (0x0).
+The thread 0x1e04 has exited with code 0 (0x0).
+The thread 0x3214 has exited with code 0 (0x0).
+The program '[3292] ImaginationServer.Auth.exe' has exited with code 0 (0x0).
