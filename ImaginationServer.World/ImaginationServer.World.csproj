@@ -4,27 +4,30 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9E791210-0A94-428D-B483-46EB198942E2}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{E2B8D9BD-3CB3-4F21-AB17-DF367A4DA92A}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ImaginationServer.Common</RootNamespace>
-    <AssemblyName>ImaginationServer.Common</AssemblyName>
+    <RootNamespace>ImaginationServer.World</RootNamespace>
+    <AssemblyName>ImaginationServer.World</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\Build\Debug\World\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\Build\Release\World\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -33,21 +36,8 @@
     <ApplicationIcon>Imagination Server Logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="protobuf-net, Version=2.0.0.480, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
-      <HintPath>..\packages\protobuf-net.2.0.0.480\lib\net40\protobuf-net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="StackExchange.Redis, Version=1.0.316.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\StackExchange.Redis.1.0.481\lib\net45\StackExchange.Redis.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="StackExchange.Redis.Extensions.Core, Version=1.1.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\StackExchange.Redis.Extensions.Core.1.1.13.0\lib\net45\StackExchange.Redis.Extensions.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="StackExchange.Redis.Extensions.Protobuf, Version=1.1.9.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\StackExchange.Redis.Extensions.Protobuf.1.1.9.0\lib\net45\StackExchange.Redis.Extensions.Protobuf.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="ImaginationServer.Core">
+      <HintPath>..\Debug\ImaginationServer.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -59,29 +49,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\Account.cs" />
-    <Compile Include="Handlers\PacketHandler.cs" />
-    <Compile Include="Handlers\Server\ConfirmVersionHandler.cs" />
-    <Compile Include="LuClient.cs" />
-    <Compile Include="LuServer.cs" />
-    <Compile Include="PacketEnums.cs" />
-    <Compile Include="Packets\OutgoingPacket.cs" />
-    <Compile Include="Packets\Server\ConfirmVersionOutgoingPacket.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServerId.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ImaginationServer.Core\ImaginationServer.Core.vcxproj">
-      <Project>{b556a656-2380-4e15-9fa9-25d555ae0fcc}</Project>
-      <Name>ImaginationServer.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Imagination Server Logo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ImaginationServer.Common\ImaginationServer.Common.csproj">
+      <Project>{9E791210-0A94-428D-B483-46EB198942E2}</Project>
+      <Name>ImaginationServer.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

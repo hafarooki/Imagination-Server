@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using ImaginationServer.Common.Handlers;
 using ImaginationServer.Common.Handlers.Server;
+using StackExchange.Redis;
+using StackExchange.Redis.Extensions.Core;
+using StackExchange.Redis.Extensions.Protobuf;
 
 namespace ImaginationServer.Common
 {
@@ -11,18 +14,25 @@ namespace ImaginationServer.Common
         public static LuServer CurrentServer { get; private set; }
 
         public Dictionary<string, LuClient> Clients { get; private set; }
-        public Dictionary<Tuple<byte, byte>, PacketHandler> Handlers { get; } 
+        public Dictionary<Tuple<ushort, uint>, PacketHandler> Handlers { get; } 
 
         public ServerId ServerId { get; }
 
+        public StackExchangeRedisCacheClient CacheClient { get; }
+        public ConnectionMultiplexer Multiplexer { get; }
+
         public LuServer(ServerId serverId, int port, int maxConnections, string address) : base(port, maxConnections, address)
         {
+            Console.Title = "Imagination Server - "  + serverId.ToString();
+
             CurrentServer = this;
 
-            Handlers = new Dictionary<Tuple<byte, byte>, PacketHandler>();
+            Handlers = new Dictionary<Tuple<ushort, uint>, PacketHandler>();
             ServerId = serverId;
 
-            Handlers.Add(new Tuple<byte, byte>((byte) PacketEnums.RemoteConnection.Server, (byte) PacketEnums.ServerPacketId.MsgServerVersionConfirm), new ConfirmVersionHandler());
+            Handlers.Add(new Tuple<ushort, uint>((ushort) PacketEnums.RemoteConnection.Server, (uint) PacketEnums.ServerPacketId.MsgServerVersionConfirm), new ConfirmVersionHandler());
+            Multiplexer = ConnectionMultiplexer.Connect("127.0.0.1:1500");
+            CacheClient = new StackExchangeRedisCacheClient(Multiplexer, new ProtobufSerializer());
         }
 
         protected override void OnStart()
@@ -37,15 +47,19 @@ namespace ImaginationServer.Common
 
         protected override void OnReceived(byte[] data, string address)
         {
-            var tuple = new Tuple<byte, byte>(data[1], data[3]);
-
-            if (!Handlers.ContainsKey(tuple))
+            using (var bitStream = new WBitStream(data, true))
             {
-                Console.WriteLine("Unknown packet received! {0}:{1}", data[1], data[3]);
-                return;
-            }
+                bitStream.ReadByte();
+                var tuple = new Tuple<ushort, uint>(bitStream.ReadUShort(), bitStream.ReadULong());
 
-            Handlers[tuple].Handle(data, address);
+                if (!Handlers.ContainsKey(tuple))
+                {
+                    Console.WriteLine("Unknown packet received! {0}:{1}", tuple.Item1, tuple.Item2);
+                    return;
+                }
+
+                Handlers[tuple].Handle(data, address);
+            }
         }
 
         protected override void OnDisconnect(string address)

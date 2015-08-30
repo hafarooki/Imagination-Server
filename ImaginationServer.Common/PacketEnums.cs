@@ -8,25 +8,25 @@ namespace ImaginationServer.Common
 {
     public class PacketEnums
     {
-        public enum RemoteConnection : byte
+        public enum RemoteConnection : usho
         {
             Server = 0x00,
             Auth = 0x01,
             Chat = 0x02,
-            Unkown = 0x03,
+            Unknown = 0x03,
             World = 0x04,
             Client = 0x05
         }
 
         // IDs for all servers
-        public enum ServerPacketId : byte
+        public enum ServerPacketId : uint
         {
             MsgServerVersionConfirm = 0x00,
             MsgServerDisconnectNotify = 0x01,
             MsgServerGeneralNotify = 0x02,
         }
 
-        public enum ChatPacketId : byte
+        public enum ChatPacketId : uint
         {
             MsgChatLoginSessionNotify = 0x00,
             MsgChatGeneralChatMessage = 0x01,
@@ -98,7 +98,7 @@ namespace ImaginationServer.Common
             MsgChatUpdateFreeTrialStatus = 0x43
         }
 
-        public enum ClientAuthPacketId : byte
+        public enum ClientAuthPacketId : uint
         {
             MsgAuthLoginRequest = 0x00,
             MsgAuthLogoutRequest = 0x01,
@@ -108,7 +108,7 @@ namespace ImaginationServer.Common
             MsgAuthRuntimeConfig = 0x05
         }
 
-        public enum ClientWorldPacketId : byte
+        public enum ClientWorldPacketId : uint
         {
             MsgWorldClientValidation = 0x01,
             MsgWorldClientCharacterListRequest = 0x02,
@@ -146,7 +146,7 @@ namespace ImaginationServer.Common
             MsgWorldUgcDownloadFailed = 0x78
         }
 
-        public enum WorldServerPacketId : byte
+        public enum WorldServerPacketId : uint
         {
             MsgClientLoginResponse = 0x00,
             MsgClientLogoutResponse = 0x01,

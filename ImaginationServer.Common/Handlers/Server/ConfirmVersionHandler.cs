@@ -8,7 +8,7 @@ namespace ImaginationServer.Common.Handlers.Server
         {
             using (var bitStream = new WBitStream())
             {
-                var confirmVersionPacket = new ConfirmVersionPacket();
+                var confirmVersionPacket = new ConfirmVersionOutgoingPacket();
                 confirmVersionPacket.Serialize(bitStream);
                 LuServer.CurrentServer.Send(bitStream, WPacketPriority.SystemPriority, WPacketReliability.ReliableOrdered, 0, address, false);
             }

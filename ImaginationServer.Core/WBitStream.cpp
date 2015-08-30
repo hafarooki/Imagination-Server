@@ -8,6 +8,14 @@ WBitStream::WBitStream()
 	Instance = new BitStream();
 }
 
+WBitStream::WBitStream(cli::array<Byte>^ value, bool copyData)
+{
+	const int length = value->Length;
+	unsigned char* pByte;
+	System::Runtime::InteropServices::Marshal::Copy(value, 0, (IntPtr)pByte, length);
+	Instance = new BitStream(pByte, length, copyData);
+}
+
 WBitStream::~WBitStream()
 {
 	delete Instance;
@@ -71,4 +79,53 @@ void WBitStream::MarshalString(String ^ s, wstring& os) {
 		(const wchar_t*)(Marshal::StringToHGlobalUni(s)).ToPointer();
 	os = chars;
 	Marshal::FreeHGlobal(IntPtr((void*)chars));
+}
+
+unsigned char WBitStream::ReadByte()
+{
+	unsigned char value;
+	Instance->Read(value);
+	return value;
+}
+
+unsigned short WBitStream::ReadUShort()
+{
+	unsigned short value;
+	Instance->Read(value);
+	return value;
+}
+
+unsigned long WBitStream::ReadULong()
+{
+	unsigned long value;
+	Instance->Read(value);
+	return value;
+}
+
+unsigned long long WBitStream::ReadULongLong()
+{
+	unsigned long long value;
+	Instance->Read(value);
+	return value;
+}
+
+long WBitStream::ReadLong()
+{
+	long value;
+	Instance->Read(value);
+	return value;
+}
+
+long long WBitStream::ReadLongLong()
+{
+	long long value;
+	Instance->Read(value);
+	return value;
+}
+
+String^ WBitStream::ReadWString()
+{
+	wstring value;
+	Instance->Read(value);
+	return gcnew String(value.c_str());
 }

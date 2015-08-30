@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{790BC5EC-B631-443E-B2ED-8C154E84B52B}</ProjectGuid>
+    <ProjectGuid>{48AA0DB0-86E9-43D0-840D-23BC961E00EA}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ImaginationServer.Auth</RootNamespace>
-    <AssemblyName>ImaginationServer.Auth</AssemblyName>
+    <RootNamespace>ImaginationServer.SingleServer</RootNamespace>
+    <AssemblyName>ImaginationServer.SingleServer</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\Build\Debug\Auth\</OutputPath>
+    <OutputPath>..\Build\Debug\SingleServer\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -27,24 +27,12 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\Build\Release\Auth\</OutputPath>
+    <OutputPath>..\Build\Release\SingleServer\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>Imagination Server Logo.ico</ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>ImaginationServer.Auth.Program</StartupObject>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ImaginationServer.Core">
-      <HintPath>..\Debug\ImaginationServer.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="StackExchange.Redis.Extensions.Core">
-      <HintPath>..\packages\StackExchange.Redis.Extensions.Core.1.1.13.0\lib\net45\StackExchange.Redis.Extensions.Core.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -55,8 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Handlers\Auth\LoginRequestHandler.cs" />
-    <Compile Include="Packets\Auth\LoginRequest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -64,15 +50,15 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ImaginationServer.Common\ImaginationServer.Common.csproj">
-      <Project>{9E791210-0A94-428D-B483-46EB198942E2}</Project>
-      <Name>ImaginationServer.Common</Name>
+    <ProjectReference Include="..\ImaginationServer.Auth\ImaginationServer.Auth.csproj">
+      <Project>{790bc5ec-b631-443e-b2ed-8c154e84b52b}</Project>
+      <Name>ImaginationServer.Auth</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ImaginationServer.World\ImaginationServer.World.csproj">
+      <Project>{e2b8d9bd-3cb3-4f21-ab17-df367a4da92a}</Project>
+      <Name>ImaginationServer.World</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="Imagination Server Logo.ico" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
