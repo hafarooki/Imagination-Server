@@ -23,8 +23,9 @@ void BaseServer::Send(WBitStream^ bitStream, WPacketPriority priority, WPacketRe
 	auto split = systemAddress->Split(':');
 	auto unmanaged = new SystemAddress();
 	unmanaged->SetBinaryAddress((char*)(Marshal::StringToHGlobalAnsi(split[0])).ToPointer());
-	unmanaged->port = (unsigned short)(char*)(Marshal::StringToHGlobalAnsi(split[1])).ToPointer();
+	unmanaged->port = (unsigned short) strtoul((char*)(Marshal::StringToHGlobalAnsi(split[1])).ToPointer(), NULL, 0);
 	_peer->Send(bitStream->Instance, static_cast<PacketPriority>(priority), static_cast<PacketReliability>(reliability), orderingChannel, *unmanaged, broadcast);
+	Console::WriteLine(gcnew String(unmanaged->ToString()));
 	delete unmanaged;
 }
 
@@ -52,15 +53,14 @@ void BaseServer::Start()
 	{
 		packet = _peer->Receive();
 		if (!packet) continue;
-	    auto bytes = gcnew cli::array<unsigned char>(sizeof(packet->data) + 2);
-		Marshal::Copy((IntPtr)packet->data, bytes, 0, sizeof(packet->data));
-		switch(bytes[0])
+		switch(packet->data[0])
 		{
 		case ID_USER_PACKET_ENUM:
-			OnReceived(bytes, gcnew String(packet->systemAddress.ToString()));
+			OnReceived(native_to_managed_array(packet->data, packet->length), packet->length, gcnew String(packet->systemAddress.ToString()));
 			break;
 		case ID_DISCONNECTION_NOTIFICATION:
 		case ID_CONNECTION_LOST:
+			cout << packet->length << endl;
 			OnDisconnect(gcnew String(packet->systemAddress.ToString()));
 			break;
 		case ID_NEW_INCOMING_CONNECTION:
@@ -71,6 +71,23 @@ void BaseServer::Start()
 			break;
 		}
 	}
+}
+
+void BaseServer::SendInitPacket(bool auth, String^ address)
+{
+	auto split = address->Split(':');
+	InitPacket initPacket(auth);
+	auto unmanaged = new SystemAddress();
+	unmanaged->SetBinaryAddress((char*)(Marshal::StringToHGlobalAnsi(split[0])).ToPointer());
+	unmanaged->port = (unsigned short)strtoul((char*)(Marshal::StringToHGlobalAnsi(split[1])).ToPointer(), NULL, 0);
+	BitStream bitStream;
+	bitStream.Write((unsigned char)83);
+	bitStream.Write((unsigned short)0);
+	bitStream.Write((unsigned long)0);
+	bitStream.Write((unsigned char)0);
+	bitStream.Write((char*)&initPacket, sizeof(initPacket));
+	_peer->Send(&bitStream, SYSTEM_PRIORITY, RELIABLE_ORDERED, 0, *unmanaged, false);
+	delete unmanaged;
 }
 
 void BaseServer::Stop()

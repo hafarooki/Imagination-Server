@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using ImaginationServer.Common.Handlers;
 using ImaginationServer.Common.Handlers.Server;
 using StackExchange.Redis;
 using StackExchange.Redis.Extensions.Core;
-using StackExchange.Redis.Extensions.Protobuf;
+using StackExchange.Redis.Extensions.Newtonsoft;
 
 namespace ImaginationServer.Common
 {
@@ -14,7 +16,7 @@ namespace ImaginationServer.Common
         public static LuServer CurrentServer { get; private set; }
 
         public Dictionary<string, LuClient> Clients { get; private set; }
-        public Dictionary<Tuple<ushort, uint>, PacketHandler> Handlers { get; } 
+        public Dictionary<Tuple<ushort, uint>, PacketHandler> Handlers { get; }
 
         public ServerId ServerId { get; }
 
@@ -23,16 +25,16 @@ namespace ImaginationServer.Common
 
         public LuServer(ServerId serverId, int port, int maxConnections, string address) : base(port, maxConnections, address)
         {
-            Console.Title = "Imagination Server - "  + serverId.ToString();
+            Console.Title = "Imagination Server - " + serverId.ToString();
 
             CurrentServer = this;
 
             Handlers = new Dictionary<Tuple<ushort, uint>, PacketHandler>();
             ServerId = serverId;
 
-            Handlers.Add(new Tuple<ushort, uint>((ushort) PacketEnums.RemoteConnection.Server, (uint) PacketEnums.ServerPacketId.MsgServerVersionConfirm), new ConfirmVersionHandler());
-            Multiplexer = ConnectionMultiplexer.Connect("127.0.0.1:1500");
-            CacheClient = new StackExchangeRedisCacheClient(Multiplexer, new ProtobufSerializer());
+            Handlers.Add(new Tuple<ushort, uint>((ushort)PacketEnums.RemoteConnection.Server, (uint)PacketEnums.ServerPacketId.MsgServerVersionConfirm), new ConfirmVersionHandler());
+            Multiplexer = ConnectionMultiplexer.Connect("127.0.0.1:6379");
+            CacheClient = new StackExchangeRedisCacheClient(Multiplexer, new NewtonsoftSerializer());
         }
 
         protected override void OnStart()
@@ -45,20 +47,25 @@ namespace ImaginationServer.Common
             Clients.Clear();
         }
 
-        protected override void OnReceived(byte[] data, string address)
+        protected override void OnReceived(byte[] bytes, uint length, string address)
         {
-            using (var bitStream = new WBitStream(data, true))
+            using (var memoryStream = new MemoryStream(bytes))
             {
-                bitStream.ReadByte();
-                var tuple = new Tuple<ushort, uint>(bitStream.ReadUShort(), bitStream.ReadULong());
-
-                if (!Handlers.ContainsKey(tuple))
+                using (var reader = new BinaryReader(memoryStream, Encoding.Unicode))
                 {
-                    Console.WriteLine("Unknown packet received! {0}:{1}", tuple.Item1, tuple.Item2);
-                    return;
-                }
+                    reader.ReadByte();
+                    var tuple = new Tuple<ushort, uint>(reader.ReadUInt16(), reader.ReadUInt32());
 
-                Handlers[tuple].Handle(data, address);
+                    if (!Handlers.ContainsKey(tuple))
+                    {
+                        Console.WriteLine("Unknown packet received! {0}:{1}", tuple.Item1, tuple.Item2);
+                        return;
+                    }
+
+                    reader.ReadByte();
+
+                    Handlers[tuple].Handle(reader, address);
+                }
             }
         }
 

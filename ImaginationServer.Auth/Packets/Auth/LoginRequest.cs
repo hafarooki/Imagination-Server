@@ -1,4 +1,9 @@
-﻿using ImaginationServer.Common.Packets;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using ImaginationServer.Common.Packets;
 
 namespace ImaginationServer.Auth.Packets.Auth
 {
@@ -7,14 +12,26 @@ namespace ImaginationServer.Auth.Packets.Auth
         public string Username { get; }
         public string Password { get; }
 
-        public LoginRequest(byte[] data) : base(data)
+        public LoginRequest(BinaryReader reader) : base(reader)
         {
-            using (var bitStream = new WBitStream(data, false))
+            var usernameChars = new List<char>();
+            while (true)
             {
-                ClearHeader(bitStream);
-                Username = bitStream.ReadWString();
-                Password = bitStream.ReadWString();
+                var c = reader.ReadChar();
+                if (c == '\0' || usernameChars.Count >= 30) break;
+                usernameChars.Add(c);
             }
+            Username = new string(usernameChars.ToArray());
+            reader.BaseStream.Position = 74; // password starts at 74
+            var passwordChars = new List<char>();
+            while (true)
+            {
+                var c = reader.ReadChar();
+                if (c == '\0') break;
+                passwordChars.Add(c);
+            }
+            Password = new string(passwordChars.ToArray());
+            Console.WriteLine(Username + " sent authentication request.");
         }
     }
 }

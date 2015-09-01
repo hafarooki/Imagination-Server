@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="Handlers\Auth\LoginRequestHandler.cs" />
     <Compile Include="Packets\Auth\LoginRequest.cs" />
+    <Compile Include="Packets\Auth\LoginResponse.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

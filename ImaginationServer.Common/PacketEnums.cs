@@ -8,7 +8,7 @@ namespace ImaginationServer.Common
 {
     public class PacketEnums
     {
-        public enum RemoteConnection : usho
+        public enum RemoteConnection : ushort
         {
             Server = 0x00,
             Auth = 0x01,

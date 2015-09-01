@@ -8,12 +8,9 @@ WBitStream::WBitStream()
 	Instance = new BitStream();
 }
 
-WBitStream::WBitStream(cli::array<Byte>^ value, bool copyData)
+WBitStream::WBitStream(unsigned char* bytes, const int length, bool copyData)
 {
-	const int length = value->Length;
-	unsigned char* pByte;
-	System::Runtime::InteropServices::Marshal::Copy(value, 0, (IntPtr)pByte, length);
-	Instance = new BitStream(pByte, length, copyData);
+	Instance = new BitStream(bytes, length, copyData);
 }
 
 WBitStream::~WBitStream()
@@ -51,10 +48,22 @@ void WBitStream::Write(long long value)
 	Instance->Write(value);
 }
 
+void WBitStream::WriteChars(String^ value)
+{
+	Instance->Write((char*)(void*)Marshal::StringToHGlobalAnsi(value));
+}
+
+void WBitStream::WriteString(String^ value, int maxLength)
+{
+	WriteString(value, value->Length, maxLength);
+}
+
 void WBitStream::WriteString(String^ value, int length, int maxLength)
 {
-	Instance->Write((char*)(void*)Marshal::StringToHGlobalAnsi(value), length);
+	auto chars = (char*)(void*)Marshal::StringToHGlobalAnsi(value);
+	Instance->Write(chars, length);
 	int remaining = maxLength - length;
+	cout << chars << ": " << maxLength <<  " - " << length << " = " << remaining << endl;
 	for (int i = 0; i < remaining; i++) Instance->Write((unsigned char)0);
 }
 
@@ -81,51 +90,51 @@ void WBitStream::MarshalString(String ^ s, wstring& os) {
 	Marshal::FreeHGlobal(IntPtr((void*)chars));
 }
 
-unsigned char WBitStream::ReadByte()
-{
-	unsigned char value;
-	Instance->Read(value);
-	return value;
-}
-
-unsigned short WBitStream::ReadUShort()
-{
-	unsigned short value;
-	Instance->Read(value);
-	return value;
-}
-
-unsigned long WBitStream::ReadULong()
-{
-	unsigned long value;
-	Instance->Read(value);
-	return value;
-}
-
-unsigned long long WBitStream::ReadULongLong()
-{
-	unsigned long long value;
-	Instance->Read(value);
-	return value;
-}
-
-long WBitStream::ReadLong()
-{
-	long value;
-	Instance->Read(value);
-	return value;
-}
-
-long long WBitStream::ReadLongLong()
-{
-	long long value;
-	Instance->Read(value);
-	return value;
-}
-
-String^ WBitStream::ReadWString()
-{
-	wstring value;
-	Instance->Read(value);
-	return gcnew String(value.c_str());
-}
+//unsigned char WBitStream::ReadByte()
+//{
+//	unsigned char value;
+//	Instance->Read(value);
+//	return value;
+//}
+//
+//unsigned short WBitStream::ReadUShort()
+//{
+//	unsigned short value;
+//	Instance->Read(value);
+//	return value;
+//}
+//
+//unsigned long WBitStream::ReadULong()
+//{
+//	unsigned long value;
+//	Instance->Read(value);
+//	return value;
+//}
+//
+//unsigned long long WBitStream::ReadULongLong()
+//{
+//	unsigned long long value;
+//	Instance->Read(value);
+//	return value;
+//}
+//
+//long WBitStream::ReadLong()
+//{
+//	long value;
+//	Instance->Read(value);
+//	return value;
+//}
+//
+//long long WBitStream::ReadLongLong()
+//{
+//	long long value;
+//	Instance->Read(value);
+//	return value;
+//}
+//
+//String^ WBitStream::ReadWString()
+//{
+//	wstring value;
+//	Instance->Read(value);
+//	return gcnew String(value.c_str());
+//}

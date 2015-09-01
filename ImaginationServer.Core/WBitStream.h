@@ -16,7 +16,7 @@ public:
 	BitStream* Instance;
 
 	WBitStream();
-	WBitStream(cli::array<Byte>^ bytes, bool copyData);
+	WBitStream(unsigned char* bytes, const int length, bool copyData);
 	~WBitStream();
 
 	void Write(unsigned char value);
@@ -25,14 +25,16 @@ public:
 	void Write(unsigned long long value);
 	void Write(long value);
 	void Write(long long value);
+	void WriteChars(String^ value);
+	void WriteString(String^ value, int maxLength);
 	void WriteString(String^ value, int length, int maxLength);
 	void WriteWString(String^ value);
 
-	unsigned char ReadByte();
-	unsigned short ReadUShort();
-	unsigned long ReadULong();
-	unsigned long long ReadULongLong();
-	long ReadLong();
-	long long ReadLongLong();
-	String^ ReadWString();
+	//unsigned char ReadByte();
+	//unsigned short ReadUShort();
+	//unsigned long ReadULong();
+	//unsigned long long ReadULongLong();
+	//long ReadLong();
+	//long long ReadLongLong();
+	//String^ ReadWString();
 };

@@ -14,13 +14,14 @@ namespace ImaginationServer.World
             try
             {
                 Console.WriteLine("Starting Imagination Server World");
-                var server = new LuServer(ServerId.Auth, 2003, 1000, "127.0.0.1");
+                var server = new LuServer(ServerId.World, 2006, 1000, "127.0.0.1");
                 Console.WriteLine("->OK");
                 server.Start();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.StackTrace);
+                Console.ReadKey(true);
             }
         }
     }

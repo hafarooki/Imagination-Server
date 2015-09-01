@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -10,6 +11,8 @@ namespace ImaginationServer.Common.Data
         public string Email { get; set; }
         public byte[] Password { get; set; }
         public byte[] Salt { get; set; }
+        public bool Banned { get; set; }
+        public DateTime Created { get; set; }
         public string[] Characters { get; set; }
 
         public static Account Create(string username, string password, string email)
@@ -24,6 +27,8 @@ namespace ImaginationServer.Common.Data
                 Salt = passwordSalt,
                 Password = passwordHash,
                 Email = email,
+                Banned = false,
+                Created = DateTime.Now,
                 Characters = new string[4]
             };
             return account;

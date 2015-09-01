@@ -15,7 +15,7 @@ namespace ImaginationServer.SingleServer
         {
             Console.Title = "Imagination Server";
 
-            
+
 
             var auth = Process.Start(@"..\Auth\ImaginationServer.Auth.exe")?.Id;
             var world = Process.Start(@"..\World\ImaginationServer.World.exe")?.Id;
@@ -41,6 +41,11 @@ namespace ImaginationServer.SingleServer
                         world = Process.Start(@"..\World\ImaginationServer.World.exe")?.Id;
                     }
                 }
+
+                var authProcesses = Process.GetProcessesByName("ImaginationServer.Auth (32 bit)");
+                var worldProcesses = Process.GetProcessesByName("ImaginationServer.World (32 bit)");
+                var processes = authProcesses.Concat(worldProcesses);
+                foreach (var process in processes) process.Kill();
             }).Start();
 
             var seconds = 0M;
@@ -49,13 +54,13 @@ namespace ImaginationServer.SingleServer
             {
                 Console.Clear();
                 var secs = seconds % 60;
-                var minutes = seconds%(60*60);
+                var minutes = seconds % (60 * 60);
                 minutes -= secs;
                 minutes /= 60;
                 var hours = seconds;
                 hours -= minutes * 60;
                 hours -= secs;
-                hours /= 60*60;
+                hours /= 60 * 60;
 
                 Console.WriteLine("Hours run: " + hours);
                 Console.WriteLine("Minutes run: " + minutes);
