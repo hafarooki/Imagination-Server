@@ -57,7 +57,6 @@
   <ItemGroup>
     <Compile Include="Handlers\Auth\LoginRequestHandler.cs" />
     <Compile Include="Packets\Auth\LoginRequest.cs" />
-    <Compile Include="Packets\Auth\LoginResponse.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -65,6 +64,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ImaginationServer.Auth.Packets\ImaginationServer.Auth.Packets.vcxproj">
+      <Project>{424bdc34-9372-4793-9d3d-9df8d9a483fc}</Project>
+      <Name>ImaginationServer.Auth.Packets</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ImaginationServer.Common\ImaginationServer.Common.csproj">
       <Project>{9E791210-0A94-428D-B483-46EB198942E2}</Project>
       <Name>ImaginationServer.Common</Name>

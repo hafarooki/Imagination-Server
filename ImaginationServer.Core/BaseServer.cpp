@@ -25,8 +25,12 @@ void BaseServer::Send(WBitStream^ bitStream, WPacketPriority priority, WPacketRe
 	unmanaged->SetBinaryAddress((char*)(Marshal::StringToHGlobalAnsi(split[0])).ToPointer());
 	unmanaged->port = (unsigned short) strtoul((char*)(Marshal::StringToHGlobalAnsi(split[1])).ToPointer(), NULL, 0);
 	_peer->Send(bitStream->Instance, static_cast<PacketPriority>(priority), static_cast<PacketReliability>(reliability), orderingChannel, *unmanaged, broadcast);
-	Console::WriteLine(gcnew String(unmanaged->ToString()));
 	delete unmanaged;
+}
+
+RakPeerInterface* BaseServer::GetPeer()
+{
+	return _peer;
 }
 
 void BaseServer::Start()

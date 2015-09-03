@@ -1,4 +1,5 @@
 #pragma once
+#pragma make_public(RakPeerInterface)
 
 #include "Stdafx.h"
 #include <RakPeerInterface.h>
@@ -37,6 +38,8 @@ public:
 	void SendInitPacket(bool auth, String^ address);
 	void Start();
 	void Stop();
+
+	RakPeerInterface* GetPeer();
 
 	void Send(WBitStream^ bitStream, WPacketPriority priority, WPacketReliability reliability, char orderingChannel, String^ systemAddress, bool broadcast);
 };

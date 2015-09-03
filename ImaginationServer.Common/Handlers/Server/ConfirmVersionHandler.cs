@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using ImaginationServer.Common.Packets.Server;
 
 namespace ImaginationServer.Common.Handlers.Server
 {

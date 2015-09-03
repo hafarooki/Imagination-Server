@@ -14,7 +14,7 @@ struct LoginStatusPacket : PacketData
 	unsigned short clientVersion2; // is split up over 3 unsigned shorts
 	unsigned short clientVersion3; // I believe...
 
-	string unknown; // This is 237 bytes long...
+	//string unknown; // This is 237 bytes long...
 
 	string userKey; // Generated User Key - Should be wstring
 	string redirectIp; // Redirect IP Address
@@ -43,12 +43,12 @@ struct LoginStatusPacket : PacketData
 		clientVersion1 = 1;
 		clientVersion2 = 10;
 		clientVersion3 = 64;
-		unknown = "_";
+		//unknown = "_";
 		userKey = "0 9 4 e 7 0 1 a c 3 b 5 5 2 0 b 4 7 8 9 5 b 3 1 8 5 7 b f 1 c 3   ";
 		chatIp = ipAddress;
 		chatPort = 2006;
 		anotherIp = ipAddress;
-		possibleGuid = "00000000 - 0000 - 0000 - 0000 - 000000000000";
+		possibleGuid = "00000000-0000-0000-0000-000000000000";
 		zeroShort = 0;
 		localizationChar[0] = 0x55;
 		localizationChar[1] = 0x53;

@@ -2,11 +2,11 @@
 
 namespace ImaginationServer.Common.Packets
 {
-    public abstract class Packet
+    public abstract class OutgoingPacket
     {
         public abstract void Serialize(WBitStream bitStream);
 
-        protected void WriteHeader(WBitStream bitStream, ushort remoteConnection, uint packetId)
+        public void WriteHeader(WBitStream bitStream, ushort remoteConnection, uint packetId)
         {
             bitStream.Write((byte)83);
             bitStream.Write(remoteConnection);

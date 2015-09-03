@@ -55,7 +55,7 @@ namespace ImaginationServer.Auth
                                 if (cmdArgs != null && cmdArgs.Length >= 1)
                                 {
                                     var username = cmdArgs[0];
-                                    if (LuServer.CurrentServer.CacheClient.Exists("accounts" + username.ToLower()))
+                                    if (LuServer.CurrentServer.CacheClient.Exists("accounts:" + username.ToLower()))
                                     {
                                         LuServer.CurrentServer.CacheClient.Remove("accounts:" + username.ToLower());
                                         Console.WriteLine("Success!");
