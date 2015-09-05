@@ -39,6 +39,17 @@
     <Reference Include="ImaginationServer.Core">
       <HintPath>..\Debug\ImaginationServer.Core.dll</HintPath>
     </Reference>
+    <Reference Include="ImaginationServer.World.Packets">
+      <HintPath>..\Debug\ImaginationServer.World.Packets.dll</HintPath>
+    </Reference>
+    <Reference Include="StackExchange.Redis, Version=1.0.316.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StackExchange.Redis.1.0.481\lib\net45\StackExchange.Redis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="StackExchange.Redis.Extensions.Core, Version=1.1.13.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StackExchange.Redis.Extensions.Core.1.1.13.0\lib\net45\StackExchange.Redis.Extensions.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,11 +60,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Handlers\World\CharacterListRequestHandler.cs" />
+    <Compile Include="Handlers\World\ClientCharacterCreateRequestHandler.cs" />
+    <Compile Include="Handlers\World\ClientLoginRequestHandler.cs" />
+    <Compile Include="Handlers\World\ClientValidationHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Imagination Server Logo.ico" />

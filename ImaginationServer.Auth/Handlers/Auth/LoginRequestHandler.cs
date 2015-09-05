@@ -7,7 +7,8 @@ using ImaginationServer.Auth.Packets.Auth;
 using ImaginationServer.Common;
 using ImaginationServer.Common.Data;
 using ImaginationServer.Common.Handlers;
-using ImaginationServerAuthPackets;
+using static System.Console;
+using static ImaginationServerAuthPackets.AuthPackets;
 
 namespace ImaginationServer.Auth.Handlers.Auth
 {
@@ -30,24 +31,45 @@ namespace ImaginationServer.Auth.Handlers.Auth
                 var hash =
                     SHA512.Create()
                         .ComputeHash(Encoding.Unicode.GetBytes(loginRequest.Password).Concat(account.Salt).ToArray());
-                Console.WriteLine(Convert.ToBase64String(account.Password) + ":" + Convert.ToBase64String(hash));
                 if (!account.Password.SequenceEqual(hash)) valid = 0x06;
             }
 
             if (valid == 0x01 &&
                 LuServer.CurrentServer.CacheClient.Get<Account>("accounts:" + loginRequest.Username.ToLower()).Banned)
                 valid = 0x02;
-            var message = "was successful.";
-            if (valid == 0x06) message = "failed: invalid credentials.";
-            if (valid == 0x02) message = "failed: banned.";
-            Console.WriteLine("User login " + message);
 
-            var userKey = new byte[132];
+            WriteLine(LuServer.CurrentServer.CacheClient.Get<Account>("accounts:" + loginRequest.Username.ToLower()).Banned);
+
+            var message = "derp";
+            switch (valid)
+            {
+                case 0x01:
+                    message = "was successful.";
+                    break;
+                case 0x06:
+                    message = "failed: invalid credentials.";
+                    break;
+                case 0x02:
+                    message = "failed: banned.";
+                    break;
+                default:
+                    WriteLine("FATAL: Magically, the valid variable was not 0x01, 0x06, or 0x02! (Like, how is that even possible..?)");
+                    break;
+            }
+
+            WriteLine("User login " + message);
+
+            var userKey = new byte[66];
             using (var rng = new RNGCryptoServiceProvider())
             {
                 rng.GetBytes(userKey);
             }
-            AuthPackets.SendLoginResponse(address, valid, Encoding.Unicode.GetString(userKey));
+
+            if (valid == 0x01)
+            {
+            }
+
+            SendLoginResponse(address, valid, Encoding.ASCII.GetString(userKey));
         }
     }
 }

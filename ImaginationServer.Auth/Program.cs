@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using ImaginationServer.Auth.Handlers.Auth;
 using ImaginationServer.Common;
 using ImaginationServer.Common.Data;
+using Newtonsoft.Json;
+using static System.Console;
 
 namespace ImaginationServer.Auth
 {
@@ -16,15 +18,15 @@ namespace ImaginationServer.Auth
         {
             try
             {
-                Console.WriteLine("Starting Imagination Server Auth");
+                WriteLine("Starting Imagination Server Auth");
                 var server = new LuServer(ServerId.Auth, 1001, 1000, "127.0.0.1");
                 server.Handlers.Add(new Tuple<ushort, uint>((byte)PacketEnums.RemoteConnection.Auth, (byte)PacketEnums.ClientAuthPacketId.MsgAuthLoginRequest), new LoginRequestHandler());
-                Console.WriteLine("->OK");
+                WriteLine("->OK");
                 new Thread(() =>
                 {
                     while (!Environment.HasShutdownStarted)
                     {
-                        var input = Console.ReadLine();
+                        var input = ReadLine();
                         if (string.IsNullOrWhiteSpace(input)) continue;
                         var split = input.Split(new[] { ' ' }, 2);
                         var cmd = split[0].ToLower();
@@ -32,9 +34,29 @@ namespace ImaginationServer.Auth
                         switch (cmd)
                         {
                             case "help":
-                                Console.WriteLine("addaccount <username> <password> <email>");
-                                Console.WriteLine("removeaccount <username>");
-                                Console.WriteLine("accountexists <username>");
+                                WriteLine("addaccount <username> <password> <email>");
+                                WriteLine("removeaccount <username>");
+                                WriteLine("accountexists <username>");
+                                WriteLine("ban <username>");
+                                WriteLine("unban <username>");
+                                WriteLine("printinfo <username>");
+                                break;
+                            case "printinfo":
+                                if (cmdArgs?.Length >= 1)
+                                {
+                                    var username = cmdArgs[0];
+                                    if (!LuServer.CurrentServer.CacheClient.Exists("accounts:" + username.ToLower()))
+                                    {
+                                        WriteLine("User does not exist.");
+                                        continue;
+                                    }
+                                    var account =
+                                        LuServer.CurrentServer.CacheClient.Database.StringGet("accounts:" + username.ToLower());
+                                    WriteLine(account);
+                                    continue;
+                                }
+
+                                WriteLine("Invalid Arguments!");
                                 break;
                             case "addaccount":
                                 if (cmdArgs != null && cmdArgs.Length >= 3)
@@ -45,41 +67,79 @@ namespace ImaginationServer.Auth
 
                                     var account = Account.Create(username, password, email);
                                     LuServer.CurrentServer.CacheClient.Add("accounts:" + username.ToLower(), account);         
-                                    Console.WriteLine("Success!");
+                                    WriteLine("Success!");
                                     continue;
                                 }
 
-                                Console.WriteLine("Invalid Arguments.");
+                                WriteLine("Invalid Arguments.");
+                                break;
+                            case "ban":
+                                if (cmdArgs?.Length >= 1)
+                                {
+                                    var username = cmdArgs[0];
+                                    if (!LuServer.CurrentServer.CacheClient.Exists("accounts:" + username.ToLower()))
+                                    {
+                                        WriteLine("User does not exist.");
+                                        continue;
+                                    }
+                                    var account = LuServer.CurrentServer.CacheClient.Get<Account>("accounts:" + username.ToLower());
+                                    account.Banned = true;
+                                    LuServer.CurrentServer.CacheClient.Remove("accounts:" + account.Username.ToLower());
+                                    LuServer.CurrentServer.CacheClient.Add("accounts:" + account.Username.ToLower(), account);
+                                    WriteLine("Success!");
+                                    continue;
+                                }
+
+                                WriteLine("Invalid Arguments.");
+                                break;
+                            case "unban":
+                                if (cmdArgs?.Length >= 1)
+                                {
+                                    var username = cmdArgs[0];
+                                    if (!LuServer.CurrentServer.CacheClient.Exists("accounts:" + username.ToLower()))
+                                    {
+                                        WriteLine("User does not exist.");
+                                        continue;
+                                    }
+                                    var account = LuServer.CurrentServer.CacheClient.Get<Account>("accounts:" + username.ToLower());
+                                    account.Banned = false;
+                                    LuServer.CurrentServer.CacheClient.Remove("accounts:" + account.Username.ToLower());
+                                    LuServer.CurrentServer.CacheClient.Add("accounts:" + account.Username.ToLower(), account);
+                                    WriteLine("Success!");
+                                    continue;
+                                }
+
+                                WriteLine("Invalid Arguments.");
                                 break;
                             case "removeaccount":
-                                if (cmdArgs != null && cmdArgs.Length >= 1)
+                                if (cmdArgs?.Length >= 1)
                                 {
                                     var username = cmdArgs[0];
                                     if (LuServer.CurrentServer.CacheClient.Exists("accounts:" + username.ToLower()))
                                     {
                                         LuServer.CurrentServer.CacheClient.Remove("accounts:" + username.ToLower());
-                                        Console.WriteLine("Success!");
+                                        WriteLine("Success!");
                                         continue;
                                     }
 
-                                    Console.WriteLine("User does not exist.");
+                                    WriteLine("User does not exist.");
                                     continue;
                                 }
 
-                                Console.WriteLine("Invalid Arguments.");
+                                WriteLine("Invalid Arguments.");
                                 break;
                             case "accountexists":
                                 if (cmdArgs != null && cmdArgs.Length >= 1)
                                 {
                                     var username = cmdArgs[0];
-                                    Console.WriteLine(LuServer.CurrentServer.CacheClient.Exists("accounts:" + username.ToLower()));
+                                    WriteLine(LuServer.CurrentServer.CacheClient.Exists("accounts:" + username.ToLower()));
                                     continue;
                                 }
 
-                                Console.WriteLine("Invalid Arguments.");
+                                WriteLine("Invalid Arguments.");
                                 break;
                             default:
-                                Console.WriteLine("Unknown command.");
+                                WriteLine("Unknown command.");
                                 break;
                         }
                     }
@@ -88,8 +148,8 @@ namespace ImaginationServer.Auth
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
-                Console.ReadKey(true);
+                WriteLine(e.StackTrace);
+                ReadKey(true);
             }
         }
     }

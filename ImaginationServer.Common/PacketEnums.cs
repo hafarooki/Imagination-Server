@@ -110,10 +110,18 @@ namespace ImaginationServer.Common
 
         public enum ClientWorldPacketId : uint
         {
+            /// <summary>
+            /// Session info
+            /// </summary>
             MsgWorldClientValidation = 0x01,
             MsgWorldClientCharacterListRequest = 0x02,
             MsgWorldClientCharacterCreateRequest = 0x03,
-            MsgWorldClientCharacterDeleteRequest = 0x04,
+            /// <summary>
+            /// Character selected
+            /// </summary>
+            MsgWorldClientLoginRequest = 0x04,
+            MsgWorldClientGameMsg = 0x05,
+            MsgWorldClientCharacterDeleteRequest = 0x06,
             MsgWorldClientCharacterRenameRequest = 0x07,
             MsgWorldClientHappyFlowerModeNotify = 0x08,
             MsgWorldClientSlashReloadMap = 0x09,

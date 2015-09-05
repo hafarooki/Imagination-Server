@@ -16,6 +16,7 @@ LoginResponse::LoginResponse(unsigned char success, String^ userKey)
 	ClientVersion3 = 64;
 	Unknown = "_";
 	UserKey = (char*)(Marshal::StringToHGlobalAnsi(userKey)).ToPointer();
+	cout << UserKey << endl;
 	//UserKey = "0 9 4 e 7 0 1 a c 3 b 5 5 2 0 b 4 7 8 9 5 b 3 1 8 5 7 b f 1 c 3   ";
 	ChatIp = "localhost";
 	ChatPort = 2003;

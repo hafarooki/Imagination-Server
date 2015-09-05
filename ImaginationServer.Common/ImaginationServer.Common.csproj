@@ -60,7 +60,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\Account.cs" />
+    <Compile Include="Data\Character.cs" />
+    <Compile Include="Data\Minifig.cs" />
     <Compile Include="DisconnectId.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Handlers\PacketHandler.cs" />
     <Compile Include="Handlers\Server\ConfirmVersionHandler.cs" />
     <Compile Include="LuClient.cs" />
