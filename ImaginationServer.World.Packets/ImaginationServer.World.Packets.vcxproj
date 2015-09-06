@@ -133,6 +133,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Reference Include="StackExchange.Redis.Extensions.Core">
+      <HintPath>..\packages\StackExchange.Redis.Extensions.Core.1.1.13.0\lib\net45\StackExchange.Redis.Extensions.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />

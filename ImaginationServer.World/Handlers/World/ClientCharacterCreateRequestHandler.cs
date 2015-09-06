@@ -1,7 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using ImaginationServer.Common;
 using ImaginationServer.Common.Data;
 using ImaginationServer.Common.Handlers;
+using ImaginationServerWorldPackets;
 
 namespace ImaginationServer.World.Handlers.World
 {
@@ -34,6 +36,7 @@ namespace ImaginationServer.World.Handlers.World
 
             var character = new Character()
             {
+                Id = long.Parse(LuServer.CurrentServer.Multiplexer.GetDatabase().StringGet("LastUserId")),
                 Minifig = new Minifig()
                 {
                     Name = name,
@@ -51,9 +54,16 @@ namespace ImaginationServer.World.Handlers.World
                     ShirtColor = shirtColor,
                     ShirtStyle = shirtStyle
                 },
-                Position = new float[3],
-                Rotation = new float[4]
+                Position = WorldPositions.VentureExplorer,
+                Rotation = new float[4],
+                Owner = client.Username,
+                MapInstance = 0,
+                ZoneId = (ushort) ZoneId.VentureExplorer
             };
+
+            var next = long.Parse(LuServer.CurrentServer.Multiplexer.GetDatabase().StringGet("LastUserId")) + 1;
+            LuServer.CurrentServer.Multiplexer.GetDatabase().KeyDelete("LastUserId");
+            LuServer.CurrentServer.Multiplexer.GetDatabase().StringSet("LastUserId", next);
 
             var responseId = (byte) ((LuServer.CurrentServer.CacheClient.Exists("characters:" + character.Minifig.Name.ToLower())) ? 0x04 : 0x00);
 
@@ -67,11 +77,19 @@ namespace ImaginationServer.World.Handlers.World
                 LuServer.CurrentServer.CacheClient.Add("accounts:" + client.Username.ToLower(), account);
             }
 
+            Console.WriteLine("Got character create request from {0}. Response Code: {1}", client.Username, responseId);
+            
             using (var bitStream = new WBitStream())
             {
+                bitStream.Write((byte) 83);
+                bitStream.Write((ushort)PacketEnums.RemoteConnection.Client);
+                bitStream.Write((uint)PacketEnums.WorldServerPacketId.MsgClientCharacterCreateResponse);
+                bitStream.Write((byte)0);
                 bitStream.Write((responseId));
                 LuServer.CurrentServer.Send(bitStream, WPacketPriority.SystemPriority, WPacketReliability.ReliableOrdered, 0, address, false);
             }
+
+            WorldPackets.SendCharacterListResponse(address, LuServer.CurrentServer.CacheClient.Get<Account>("accounts:" + client.Username));
         }
     }
 }

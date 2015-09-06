@@ -13,9 +13,8 @@ namespace ImaginationServer.World.Handlers.World
         {
             var client = CurrentServer.Clients[address];
             if (!client.Authenticated) return;
-            Console.WriteLine(CurrentServer.Clients[address].Authenticated);
             var account = CurrentServer.CacheClient.Get<Account>("accounts:" + client.Username.ToLower());
-            WorldPackets.SendCharacterListResponse(address, (byte) account.Characters.Count);
+            WorldPackets.SendCharacterListResponse(address, account);
         }
     }
 }

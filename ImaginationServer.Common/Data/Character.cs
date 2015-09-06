@@ -2,8 +2,13 @@
 {
     public class Character
     {
+        public long Id { get; set; }
+
+        public string Owner { get; set; }
         public Minifig Minifig { get; set; }
         public float[] Position { get; set; }
         public float[] Rotation { get; set; }
+        public ushort ZoneId { get; set; }
+        public ushort MapInstance { get; set; }
     }
 }
