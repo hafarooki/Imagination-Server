@@ -33,7 +33,7 @@ void ImaginationServerWorldPackets::WorldPackets::SendCharacterListResponse(Stri
 		}
 		username.resize(66);
 		bitStream.Write((char*)username.data(), sizeof(wchar_t) * username.size() / 2); // Name of character, wstring
-		std::wstring weirdname(L"Mr. Peabody");
+		std::wstring weirdname(L" Player" + std::to_wstring(charId));
 		weirdname.resize(66);
 		bitStream.Write((char*)weirdname.data(), sizeof(wchar_t) * weirdname.size() / 2); // Name that shows up in parentheses in the client (probably for not yet approved custom names?)
 		bitStream.Write((unsigned char)0); // is rejected, bool
@@ -65,10 +65,10 @@ void ImaginationServerWorldPackets::WorldPackets::SendCharacterListResponse(Stri
 		bitStream.Write(character->MapInstance); // (very likely) map instance
 		bitStream.Write((unsigned long)0); // map clone (name from [53-05-00-02] structure)
 		bitStream.Write((unsigned long long)0); // last login or logout timestamp of character in seconds? (xml is “llog” so both could be possible)
-		bitStream.Write((unsigned short)0); // number of items to follow
+		bitStream.Write((unsigned short)1); // number of items to follow
 
 		// equipped item LOTs (order of items doesn’t matter? I think it reads them in order so if we accidentally put 2 shirts the second one will be the one shown.)
-		//bitStream.Write(character->Minifig->ShirtStyle);
+		bitStream.Write(character->Minifig->ShirtStyle);
 
 		charId++;
 	}
