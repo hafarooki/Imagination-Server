@@ -18,6 +18,7 @@ namespace ImaginationServer.Auth.Handlers.Auth
         public override void Handle(BinaryReader reader, string address)
         {
             var loginRequest = new LoginRequest(reader);
+            WriteLine($"{loginRequest.Username} sent authentication request.");
 
             byte valid = 0x01;
             if (!LuServer.CurrentServer.CacheClient.Exists("accounts:" + loginRequest.Username.ToLower()))
@@ -36,11 +37,8 @@ namespace ImaginationServer.Auth.Handlers.Auth
             }
 
             if (valid == 0x01 &&
-                LuServer.CurrentServer.CacheClient.Get<Account>("accounts:" + loginRequest.Username.ToLower()).Banned)
+                LuServer.CurrentServer.CacheClient.Get<Account>($"accounts:{loginRequest.Username.ToLower()}").Banned)
                 valid = 0x02;
-
-            WriteLine(
-                LuServer.CurrentServer.CacheClient.Get<Account>("accounts:" + loginRequest.Username.ToLower()).Banned);
 
             var message = "derp";
             switch (valid)
@@ -71,7 +69,7 @@ namespace ImaginationServer.Auth.Handlers.Auth
         }
 
         private string RandomString(int length,
-            string allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ")
+            string allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
         {
             if (length < 0) throw new ArgumentOutOfRangeException(nameof(length), "length cannot be less than zero.");
             if (string.IsNullOrEmpty(allowedChars)) throw new ArgumentException("allowedChars may not be empty.");

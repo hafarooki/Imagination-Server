@@ -34,10 +34,10 @@ namespace ImaginationServer.World.Handlers.World
             var eyes = reader.ReadUInt32();
             var mouth = reader.ReadUInt32();
 
-            var character = new Character()
+            var character = new Character
             {
-                Id = long.Parse(LuServer.CurrentServer.Multiplexer.GetDatabase().StringGet("LastUserId")),
-                Minifig = new Minifig()
+                Id = ulong.Parse(LuServer.CurrentServer.Multiplexer.GetDatabase().StringGet("LastUserId")),
+                Minifig = new Minifig
                 {
                     Name = name,
                     Eyebrows = eyebrows,
@@ -61,7 +61,7 @@ namespace ImaginationServer.World.Handlers.World
                 ZoneId = (ushort) ZoneId.VentureExplorer
             };
 
-            var next = long.Parse(LuServer.CurrentServer.Multiplexer.GetDatabase().StringGet("LastUserId")) + 1;
+            var next = ulong.Parse(LuServer.CurrentServer.Multiplexer.GetDatabase().StringGet("LastUserId")) + 1;
             LuServer.CurrentServer.Multiplexer.GetDatabase().KeyDelete("LastUserId");
             LuServer.CurrentServer.Multiplexer.GetDatabase().StringSet("LastUserId", next);
 
@@ -89,7 +89,7 @@ namespace ImaginationServer.World.Handlers.World
                 LuServer.CurrentServer.Send(bitStream, WPacketPriority.SystemPriority, WPacketReliability.ReliableOrdered, 0, address, false);
             }
 
-            WorldPackets.SendCharacterListResponse(address, LuServer.CurrentServer.CacheClient.Get<Account>("accounts:" + client.Username));
+            WorldPackets.SendCharacterListResponse(address, LuServer.CurrentServer.CacheClient.Get<Account>("accounts:" + client.Username.ToLower()));
         }
     }
 }

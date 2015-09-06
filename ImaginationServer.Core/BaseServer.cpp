@@ -53,7 +53,7 @@ void BaseServer::Start()
 	OnStart();
 	Packet *packet;
 
-	while(1)
+	while(!Environment::HasShutdownStarted)
 	{
 		packet = _peer->Receive();
 		if (!packet) continue;

@@ -15,7 +15,6 @@ namespace ImaginationServer.Auth.Packets.Auth
             Username = reader.ReadWString(66);
             reader.BaseStream.Position = 74; // password starts at 74
             Password = reader.ReadWString(66);
-            WriteLine("{0} sent authentication request.", Username);
         }
     }
 }

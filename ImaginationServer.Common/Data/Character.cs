@@ -2,7 +2,7 @@
 {
     public class Character
     {
-        public long Id { get; set; }
+        public ulong Id { get; set; }
 
         public string Owner { get; set; }
         public Minifig Minifig { get; set; }
