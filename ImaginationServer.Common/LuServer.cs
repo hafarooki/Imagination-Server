@@ -7,6 +7,8 @@ using ImaginationServer.Common.Handlers.Server;
 using StackExchange.Redis;
 using StackExchange.Redis.Extensions.Core;
 using StackExchange.Redis.Extensions.Newtonsoft;
+using static ImaginationServer.Common.PacketEnums;
+using static ImaginationServer.Common.PacketEnums.ServerPacketId;
 
 namespace ImaginationServer.Common
 {
@@ -32,7 +34,7 @@ namespace ImaginationServer.Common
             Handlers = new Dictionary<Tuple<ushort, uint>, PacketHandler>();
             ServerId = serverId;
 
-            Handlers.Add(new Tuple<ushort, uint>((ushort)PacketEnums.RemoteConnection.Server, (uint)PacketEnums.ServerPacketId.MsgServerVersionConfirm), new ConfirmVersionHandler());
+            AddHandler((ushort)RemoteConnection.Server, (uint)MsgServerVersionConfirm, new ConfirmVersionHandler());
             Multiplexer = ConnectionMultiplexer.Connect("127.0.0.1:6379");
             CacheClient = new StackExchangeRedisCacheClient(Multiplexer, new NewtonsoftSerializer());
         }
@@ -79,6 +81,11 @@ namespace ImaginationServer.Common
         {
             Clients[address] = new LuClient(address);
             Console.WriteLine("Client of IP {0} joined.", address);
+        }
+
+        public void AddHandler(ushort remoteConnection, uint packetCode, PacketHandler handler)
+        {
+            Handlers.Add(new Tuple<ushort, uint>(remoteConnection, packetCode), handler);
         }
     }
 }

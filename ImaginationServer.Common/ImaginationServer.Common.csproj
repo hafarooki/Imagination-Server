@@ -76,17 +76,17 @@
     <Compile Include="ZoneId.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ImaginationServer.Core\ImaginationServer.Core.vcxproj">
-      <Project>{b556a656-2380-4e15-9fa9-25d555ae0fcc}</Project>
-      <Name>ImaginationServer.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Imagination Server Logo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ImaginationServer.Core\ImaginationServer.Core.vcxproj">
+      <Project>{b556a656-2380-4e15-9fa9-25d555ae0fcc}</Project>
+      <Name>ImaginationServer.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

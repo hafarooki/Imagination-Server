@@ -5,6 +5,8 @@ using ImaginationServer.Auth.Handlers.Auth;
 using ImaginationServer.Common;
 using ImaginationServer.Common.Data;
 using static System.Console;
+using static ImaginationServer.Common.PacketEnums;
+using static ImaginationServer.Common.PacketEnums.ClientAuthPacketId;
 
 namespace ImaginationServer.Auth
 {
@@ -19,9 +21,7 @@ namespace ImaginationServer.Auth
             {
                 WriteLine("Starting Imagination Server Auth");
                 Server = new LuServer(ServerId.Auth, 1001, 1000, "127.0.0.1");
-                Server.Handlers.Add(
-                    new Tuple<ushort, uint>((byte) PacketEnums.RemoteConnection.Auth,
-                        (byte) PacketEnums.ClientAuthPacketId.MsgAuthLoginRequest), new LoginRequestHandler());
+                Server.AddHandler((byte) RemoteConnection.Auth, (byte) MsgAuthLoginRequest, new LoginRequestHandler());
                 if (!Server.Multiplexer.GetDatabase().KeyExists("LastUserId"))
                 {
                     Server.Multiplexer.GetDatabase().StringSet("LastUserId", 1152921504606846994);

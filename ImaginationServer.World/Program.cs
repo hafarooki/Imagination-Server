@@ -1,6 +1,8 @@
 ﻿using System;
 using ImaginationServer.Common;
 using ImaginationServer.World.Handlers.World;
+using static ImaginationServer.Common.PacketEnums;
+using static ImaginationServer.Common.PacketEnums.ClientWorldPacketId;
 
 namespace ImaginationServer.World
 {
@@ -34,24 +36,13 @@ namespace ImaginationServer.World
                 var server = new LuServer(ServerId.World,
                     type.HasFlag(ServerId.Character) ? 2006 : 2006 + (int) (ZoneId)Enum.Parse(typeof (ZoneId), args[0]), 1000,
                     "127.0.0.1");
-                server.Handlers.Add(
-                    new Tuple<ushort, uint>((ushort) PacketEnums.RemoteConnection.World,
-                        (uint) PacketEnums.ClientWorldPacketId.MsgWorldClientValidation), new ClientValidationHandler());
-                server.Handlers.Add(
-                    new Tuple<ushort, uint>((ushort) PacketEnums.RemoteConnection.World,
-                        (uint) PacketEnums.ClientWorldPacketId.MsgWorldClientLoginRequest),
-                    new ClientLoginRequestHandler());
+                server.AddHandler((ushort) RemoteConnection.World, (uint) MsgWorldClientValidation, new ClientValidationHandler());
+                server.AddHandler((ushort) RemoteConnection.World, (uint) MsgWorldClientLoginRequest, new ClientLoginRequestHandler());
 
                 if (type.HasFlag(ServerId.Character))
                 {
-                    server.Handlers.Add(
-                        new Tuple<ushort, uint>((ushort) PacketEnums.RemoteConnection.World,
-                            (uint) PacketEnums.ClientWorldPacketId.MsgWorldClientCharacterListRequest),
-                        new CharacterListRequestHandler());
-                    server.Handlers.Add(
-                        new Tuple<ushort, uint>((ushort) PacketEnums.RemoteConnection.World,
-                            (uint) PacketEnums.ClientWorldPacketId.MsgWorldClientCharacterCreateRequest),
-                        new ClientCharacterCreateRequestHandler());
+                    server.AddHandler((ushort) RemoteConnection.World, (uint) MsgWorldClientCharacterListRequest, new CharacterListRequestHandler());
+                    server.AddHandler((ushort) RemoteConnection.World, (uint) MsgWorldClientCharacterCreateRequest, new ClientCharacterCreateRequestHandler());
                 }
                 Console.WriteLine("->OK");
                 server.Start();
