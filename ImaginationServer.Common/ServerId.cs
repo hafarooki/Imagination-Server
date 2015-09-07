@@ -7,6 +7,8 @@ namespace ImaginationServer.Common
     {
         Auth = 0x01,
         Chat = 0x02,
-        World = 0x04
+        World = 0x04,
+        Character = 0x08,
+        VentureExplorer = 0x16
     }
 }

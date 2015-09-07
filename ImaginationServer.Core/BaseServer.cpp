@@ -64,7 +64,6 @@ void BaseServer::Start()
 			break;
 		case ID_DISCONNECTION_NOTIFICATION:
 		case ID_CONNECTION_LOST:
-			cout << packet->length << endl;
 			OnDisconnect(gcnew String(packet->systemAddress.ToString()));
 			break;
 		case ID_NEW_INCOMING_CONNECTION:

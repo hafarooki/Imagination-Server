@@ -15,37 +15,54 @@ namespace ImaginationServer.SingleServer
         {
             Console.Title = "Imagination Server";
 
-
-
-            var auth = Process.Start(@"..\Auth\ImaginationServer.Auth.exe")?.Id;
-            var world = Process.Start(@"..\World\ImaginationServer.World.exe")?.Id;
-
             new Thread(() =>
             {
+                var auth = -1;
+                var character = -1;
+                var venture = -1;
+
                 while (!Environment.HasShutdownStarted)
                 {
                     try
                     {
-                        Process.GetProcessById(auth.Value);
+                        Process.GetProcessById(auth);
                     }
                     catch
                     {
-                        auth = Process.Start(@"..\Auth\ImaginationServer.Auth.exe")?.Id;
+                        var id = Process.Start(@"..\Auth\ImaginationServer.Auth.exe")?.Id;
+                        if (id != null)
+                            auth = (int)id;
                     }
                     try
                     {
-                        Process.GetProcessById(world.Value);
+                        Process.GetProcessById(character);
                     }
                     catch
                     {
-                        world = Process.Start(@"..\World\ImaginationServer.World.exe")?.Id;
+                        var id = Process.Start(@"..\World\ImaginationServer.World.exe", "Character")?.Id;
+                        if (id != null)
+                            character = (int)id;
                     }
+                    try
+                    {
+                        Process.GetProcessById(venture);
+                    }
+                    catch
+                    {
+                        var id = Process.Start(@"..\World\ImaginationServer.World.exe", "VentureExplorer")?.Id;
+                        if (id != null)
+                            venture = (int)id;
+                    }
+
+                    Thread.Sleep(250);
                 }
 
-                var authProcesses = Process.GetProcessesByName("ImaginationServer.Auth (32 bit)");
-                var worldProcesses = Process.GetProcessesByName("ImaginationServer.World (32 bit)");
-                var processes = authProcesses.Concat(worldProcesses);
-                foreach (var process in processes) process.Kill();
+                var authProcess = Process.GetProcessById(auth);
+                var characterProcess = Process.GetProcessById(character);
+                var ventureProcess = Process.GetProcessById(venture);
+                authProcess.Kill();
+                characterProcess.Kill();
+                ventureProcess.Kill();
             }).Start();
 
             var seconds = 0M;
