@@ -1,17 +1,23 @@
 #pragma once
 #pragma make_public(RakPeerInterface)
+#pragma make_public(ReplicaManager)
 
 #include "Stdafx.h"
 #include <RakPeerInterface.h>
 #include <iostream>
 #include "WBitStream.h"
 #include "WPacketPriority.h"
+#include "LuReplicaManager.h"
+#include <NetworkIDManager.h>
+#include "LuNetworkIdManager.h"
 
 using namespace RakNet;
 using namespace System;
 
 public ref class BaseServer abstract
 {
+	bool _terminate;
+
 	RakPeerInterface *_peer;
 
 	int _port;
@@ -35,6 +41,9 @@ protected:
 	virtual void OnConnect(String^ address) = 0;
 
 public:
+	LuReplicaManager^ RM;
+	LuNetworkIdManager^ NetworkIdManager;
+
 	void SendInitPacket(bool auth, String^ address);
 	void Start();
 	void Stop();

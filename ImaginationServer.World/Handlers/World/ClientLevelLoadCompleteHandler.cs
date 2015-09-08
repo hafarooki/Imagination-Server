@@ -11,6 +11,8 @@ namespace ImaginationServer.World.Handlers.World
             var zone = (ZoneId) reader.ReadUInt16();
             var instance = reader.ReadUInt16();
             var clone = reader.ReadInt32();
+
+            // Not really sure what exactly to do here? Probably time to set up some RM...
         }
     }
 }

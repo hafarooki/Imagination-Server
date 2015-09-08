@@ -9,14 +9,13 @@ namespace ImaginationServer.Common.Data
     public class Account
     {
         public string Username { get; set; }
-        public string Email { get; set; }
         public byte[] Password { get; set; }
         public byte[] Salt { get; set; }
         public bool Banned { get; set; }
         public DateTime Created { get; set; }
         public List<string> Characters { get; set; }
 
-        public static Account Create(string username, string password, string email)
+        public static Account Create(string username, string password)
         {
             var passwordSalt = new byte[64];
             new RNGCryptoServiceProvider().GetBytes(passwordSalt);
@@ -27,7 +26,6 @@ namespace ImaginationServer.Common.Data
                 Username = username,
                 Salt = passwordSalt,
                 Password = passwordHash,
-                Email = email,
                 Banned = false,
                 Created = DateTime.Now,
                 Characters = new List<string>(4)

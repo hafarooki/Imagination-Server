@@ -32,8 +32,6 @@ namespace ImaginationServer.World
                     return;
                 }
 
-                Console.WriteLine("Starting Imagination Server World {0}", type);
-
                 type = type | ServerId.World;
                 var server = new LuServer(type,
                     type.HasFlag(ServerId.Character) ? 2006 : 2006 + (int) (Zone = (ZoneId)Enum.Parse(typeof (ZoneId), args[0])), 1000,
@@ -47,6 +45,8 @@ namespace ImaginationServer.World
                         new CharacterListRequestHandler());
                     server.AddHandler((ushort) RemoteConnection.World, (uint) MsgWorldClientCharacterCreateRequest,
                         new ClientCharacterCreateRequestHandler());
+                    server.AddHandler((ushort) RemoteConnection.World, (uint) MsgWorldClientCharacterDeleteRequest,
+                        new ClientCharacterDeleteRequestHandler());
                 }
                 else
                 {

@@ -1,44 +1,49 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using ImaginationServer.Common;
-using ImaginationServer.Common.Data;
 using ImaginationServer.Common.Handlers;
+using static ImaginationServer.Common.PacketEnums;
+using static ImaginationServer.Common.PacketEnums.WorldServerPacketId;
 
 namespace ImaginationServer.World.Handlers.World
 {
-    class ClientValidationHandler : PacketHandler
+    internal class ClientValidationHandler : PacketHandler
     {
         public override void Handle(BinaryReader reader, string address)
         {
-            var username = reader.ReadWString(66);
-            reader.BaseStream.Position = 74;
-            var userKey = reader.ReadWString(66);
+            var username = reader.ReadWString(66); // Read the username
+            reader.BaseStream.Position = 74; // Set the position to 74, to get the user key.
+            var userKey = reader.ReadWString(66); // Read the user key
 
+            // Set the user to authenticated
             LuServer.CurrentServer.Clients[address].Authenticated = true;
             LuServer.CurrentServer.Clients[address].Username = username;
-            // TODO: Verify user key
+            // TODO: Verify user key (Maybe it should expire, instead of just being stored? Otherwise, I'd just cache it.)
 
-            if (LuServer.CurrentServer.ServerId.HasFlag(ServerId.Character)) return;
+            if (LuServer.CurrentServer.ServerId.HasFlag(ServerId.Character))
+                return; // Character server doesn't need to do any more.
 
             var characterName =
                 LuServer.CurrentServer.CacheClient.Database.StringGet("cache:selectedcharacter:" + username.ToLower());
-            var character = LuServer.CurrentServer.CacheClient.Get<Character>("characters:" + characterName);
+                // Get the selected character.
+            var character = DbUtils.GetCharacter(characterName);
 
-            using (var bitStream = new WBitStream())
+            using (var bitStream = new WBitStream()) // Create the zone load packet
             {
-                bitStream.Write((byte)83);
-                bitStream.Write((ushort)5);
-                bitStream.Write((uint)PacketEnums.WorldServerPacketId.MsgClientLoadStaticZone);
-                bitStream.Write((byte)0);
+                bitStream.WriteHeader(RemoteConnection.Client, (uint) MsgClientLoadStaticZone);
+                    // Always write the header.
 
-                bitStream.Write(character.ZoneId);
-                bitStream.Write(character.MapInstance);
-                bitStream.Write(character.MapClone);
-                for(var i = 0; i < 4; i++) bitStream.Write(ZoneChecksums.Checksums[(ZoneId) character.ZoneId][i]);
-                for(var i = 0; i < 3; i++) bitStream.Write(character.Position[i]);
-                bitStream.Write((uint)0);
+                bitStream.Write(character.ZoneId); // Write the zone id
+                bitStream.Write(character.MapInstance); // Write the map instance
+                bitStream.Write(character.MapClone); // Write the map clone
+                for (var i = 0; i < 4; i++)
+                    bitStream.Write(ZoneChecksums.Checksums[(ZoneId) character.ZoneId][i]); // Write the checksum
+                bitStream.Write((ushort) 0); // ???
+                for (var i = 0; i < 3; i++) bitStream.Write(character.Position[i]); // Write the position
+                bitStream.Write((uint) 0); // Supposed to be 4, if in battle...
 
-                LuServer.CurrentServer.Send(bitStream, WPacketPriority.SystemPriority, WPacketReliability.ReliableOrdered, 0, address, false);
+                // Send the packet
+                LuServer.CurrentServer.Send(bitStream, WPacketPriority.SystemPriority,
+                    WPacketReliability.ReliableOrdered, 0, address, false);
             }
         }
     }

@@ -53,8 +53,24 @@ void BaseServer::Start()
 	OnStart();
 	Packet *packet;
 
-	while(!Environment::HasShutdownStarted)
+	RM = gcnew LuReplicaManager();
+
+	_peer->AttachPlugin(RM->Instance);
+	_peer->SetNetworkIDManager(NetworkIdManager->Instance);
+
+	RM->Instance->SetAutoParticipateNewConnections(true);
+	RM->Instance->SetAutoSerializeInScope(true);
+	NetworkIdManager->Instance->SetIsNetworkIDAuthority(true);
+
+	_terminate = false;
+
+	while(!_terminate)
 	{
+		if (Environment::HasShutdownStarted)
+		{
+			Stop();
+			break;
+		}
 		packet = _peer->Receive();
 		if (!packet) continue;
 		switch(packet->data[0])
@@ -95,6 +111,9 @@ void BaseServer::SendInitPacket(bool auth, String^ address)
 
 void BaseServer::Stop()
 {
+	_terminate = true;
+
 	OnStop();
 	RakNetworkFactory::DestroyRakPeerInterface(_peer);
+	delete RM;
 }

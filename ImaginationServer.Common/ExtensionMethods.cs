@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using static ImaginationServer.Common.PacketEnums;
 
 namespace ImaginationServer.Common
 {
@@ -11,10 +12,18 @@ namespace ImaginationServer.Common
             while (true)
             {
                 var c = reader.ReadChar();
-                if (c == '\0' || valueChars.Count >= 30) break;
+                if (c == '\0' || valueChars.Count >= maxLength) break;
                 valueChars.Add(c);
             }
             return new string(valueChars.ToArray());
-        }    
+        }
+
+        public static void WriteHeader(this WBitStream bitStream, RemoteConnection remoteConnection, uint packetCode)
+        {
+            bitStream.Write((byte)83);
+            bitStream.Write((ushort)remoteConnection);
+            bitStream.Write(packetCode);
+            bitStream.Write((byte)0);
+        }
     }
 }

@@ -30,7 +30,8 @@ namespace ImaginationServer.Common
 
         public LuServer(ServerId serverId, int port, int maxConnections, string address) : base(port, maxConnections, address)
         {
-            Console.Title = "Imagination Server - " + serverId.ToString();
+            Console.Title = $"Imagination Server - {serverId}";
+            Console.WriteLine($"Starting Imagination Server {serverId}");
 
             CurrentServer = this;
 

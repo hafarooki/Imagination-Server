@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using ImaginationServer.Common;
-using ImaginationServer.Common.Data;
 using ImaginationServer.Common.Handlers;
+using static ImaginationServer.Common.PacketEnums;
+using static ImaginationServer.Common.PacketEnums.WorldServerPacketId;
 
 namespace ImaginationServer.World.Handlers.World
 {
@@ -11,49 +11,51 @@ namespace ImaginationServer.World.Handlers.World
     {
         public override void Handle(BinaryReader reader, string address)
         {
-            var objectId = reader.ReadUInt64();
+            var objectId = reader.ReadUInt64(); // Read the object ID.
             Console.WriteLine("Received Login Request from {0} - ObjectID = {1}", address, objectId);
 
-            var client = LuServer.CurrentServer.Clients[address];
-            var account = LuServer.CurrentServer.CacheClient.Get<Account>("accounts:" + client.Username.ToLower());
+            var client = LuServer.CurrentServer.Clients[address]; // Get the client.
+            var account = DbUtils.GetAccount(client.Username); // Get the account.
+            var character = DbUtils.GetCharacter(objectId);
 
-            var index = -1;
-
-            foreach (var characterName in from characterName in account.Characters let character = LuServer.CurrentServer.CacheClient.Get<Character>("characters:" + characterName.ToLower()) where character.Id == objectId select characterName)
+            if (!string.Equals(character.Owner, account.Username, StringComparison.CurrentCultureIgnoreCase))
+                // Make sure they selected their own character
             {
-                index = account.Characters.IndexOf(characterName);
-            }
-
-            if (index == -1)
-            {
-                Console.WriteLine("USER SENT OBJECT ID THAT IS NOT ONE OF THEIR CHARACTER'S!!!");
+                Console.WriteLine("USER {0} SENT OBJECT ID THAT IS NOT ONE OF THEIR CHARACTER'S!!!", client.Username);
                 // TODO: Kick user
                 return;
             }
 
-            var characterSelected = LuServer.CurrentServer.CacheClient.Get<Character>("characters:" + account.Characters[index].ToLower());
+            // Cache the user's selected character
+            LuServer.CurrentServer.CacheClient.Database.StringSet(
+                "cache:selectedcharacter:" + client.Username.ToLower(), character.Minifig.Name.ToLower());
 
-            LuServer.CurrentServer.CacheClient.Database.StringSet("cache:selectedcharacter:" + client.Username.ToLower(), characterSelected.Minifig.Name.ToLower());
+            Console.WriteLine("User has selected character {0}. Sending them to zone {1}.", character.Minifig.Name,
+                character.ZoneId);
 
-            Console.WriteLine("User has selected character {0}. Sending them to zone {1}.", characterSelected.Minifig.Name, characterSelected.ZoneId);
-
-            using (var bitStream = new WBitStream())
+            using (var bitStream = new WBitStream()) // Create the redirect packet
             {
-                bitStream.Write((byte)83);
-                bitStream.Write((ushort)5);
-                bitStream.Write((uint)PacketEnums.WorldServerPacketId.MsgClientTransferToWorld);
-                bitStream.Write((byte)0);
+                bitStream.WriteHeader(RemoteConnection.Client, (uint) MsgClientTransferToWorld);
+                    // Always write the header.
                 bitStream.WriteString("127.0.0.1", 33);
-                bitStream.Write(ResolvePortFromZone((ZoneId) characterSelected.ZoneId));
-                bitStream.Write((byte)0);
+                    // Write the IP to redirect to (TODO: Make this the broadcast IP)
+                bitStream.Write(ResolvePortFromZone((ZoneId) character.ZoneId));
+                    // Write the port of the server. (For now, this is 2006 + the zone id)
+                bitStream.Write((byte) 0); // Don't say that this was a mythran dimensional shift, because it wasn't.
 
-                LuServer.CurrentServer.Send(bitStream, WPacketPriority.SystemPriority, WPacketReliability.ReliableOrdered, 0, address, false);
+                LuServer.CurrentServer.Send(bitStream, WPacketPriority.SystemPriority,
+                    WPacketReliability.ReliableOrdered, 0, address, false); // Send the redirect packet.
             }
         }
 
-        private ushort ResolvePortFromZone(ZoneId zone)
+        /// <summary>
+        /// Resolves the port from the specified zone id.
+        /// </summary>
+        /// <param name="zone">The zone of the server to retrieve the port of.</param>
+        /// <returns>The port of the server that hosts the specified zone.</returns>
+        private static ushort ResolvePortFromZone(ZoneId zone)
         {
-            return (ushort) (2006 + zone);
+            return (ushort) (2006 + zone); // Add 2006, the base port, to the zone.
         }
     }
 }

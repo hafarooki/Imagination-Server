@@ -3,7 +3,6 @@ using System.Threading;
 using System.Windows.Forms;
 using ImaginationServer.Auth.Handlers.Auth;
 using ImaginationServer.Common;
-using ImaginationServer.Common.Data;
 using static System.Console;
 using static ImaginationServer.Common.PacketEnums;
 using static ImaginationServer.Common.PacketEnums.ClientAuthPacketId;
@@ -19,7 +18,6 @@ namespace ImaginationServer.Auth
         {
             try
             {
-                WriteLine("Starting Imagination Server Auth");
                 Server = new LuServer(ServerId.Auth, 1001, 1000, "127.0.0.1");
                 Server.AddHandler((byte) RemoteConnection.Auth, (byte) MsgAuthLoginRequest, new LoginRequestHandler());
                 if (!Server.Multiplexer.GetDatabase().KeyExists("LastUserId"))
@@ -50,7 +48,7 @@ namespace ImaginationServer.Auth
                 switch (cmd)
                 {
                     case "help":
-                        WriteLine("addaccount <username> <password> <email>");
+                        WriteLine("addaccount <username> <password>");
                         WriteLine("removeaccount <username>");
                         WriteLine("accountexists <username>");
                         WriteLine("ban <username>");
@@ -62,18 +60,13 @@ namespace ImaginationServer.Auth
                         if (cmdArgs?.Length >= 1)
                         {
                             var name = cmdArgs[0];
-                            if (!Server.CacheClient.Exists($"characters:{name.ToLower()}"))
+                            if (!DbUtils.CharacterExists(name))
                             {
                                 WriteLine("Character does not exist.");
                                 continue;
                             }
 
-                            var character = Server.CacheClient.Get<Character>($"characters:{name.ToLower()}");
-                            var account = Server.CacheClient.Get<Account>($"accounts:{character.Owner.ToLower()}");
-                            account.Characters.Remove(character.Minifig.Name);
-                            Server.CacheClient.Remove($"characters:{name.ToLower()}");
-                            Server.CacheClient.Remove($"accounts:{account.Username.ToLower()}");
-                            Server.CacheClient.Add($"accounts:{account.Username.ToLower()}", account);
+                            DbUtils.DeleteCharacter(DbUtils.GetCharacter(name));
 
                             WriteLine("Success!");
                             continue;
@@ -104,14 +97,12 @@ namespace ImaginationServer.Auth
                         WriteLine("Invalid Arguments!");
                         break;
                     case "addaccount":
-                        if (cmdArgs != null && cmdArgs.Length >= 3)
+                        if (cmdArgs != null && cmdArgs.Length >= 2)
                         {
                             var username = cmdArgs[0];
                             var password = cmdArgs[1];
-                            var email = cmdArgs[2];
-
-                            var account = Account.Create(username, password, email);
-                            Server.CacheClient.Add($"accounts:{username.ToLower()}", account);
+                            DbUtils.CreateAccount(username, password);
+                            
                             WriteLine("Success!");
                             continue;
                         }
@@ -122,17 +113,14 @@ namespace ImaginationServer.Auth
                         if (cmdArgs?.Length >= 1)
                         {
                             var username = cmdArgs[0];
-                            if (!Server.CacheClient.Exists($"accounts:{username.ToLower()}"))
+                            if (!DbUtils.AccountExists(username))
                             {
                                 WriteLine("User does not exist.");
                                 continue;
                             }
-                            var account =
-                                Server.CacheClient.Get<Account>($"accounts:{username.ToLower()}");
+                            var account = DbUtils.GetAccount(username);
                             account.Banned = true;
-                            Server.CacheClient.Remove($"accounts:{account.Username.ToLower()}");
-                            Server.CacheClient.Add($"accounts:{account.Username.ToLower()}",
-                                account);
+                            DbUtils.UpdateAccount(account);
                             WriteLine("Success!");
                             continue;
                         }
@@ -143,17 +131,14 @@ namespace ImaginationServer.Auth
                         if (cmdArgs?.Length >= 1)
                         {
                             var username = cmdArgs[0];
-                            if (!Server.CacheClient.Exists($"accounts:{username.ToLower()}"))
+                            if (!DbUtils.AccountExists(username))
                             {
                                 WriteLine("User does not exist.");
                                 continue;
                             }
-                            var account =
-                                Server.CacheClient.Get<Account>($"accounts:{username.ToLower()}");
+                            var account = DbUtils.GetAccount(username);
                             account.Banned = false;
-                            Server.CacheClient.Remove($"accounts:{account.Username.ToLower()}");
-                            Server.CacheClient.Add($"accounts:{account.Username.ToLower()}",
-                                account);
+                            DbUtils.UpdateAccount(account);
                             WriteLine("Success!");
                             continue;
                         }
@@ -164,14 +149,9 @@ namespace ImaginationServer.Auth
                         if (cmdArgs?.Length >= 1)
                         {
                             var username = cmdArgs[0];
-                            if (Server.CacheClient.Exists($"accounts:{username.ToLower()}"))
+                            if (DbUtils.AccountExists(username))
                             {
-                                var account = Server.CacheClient.Get<Account>($"accounts:{username.ToLower()}");
-                                foreach (var name in account.Characters)
-                                {
-                                    Server.CacheClient.Remove($"characters:{name.ToLower()}");
-                                }
-                                Server.CacheClient.Remove($"accounts:{username.ToLower()}");
+                                DbUtils.DeleteAccount(DbUtils.GetAccount(username));
                                 WriteLine("Success!");
                                 continue;
                             }
@@ -186,8 +166,7 @@ namespace ImaginationServer.Auth
                         if (cmdArgs != null && cmdArgs.Length >= 1)
                         {
                             var username = cmdArgs[0];
-                            WriteLine(
-                                Server.CacheClient.Exists($"accounts:{username.ToLower()}"));
+                            WriteLine(DbUtils.AccountExists(username));
                             continue;
                         }
 
