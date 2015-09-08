@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using ImaginationServer.Common.Codes;
 using ImaginationServer.Common.Handlers;
 using ImaginationServer.Common.Handlers.Server;
+using ImaginationServer.Common.Subscribers;
 using StackExchange.Redis;
 using StackExchange.Redis.Extensions.Core;
 using StackExchange.Redis.Extensions.Newtonsoft;
@@ -19,6 +21,7 @@ namespace ImaginationServer.Common
 
         public Dictionary<string, LuClient> Clients { get; private set; }
         public Dictionary<Tuple<ushort, uint>, PacketHandler> Handlers { get; }
+        public Dictionary<ushort, PacketSubscriber> Subscribers { get; }
 
         public ServerId ServerId { get; }
 
@@ -33,6 +36,7 @@ namespace ImaginationServer.Common
 
             Handlers = new Dictionary<Tuple<ushort, uint>, PacketHandler>();
             ServerId = serverId;
+            Subscribers = new Dictionary<ushort, PacketSubscriber>();
 
             AddHandler((ushort)RemoteConnection.Server, (uint)MsgServerVersionConfirm, new ConfirmVersionHandler());
             Multiplexer = ConnectionMultiplexer.Connect("127.0.0.1:6379");
@@ -67,6 +71,7 @@ namespace ImaginationServer.Common
                     reader.ReadByte();
 
                     Handlers[tuple].Handle(reader, address);
+                    Console.WriteLine("Received packet {0}:{1}", tuple.Item1, tuple.Item2);
                 }
             }
         }
@@ -86,6 +91,22 @@ namespace ImaginationServer.Common
         public void AddHandler(ushort remoteConnection, uint packetCode, PacketHandler handler)
         {
             Handlers.Add(new Tuple<ushort, uint>(remoteConnection, packetCode), handler);
+        }
+
+        public void AddSubscriber(PacketSubscriber subscriber)
+        {
+            Multiplexer.GetSubscriber().Subscribe(((ushort)subscriber.Code).ToString(), (channel, value) => subscriber.MessageReceived(value));
+        }
+
+        public void WriteHeader(ServerId target, BinaryWriter writer)
+        {
+            writer.Write((ushort)target);
+            writer.Write((ushort)ServerId);
+        }
+
+        public void Publish(OpCode code, byte[] data)
+        {
+            Multiplexer.GetSubscriber().Publish(((ushort)code).ToString(), data);
         }
     }
 }

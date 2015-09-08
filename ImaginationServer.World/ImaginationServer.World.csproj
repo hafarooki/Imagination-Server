@@ -36,12 +36,6 @@
     <ApplicationIcon>Imagination Server Logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ImaginationServer.Core">
-      <HintPath>..\Debug\ImaginationServer.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="ImaginationServer.World.Packets">
-      <HintPath>..\Debug\ImaginationServer.World.Packets.dll</HintPath>
-    </Reference>
     <Reference Include="StackExchange.Redis, Version=1.0.316.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StackExchange.Redis.1.0.481\lib\net45\StackExchange.Redis.dll</HintPath>
       <Private>True</Private>
@@ -62,6 +56,7 @@
   <ItemGroup>
     <Compile Include="Handlers\World\CharacterListRequestHandler.cs" />
     <Compile Include="Handlers\World\ClientCharacterCreateRequestHandler.cs" />
+    <Compile Include="Handlers\World\ClientLevelLoadCompleteHandler.cs" />
     <Compile Include="Handlers\World\ClientLoginRequestHandler.cs" />
     <Compile Include="Handlers\World\ClientValidationHandler.cs" />
     <Compile Include="Program.cs" />
@@ -78,6 +73,14 @@
     <ProjectReference Include="..\ImaginationServer.Common\ImaginationServer.Common.csproj">
       <Project>{9E791210-0A94-428D-B483-46EB198942E2}</Project>
       <Name>ImaginationServer.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ImaginationServer.Core\ImaginationServer.Core.vcxproj">
+      <Project>{b556a656-2380-4e15-9fa9-25d555ae0fcc}</Project>
+      <Name>ImaginationServer.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ImaginationServer.World.Packets\ImaginationServer.World.Packets.vcxproj">
+      <Project>{ed9dda8b-99a2-40f9-b8dc-b734e79c7c55}</Project>
+      <Name>ImaginationServer.World.Packets</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

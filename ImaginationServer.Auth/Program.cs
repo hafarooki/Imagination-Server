@@ -24,7 +24,7 @@ namespace ImaginationServer.Auth
                 Server.AddHandler((byte) RemoteConnection.Auth, (byte) MsgAuthLoginRequest, new LoginRequestHandler());
                 if (!Server.Multiplexer.GetDatabase().KeyExists("LastUserId"))
                 {
-                    Server.Multiplexer.GetDatabase().StringSet("LastUserId", 1152921504606846994);
+                    Server.Multiplexer.GetDatabase().StringSet("LastUserId", 0);
                 }
                 WriteLine("->OK");
                 new Thread(() => Server.Start()).Start();

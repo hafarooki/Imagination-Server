@@ -10,5 +10,6 @@
         public string Address { get; set; }
         public bool Authenticated { get; set; }
         public string Username { get; set; }
+        public string Character { get; set; }
     }
 }

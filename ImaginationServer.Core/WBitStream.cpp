@@ -58,6 +58,11 @@ void WBitStream::WriteString(String^ value, int maxLength)
 	WriteString(value, value->Length, maxLength);
 }
 
+void WBitStream::Write(Single value)
+{
+	Instance->Write(value);
+}
+
 void WBitStream::WriteString(String^ value, int length, int maxLength)
 {
 	auto chars = (char*)(void*)Marshal::StringToHGlobalAnsi(value);
@@ -66,11 +71,16 @@ void WBitStream::WriteString(String^ value, int length, int maxLength)
 	for (int i = 0; i < remaining; i++) Instance->Write((unsigned char)0);
 }
 
-void WBitStream::WriteWString(String^ value)
+void WBitStream::WriteWString(String^ value, bool writeSize, bool nullChar)
 {
 	wstring str;
 	MarshalString(value, str);
-	Instance->Write(str);
+	if (writeSize) Instance->Write((unsigned char)(str.size() * 2));
+	if(nullChar) str.append(L"\0");
+	for (unsigned int k = 0; k < str.size(); k++)
+	{
+		Instance->Write(str.at(k));
+	}
 }
 
 void WBitStream::Write(char * value, int length)
@@ -100,9 +110,14 @@ void WBitStream::Write(unsigned char * value)
 	Instance->Write(value);
 }
 
-void WBitStream::Write(wstring value)
+void WBitStream::Write(wstring str, bool writeSize, bool nullChar)
 {
-	Instance->Write(value);
+	if (writeSize) Instance->Write((unsigned char)(str.size() * 2));
+	if (nullChar) str.append(L"\0");
+	for (unsigned int k = 0; k < str.size(); k++)
+	{
+		Instance->Write(str.at(k));
+	}
 }
 
 void WBitStream::MarshalString(String ^ s, string& os) {

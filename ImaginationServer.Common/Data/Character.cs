@@ -10,5 +10,6 @@
         public float[] Rotation { get; set; }
         public ushort ZoneId { get; set; }
         public ushort MapInstance { get; set; }
+        public uint MapClone { get; set; }
     }
 }

@@ -34,9 +34,11 @@ namespace ImaginationServer.World.Handlers.World
             var eyes = reader.ReadUInt32();
             var mouth = reader.ReadUInt32();
 
+            Console.WriteLine(LuServer.CurrentServer.Multiplexer.GetDatabase().StringGet("LastUserId"));
+
             var character = new Character
             {
-                Id = ulong.Parse(LuServer.CurrentServer.Multiplexer.GetDatabase().StringGet("LastUserId")),
+                Id = 1152921504606846994 + ulong.Parse(LuServer.CurrentServer.Multiplexer.GetDatabase().StringGet("LastUserId")),
                 Minifig = new Minifig
                 {
                     Name = name,
@@ -54,10 +56,11 @@ namespace ImaginationServer.World.Handlers.World
                     ShirtColor = shirtColor,
                     ShirtStyle = shirtStyle
                 },
-                Position = WorldPositions.VentureExplorer,
+                Position = ZonePositions.VentureExplorer,
                 Rotation = new float[4],
                 Owner = client.Username,
                 MapInstance = 0,
+                MapClone = 0,
                 ZoneId = (ushort) ZoneId.VentureExplorer
             };
 

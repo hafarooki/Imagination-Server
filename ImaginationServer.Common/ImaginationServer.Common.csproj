@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Codes\OpCode.cs" />
     <Compile Include="Data\Account.cs" />
     <Compile Include="Data\Character.cs" />
     <Compile Include="Data\Minifig.cs" />
@@ -72,7 +73,9 @@
     <Compile Include="Packets\OutgoingPacket.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerId.cs" />
-    <Compile Include="WorldPositions.cs" />
+    <Compile Include="Subscribers\PacketSubscriber.cs" />
+    <Compile Include="ZoneChecksums.cs" />
+    <Compile Include="ZonePositions.cs" />
     <Compile Include="ZoneId.cs" />
   </ItemGroup>
   <ItemGroup>

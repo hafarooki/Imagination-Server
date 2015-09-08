@@ -33,6 +33,8 @@ namespace ImaginationServer.World.Handlers.World
 
             var characterSelected = LuServer.CurrentServer.CacheClient.Get<Character>("characters:" + account.Characters[index].ToLower());
 
+            LuServer.CurrentServer.CacheClient.Database.StringSet("cache:selectedcharacter:" + client.Username.ToLower(), characterSelected.Minifig.Name.ToLower());
+
             Console.WriteLine("User has selected character {0}. Sending them to zone {1}.", characterSelected.Minifig.Name, characterSelected.ZoneId);
 
             using (var bitStream = new WBitStream())

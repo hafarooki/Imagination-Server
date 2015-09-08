@@ -3,7 +3,7 @@
 namespace ImaginationServer.Common
 {
     [Flags]
-    public enum ServerId
+    public enum ServerId : byte
     {
         Auth = 0x01,
         Chat = 0x02,
