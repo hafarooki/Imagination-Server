@@ -34,10 +34,14 @@ namespace ImaginationServer.World
 
                 type = type | ServerId.World;
                 var server = new LuServer(type,
-                    type.HasFlag(ServerId.Character) ? 2006 : 2006 + (int) (Zone = (ZoneId)Enum.Parse(typeof (ZoneId), args[0])), 1000,
+                    type.HasFlag(ServerId.Character)
+                        ? 2006
+                        : 2006 + (int) (Zone = (ZoneId) Enum.Parse(typeof (ZoneId), args[0])), 1000,
                     "127.0.0.1");
-                server.AddHandler((ushort) RemoteConnection.World, (uint) MsgWorldClientValidation, new ClientValidationHandler());
-                server.AddHandler((ushort) RemoteConnection.World, (uint) MsgWorldClientLoginRequest, new ClientLoginRequestHandler());
+                server.AddHandler((ushort) RemoteConnection.World, (uint) MsgWorldClientValidation,
+                    new ClientValidationHandler());
+                server.AddHandler((ushort) RemoteConnection.World, (uint) MsgWorldClientLoginRequest,
+                    new ClientLoginRequestHandler());
 
                 if (type.HasFlag(ServerId.Character))
                 {
@@ -47,12 +51,15 @@ namespace ImaginationServer.World
                         new ClientCharacterCreateRequestHandler());
                     server.AddHandler((ushort) RemoteConnection.World, (uint) MsgWorldClientCharacterDeleteRequest,
                         new ClientCharacterDeleteRequestHandler());
-                    server.AddHandler((ushort)RemoteConnection.World, (uint) MsgWorldClientCharacterRenameRequest,
+                    server.AddHandler((ushort) RemoteConnection.World, (uint) MsgWorldClientCharacterRenameRequest,
                         new ClientCharacterRenameRequestHandler());
                 }
                 else
                 {
-                    server.AddHandler((ushort)RemoteConnection.World, (uint) MsgWorldClientLevelLoadComplete, new ClientLevelLoadCompleteHandler());
+                    server.AddHandler((ushort) RemoteConnection.World, (uint) MsgWorldClientLevelLoadComplete,
+                        new ClientLevelLoadCompleteHandler());
+                    server.AddHandler((ushort) RemoteConnection.World, (uint) MsgWorldClientGameMsg,
+                        new ClientGameMsgHandler());
                 }
                 Console.WriteLine("->OK");
                 server.Start();

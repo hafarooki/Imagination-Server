@@ -100,7 +100,7 @@ namespace ImaginationServer.Common
 
                     if (!Handlers.ContainsKey(tuple))
                     {
-                        Console.WriteLine("Unknown packet received! 53-{0}-00-{1}", tuple.Item1.ToString("X"), tuple.Item2.ToString("X"));
+                        Console.WriteLine("Unhandled packet received! 53-{0}-00-{1}", tuple.Item1.ToString("X"), tuple.Item2.ToString("X"));
                         return;
                     }
 

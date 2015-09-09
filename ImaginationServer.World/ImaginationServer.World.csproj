@@ -62,9 +62,11 @@
     <Compile Include="Handlers\World\ClientCharacterCreateRequestHandler.cs" />
     <Compile Include="Handlers\World\ClientCharacterDeleteRequestHandler.cs" />
     <Compile Include="Handlers\World\ClientCharacterRenameRequestHandler.cs" />
+    <Compile Include="Handlers\World\ClientGameMsgHandler.cs" />
     <Compile Include="Handlers\World\ClientLevelLoadCompleteHandler.cs" />
     <Compile Include="Handlers\World\ClientLoginRequestHandler.cs" />
     <Compile Include="Handlers\World\ClientValidationHandler.cs" />
+    <Compile Include="Handlers\World\GameMsgHandlers\GameMsgHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
