@@ -68,6 +68,7 @@
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Handlers\PacketHandler.cs" />
     <Compile Include="Handlers\Server\ConfirmVersionHandler.cs" />
+    <Compile Include="Ldf.cs" />
     <Compile Include="LuClient.cs" />
     <Compile Include="LuServer.cs" />
     <Compile Include="PacketEnums.cs" />

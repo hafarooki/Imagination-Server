@@ -36,6 +36,10 @@
     <ApplicationIcon>Imagination Server Logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="StackExchange.Redis, Version=1.0.316.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StackExchange.Redis.1.0.481\lib\net45\StackExchange.Redis.dll</HintPath>
       <Private>True</Private>
@@ -57,6 +61,7 @@
     <Compile Include="Handlers\World\CharacterListRequestHandler.cs" />
     <Compile Include="Handlers\World\ClientCharacterCreateRequestHandler.cs" />
     <Compile Include="Handlers\World\ClientCharacterDeleteRequestHandler.cs" />
+    <Compile Include="Handlers\World\ClientCharacterRenameRequestHandler.cs" />
     <Compile Include="Handlers\World\ClientLevelLoadCompleteHandler.cs" />
     <Compile Include="Handlers\World\ClientLoginRequestHandler.cs" />
     <Compile Include="Handlers\World\ClientValidationHandler.cs" />

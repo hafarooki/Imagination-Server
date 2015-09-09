@@ -11,7 +11,7 @@ namespace ImaginationServer.World.Handlers.World
     {
         public override void Handle(BinaryReader reader, string address)
         {
-            var objectId = reader.ReadUInt64(); // Read the object ID.
+            var objectId = reader.ReadInt64(); // Read the object ID.
             Console.WriteLine("Received Login Request from {0} - ObjectID = {1}", address, objectId);
 
             var client = LuServer.CurrentServer.Clients[address]; // Get the client.

@@ -54,6 +54,7 @@ void BaseServer::Start()
 	Packet *packet;
 
 	RM = gcnew LuReplicaManager();
+	NetworkIdManager = gcnew LuNetworkIdManager();
 
 	_peer->AttachPlugin(RM->Instance);
 	_peer->SetNetworkIDManager(NetworkIdManager->Instance);

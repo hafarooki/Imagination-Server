@@ -58,7 +58,7 @@ namespace ImaginationServer.World.Handlers.World
                 {
                     Id =
                         1152921504606846994 +
-                        ulong.Parse(LuServer.CurrentServer.Multiplexer.GetDatabase().StringGet("LastUserId")),
+                        long.Parse(LuServer.CurrentServer.Multiplexer.GetDatabase().StringGet("LastUserId")),
                     // Object ID, starts at 1152921504606846994 (Thanks to Darwin for that number)
                     Minifig = new Minifig // Initialize the minifig customization
                     {
@@ -79,7 +79,6 @@ namespace ImaginationServer.World.Handlers.World
                     },
                     // Initialize the other character data
                     Position = ZonePositions.VentureExplorer,
-                    Rotation = new float[4],
                     Owner = client.Username,
                     MapInstance = 0,
                     MapClone = 0,
@@ -89,7 +88,9 @@ namespace ImaginationServer.World.Handlers.World
                     Health = 4,
                     MaxHealth = 4,
                     Imagination = 0,
-                    MaxImagination = 0
+                    MaxImagination = 0,
+                    GmLevel = 0,
+                    Reputation = 0
                 };
 
                 DbUtils.AddCharacter(character); // Add the character to the database.
@@ -97,7 +98,7 @@ namespace ImaginationServer.World.Handlers.World
                 account.Characters.Add(character.Minifig.Name); // Add the character to the account
                 DbUtils.UpdateAccount(account); // Update the account
 
-                var next = ulong.Parse(LuServer.CurrentServer.Multiplexer.GetDatabase().StringGet("LastUserId"));
+                var next = long.Parse(LuServer.CurrentServer.Multiplexer.GetDatabase().StringGet("LastUserId"));
                     // Get the last character id
                 LuServer.CurrentServer.Multiplexer.GetDatabase()
                     .StringSet(DbUtils.GetIdKey(next), character.Minifig.Name.ToLower()); // Match the name to the id

@@ -13,10 +13,11 @@ namespace ImaginationServer.Common
         ///     Gets the key of the specified ID.
         /// </summary>
         /// <param name="id">The ID.</param>
+        /// <param name="notRaw">Is this not raw (not the actual raw object id from the client/RM/whatever?)</param>
         /// <returns>The key where the username assigned to that ID should be stored.</returns>
-        public static string GetIdKey(ulong id)
+        public static string GetIdKey(long id, bool notRaw = false)
         {
-            return $"characters:IDMAP:{id}";
+            return $"characters:IDMAP:{id - 1152921504606846994}";
         }
 
         /// <summary>
@@ -33,13 +34,14 @@ namespace ImaginationServer.Common
         ///     Does a character of this ID exist?
         /// </summary>
         /// <param name="id">The ID of the supposed character.</param>
+        /// <param name="notRaw">Is this not raw?</param>
         /// <returns>
         ///     Whether or not there is a character of that ID, and if there is, whether or not that character still actually
         ///     exists.
         /// </returns>
-        public static bool CharacterExists(ulong id)
+        public static bool CharacterExists(long id, bool notRaw = false)
         {
-            return LuServer.CurrentServer.CacheClient.Exists(GetIdKey(id)) && // Check if the key exists
+            return LuServer.CurrentServer.CacheClient.Exists(GetIdKey(id, notRaw)) && // Check if the key exists
                    CharacterExists(GetCharacterName(id));
                 // Check if a character of the username assigned to the key exists
         }
@@ -93,10 +95,11 @@ namespace ImaginationServer.Common
         ///     Gets the name assigned to the specified ID.
         /// </summary>
         /// <param name="id">The ID to check.</param>
+        /// <param name="notRaw">Is this not raw?</param>
         /// <returns>Whatever name is assigned to the specified ID.</returns>
-        public static string GetCharacterName(ulong id)
+        public static string GetCharacterName(long id, bool notRaw = false)
         {
-            return LuServer.CurrentServer.CacheClient.Database.StringGet(GetIdKey(id));
+            return LuServer.CurrentServer.CacheClient.Database.StringGet(GetIdKey(id, notRaw));
         }
 
         /// <summary>
@@ -104,7 +107,7 @@ namespace ImaginationServer.Common
         /// </summary>
         /// <param name="id">The character ID.</param>
         /// <returns>The character</returns>
-        public static Character GetCharacter(ulong id)
+        public static Character GetCharacter(long id)
         {
             return GetCharacter(GetCharacterName(id));
         }

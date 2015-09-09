@@ -53,6 +53,14 @@ void WBitStream::WriteChars(String^ value)
 	Instance->Write((char*)(void*)Marshal::StringToHGlobalAnsi(value));
 }
 
+void WBitStream::Write(WBitStream^ value, unsigned int length) {
+	Instance->Write(value->Instance, length);
+}
+
+unsigned long WBitStream::GetNumberOfBytesUsed() {
+	return Instance->GetNumberOfBytesUsed();
+}
+
 void WBitStream::WriteString(String^ value, int maxLength)
 {
 	WriteString(value, value->Length, maxLength);

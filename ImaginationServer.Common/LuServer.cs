@@ -14,20 +14,49 @@ using static ImaginationServer.Common.PacketEnums.ServerPacketId;
 
 namespace ImaginationServer.Common
 {
+    /// <summary>
+    /// Main server class
+    /// </summary>
     public class LuServer : BaseServer
     {
-
+        /// <summary>
+        /// Current instance of the serveer
+        /// </summary>
         public static LuServer CurrentServer { get; private set; }
-
+        /// <summary>
+        /// A map of IP addresses and client data
+        /// </summary>
         public Dictionary<string, LuClient> Clients { get; private set; }
+        /// <summary>
+        /// A map of packet handlers
+        /// </summary>
         public Dictionary<Tuple<ushort, uint>, PacketHandler> Handlers { get; }
+        /// <summary>
+        /// A map of server to server packet subscribers
+        /// </summary>
         public Dictionary<ushort, PacketSubscriber> Subscribers { get; }
 
+        /// <summary>
+        /// The ID of the server
+        /// </summary>
         public ServerId ServerId { get; }
 
+        /// <summary>
+        /// The CacheClient, used for storing json of objects
+        /// </summary>
         public StackExchangeRedisCacheClient CacheClient { get; }
+        /// <summary>
+        /// The ConnectionMultiplexer
+        /// </summary>
         public ConnectionMultiplexer Multiplexer { get; }
 
+        /// <summary>
+        /// Main constructor
+        /// </summary>
+        /// <param name="serverId">ID of the server</param>
+        /// <param name="port">Port to host on</param>
+        /// <param name="maxConnections">Maximum clients that cna connect</param>
+        /// <param name="address">Address to host on</param>
         public LuServer(ServerId serverId, int port, int maxConnections, string address) : base(port, maxConnections, address)
         {
             Console.Title = $"Imagination Server - {serverId}";
@@ -42,6 +71,12 @@ namespace ImaginationServer.Common
             AddHandler((ushort)RemoteConnection.Server, (uint)MsgServerVersionConfirm, new ConfirmVersionHandler());
             Multiplexer = ConnectionMultiplexer.Connect("127.0.0.1:6379");
             CacheClient = new StackExchangeRedisCacheClient(Multiplexer, new NewtonsoftSerializer());
+
+            //Multiplexer.GetSubscriber().Subscribe("Kill", (channel, value) =>
+            //{
+            //    Stop();
+            //    Environment.Exit((int)value);
+            //});
         }
 
         protected override void OnStart()
@@ -65,14 +100,13 @@ namespace ImaginationServer.Common
 
                     if (!Handlers.ContainsKey(tuple))
                     {
-                        Console.WriteLine("Unknown packet received! {0}:{1}", tuple.Item1, tuple.Item2);
+                        Console.WriteLine("Unknown packet received! 53-{0}-00-{1}", tuple.Item1.ToString("X"), tuple.Item2.ToString("X"));
                         return;
                     }
 
                     reader.ReadByte();
 
                     Handlers[tuple].Handle(reader, address);
-                    Console.WriteLine("Received packet {0}:{1}", tuple.Item1, tuple.Item2);
                 }
             }
         }

@@ -36,6 +36,9 @@ public ref class WBitStream
 	void Write(unsigned char* value);
 	void Write(wstring value, bool writeSize, bool nullChar);
 	void Write(Single value);
+	void Write(WBitStream^ value, unsigned int length);
+
+	unsigned long GetNumberOfBytesUsed();
 
 	//unsigned char ReadByte();
 	//unsigned short ReadUShort();

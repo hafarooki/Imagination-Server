@@ -1,7 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using ImaginationServer.Common.Data;
 using ImaginationServer.Common.Handlers;
 using ImaginationServerWorldPackets;
+using Newtonsoft.Json;
 using static ImaginationServer.Common.LuServer;
 
 namespace ImaginationServer.World.Handlers.World
@@ -16,6 +18,8 @@ namespace ImaginationServer.World.Handlers.World
                 // Retrieve their account
             WorldPackets.SendCharacterListResponse(address, account);
                 // Call the C++ code that generates and sends the character list packet of the specified account
+
+            Console.WriteLine($"Sent character list packet to {client.Username}. Users: " + JsonConvert.SerializeObject(account.Characters));
         }
     }
 }

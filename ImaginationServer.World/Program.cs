@@ -47,6 +47,8 @@ namespace ImaginationServer.World
                         new ClientCharacterCreateRequestHandler());
                     server.AddHandler((ushort) RemoteConnection.World, (uint) MsgWorldClientCharacterDeleteRequest,
                         new ClientCharacterDeleteRequestHandler());
+                    server.AddHandler((ushort)RemoteConnection.World, (uint) MsgWorldClientCharacterRenameRequest,
+                        new ClientCharacterRenameRequestHandler());
                 }
                 else
                 {

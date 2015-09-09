@@ -15,8 +15,12 @@ namespace ImaginationServer.World.Handlers.World
     {
         public override void Handle(BinaryReader reader, string address)
         {
-            var id = reader.ReadUInt64(); // The object id of the character
+            var id = reader.ReadInt64(); // The object id of the character
             var character = DbUtils.GetCharacter(id); // Retrieve the character from the database
+
+            var client = LuServer.CurrentServer.Clients[address];
+
+            Console.WriteLine($"{client.Username} requested to delete their character {character.Minifig.Name}.");
 
             using (var bitStream = new WBitStream()) // Create the new bitstream
             {
@@ -25,11 +29,13 @@ namespace ImaginationServer.World.Handlers.World
                         StringComparison.CurrentCultureIgnoreCase)) // You can't delete someone else's character!
                 {
                     bitStream.Write((byte) 0x02); // Maybe that's the fail code?
+                    Console.WriteLine("Failed: Can't delete someone else's character!");
                 }
                 else // Good to go, that's their character, they can delete it if they want.
                 {
                     DbUtils.DeleteCharacter(character); // Remove the character from the Redis database
                     bitStream.Write((byte) 0x01); // Success code
+                    Console.WriteLine("Successfully deleted character.");
                 }
 
                 LuServer.CurrentServer.Send(bitStream, SystemPriority, ReliableOrdered, 0, address, false); // Send the packet

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Win32;
+using StackExchange.Redis;
 
 namespace ImaginationServer.SingleServer
 {
@@ -13,6 +14,10 @@ namespace ImaginationServer.SingleServer
     {
         static void Main(string[] args)
         {
+            Process.GetCurrentProcess().EnableRaisingEvents = true;
+
+            var multiplexer = ConnectionMultiplexer.Connect("127.0.0.1:6379");
+
             Console.Title = "Imagination Server";
 
             new Thread(() =>
@@ -67,7 +72,9 @@ namespace ImaginationServer.SingleServer
 
             var seconds = 0M;
 
-            while (true)
+            Process.GetCurrentProcess().Exited += (a, b) => { multiplexer.GetSubscriber().Publish("Kill", 0); Console.WriteLine("test");};
+
+            while (!Process.GetCurrentProcess().HasExited)
             {
                 Console.Clear();
                 var secs = seconds % 60;

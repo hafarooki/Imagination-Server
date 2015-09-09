@@ -12,9 +12,9 @@ namespace ImaginationServer.Auth.Packets.Auth
 
         public LoginRequest(BinaryReader reader) : base(reader)
         {
-            Username = reader.ReadWString(66);
+            Username = reader.ReadWString(66); // Read username
             reader.BaseStream.Position = 74; // password starts at 74
-            Password = reader.ReadWString(66);
+            Password = reader.ReadWString(66); // Read password
         }
     }
 }
