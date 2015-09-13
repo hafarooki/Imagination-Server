@@ -60,6 +60,8 @@ namespace ImaginationServer.World
                         new ClientLevelLoadCompleteHandler());
                     server.AddHandler((ushort) RemoteConnection.World, (uint) MsgWorldClientGameMsg,
                         new ClientGameMsgHandler());
+                    server.AddHandler((ushort) RemoteConnection.World, (uint) MsgWorldClientRoutePacket,
+                        new ClientRoutePacketHandler());
                 }
                 Console.WriteLine("->OK");
                 server.Start();

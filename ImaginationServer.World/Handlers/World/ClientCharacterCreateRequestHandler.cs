@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using ImaginationServer.Common;
 using ImaginationServer.Common.Data;
@@ -90,8 +91,12 @@ namespace ImaginationServer.World.Handlers.World
                     Imagination = 0,
                     MaxImagination = 0,
                     GmLevel = 0,
-                    Reputation = 0
+                    Reputation = 0,
+
+                    Items = new List<BackpackItem>(182)
                 };
+
+                character.Items.Add(new BackpackItem(WorldPackets.FindCharShirtID(shirtColor, shirtStyle)));
 
                 DbUtils.AddCharacter(character); // Add the character to the database.
 

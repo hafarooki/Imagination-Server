@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using static ImaginationServer.Common.PacketEnums;
+using static ImaginationServer.Common.PacketEnums.WorldServerPacketId;
 
 namespace ImaginationServer.Common
 {
@@ -20,10 +21,17 @@ namespace ImaginationServer.Common
 
         public static void WriteHeader(this WBitStream bitStream, RemoteConnection remoteConnection, uint packetCode)
         {
-            bitStream.Write((byte)83);
-            bitStream.Write((ushort)remoteConnection);
+            bitStream.Write((byte) 83);
+            bitStream.Write((ushort) remoteConnection);
             bitStream.Write(packetCode);
-            bitStream.Write((byte)0);
+            bitStream.Write((byte) 0);
+        }
+
+        public static void InitGameMsg(this WBitStream bitStream, long objId, ushort msgId)
+        {
+            bitStream.WriteHeader(RemoteConnection.Client, (uint) MsgClientGameMsg);
+            bitStream.Write(objId);
+            bitStream.Write(msgId);
         }
     }
 }

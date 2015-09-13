@@ -12,6 +12,7 @@ namespace ImaginationServer.World.Handlers.World
 
         public ClientGameMsgHandler()
         {
+            _handlers = new Dictionary<ushort, GameMsgHandler>();
             // TODO: Add handlers
         } 
 
@@ -19,8 +20,8 @@ namespace ImaginationServer.World.Handlers.World
         {
             var objectId = reader.ReadInt64();
             var flags = "";
-            reader.BaseStream.Position = reader.BaseStream.Position - 32;
-            for (uint k = 0; k < 32; k++)
+            reader.BaseStream.Position = reader.BaseStream.Position - 4;
+            for (uint k = 0; k < 4; k++)
             {
                 var flag = reader.ReadBoolean();
                 if (flag)

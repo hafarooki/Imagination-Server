@@ -12,7 +12,7 @@ namespace ImaginationServer.World.Handlers.World
     {
         public override void Handle(BinaryReader reader, string address)
         {
-            var zone = (ZoneId) reader.ReadUInt16();
+            var zone = (ZoneId)reader.ReadUInt16();
             var instance = reader.ReadUInt16();
             var clone = reader.ReadInt32();
 
@@ -22,7 +22,7 @@ namespace ImaginationServer.World.Handlers.World
 
             using (var bitStream = new WBitStream())
             {
-                bitStream.WriteHeader(RemoteConnection.Client, (uint) MsgClientCreateCharacter);
+                bitStream.WriteHeader(RemoteConnection.Client, (uint)MsgClientCreateCharacter);
 
                 var ldf = new Ldf();
 

@@ -53,16 +53,6 @@ void BaseServer::Start()
 	OnStart();
 	Packet *packet;
 
-	RM = gcnew LuReplicaManager();
-	NetworkIdManager = gcnew LuNetworkIdManager();
-
-	_peer->AttachPlugin(RM->Instance);
-	_peer->SetNetworkIDManager(NetworkIdManager->Instance);
-
-	RM->Instance->SetAutoParticipateNewConnections(true);
-	RM->Instance->SetAutoSerializeInScope(true);
-	NetworkIdManager->Instance->SetIsNetworkIDAuthority(true);
-
 	_terminate = false;
 
 	while(!_terminate)
@@ -116,5 +106,4 @@ void BaseServer::Stop()
 
 	OnStop();
 	RakNetworkFactory::DestroyRakPeerInterface(_peer);
-	delete RM;
 }

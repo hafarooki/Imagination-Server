@@ -139,11 +139,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseServer.h" />
-    <ClInclude Include="LuNetworkIdManager.h" />
-    <ClInclude Include="LuReplicaManager.h" />
-    <ClInclude Include="ReplicaComponent.h" />
-    <ClInclude Include="ReplicaEnums.h" />
-    <ClInclude Include="ReplicaObject.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />
     <ClInclude Include="WBitStream.h" />
@@ -152,8 +147,6 @@
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="BaseServer.cpp" />
-    <ClCompile Include="LuNetworkIdManager.cpp" />
-    <ClCompile Include="LuReplicaManager.cpp" />
     <ClCompile Include="Stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

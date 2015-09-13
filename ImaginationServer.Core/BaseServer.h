@@ -7,9 +7,7 @@
 #include <iostream>
 #include "WBitStream.h"
 #include "WPacketPriority.h"
-#include "LuReplicaManager.h"
 #include <NetworkIDManager.h>
-#include "LuNetworkIdManager.h"
 
 using namespace RakNet;
 using namespace System;
@@ -41,9 +39,6 @@ protected:
 	virtual void OnConnect(String^ address) = 0;
 
 public:
-	LuReplicaManager^ RM;
-	LuNetworkIdManager^ NetworkIdManager;
-
 	void SendInitPacket(bool auth, String^ address);
 	void Start();
 	void Stop();

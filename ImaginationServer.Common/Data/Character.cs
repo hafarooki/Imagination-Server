@@ -1,4 +1,6 @@
-﻿namespace ImaginationServer.Common.Data
+﻿using System.Collections.Generic;
+
+namespace ImaginationServer.Common.Data
 {
     public class Character
     {
@@ -18,5 +20,9 @@
         public float MaxImagination { get; set; }
         public int GmLevel { get; set; }
         public long Reputation { get; set; }
+
+        public List<BackpackItem> Items { get; set; }
+        public uint Level { get; set; }
+        public List<MissionData> Missions { get; set; }
     }
 }

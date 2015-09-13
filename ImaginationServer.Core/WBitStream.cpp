@@ -50,7 +50,10 @@ void WBitStream::Write(long long value)
 
 void WBitStream::WriteChars(String^ value)
 {
-	Instance->Write((char*)(void*)Marshal::StringToHGlobalAnsi(value));
+	string chars = (char*)(void*)Marshal::StringToHGlobalAnsi(value);
+	for (unsigned long i = 0; i < chars.size(); i++) {
+		Instance->Write(chars.at(i));
+	}
 }
 
 void WBitStream::Write(WBitStream^ value, unsigned int length) {
