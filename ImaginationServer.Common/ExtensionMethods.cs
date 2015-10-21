@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using static ImaginationServer.Common.PacketEnums;
 using static ImaginationServer.Common.PacketEnums.WorldServerPacketId;
@@ -7,6 +8,16 @@ namespace ImaginationServer.Common
 {
     public static class ExtensionMethods
     {
+        public static long ToCppTime(this DateTime time)
+        {
+            return (long) time.ToUniversalTime().Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+        }
+
+        public static DateTime ToDateTime(this long cppTime)
+        {
+            return new DateTime(1970, 1, 1).AddSeconds(cppTime);
+        }
+
         public static string ReadWString(this BinaryReader reader, int maxLength)
         {
             var valueChars = new List<char>();

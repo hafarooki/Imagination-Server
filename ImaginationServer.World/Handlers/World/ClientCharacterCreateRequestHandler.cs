@@ -92,8 +92,7 @@ namespace ImaginationServer.World.Handlers.World
                     MaxImagination = 0,
                     GmLevel = 0,
                     Reputation = 0,
-
-                    Items = new List<BackpackItem>(182)
+                    Items = new List<BackpackItem>()
                 };
 
                 character.Items.Add(new BackpackItem(WorldPackets.FindCharShirtID(shirtColor, shirtStyle)));

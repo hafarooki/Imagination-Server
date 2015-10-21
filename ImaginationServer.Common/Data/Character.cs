@@ -23,6 +23,6 @@ namespace ImaginationServer.Common.Data
 
         public List<BackpackItem> Items { get; set; }
         public uint Level { get; set; }
-        public List<MissionData> Missions { get; set; }
+        public List<Mission> Missions { get; set; }
     }
 }

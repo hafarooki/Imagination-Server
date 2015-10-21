@@ -71,6 +71,7 @@ namespace ImaginationServer.Common
             AddHandler((ushort)RemoteConnection.Server, (uint)MsgServerVersionConfirm, new ConfirmVersionHandler());
             Multiplexer = ConnectionMultiplexer.Connect("127.0.0.1:6379");
             CacheClient = new StackExchangeRedisCacheClient(Multiplexer, new NewtonsoftSerializer());
+            Directory.CreateDirectory("Temp");
 
             //Multiplexer.GetSubscriber().Subscribe("Kill", (channel, value) =>
             //{

@@ -18,45 +18,65 @@ namespace ImaginationServer.Common
             BitStream.Dispose();
         }
 
+        /// <summary>
+        /// 3
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="data"></param>
         public void WriteFloat(string key, float data)
         {
-            //3
             BitStream.WriteWString(key, true, false);
             BitStream.Write((byte) 3);
             BitStream.Write(data);
             _keyNumber++;
         }
 
+        /// <summary>
+        /// 1
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="data"></param>
         public void WriteS32(string key, int data)
         {
-            //1
             BitStream.WriteWString(key, true, false);
             BitStream.Write((byte) 1);
             BitStream.Write(data);
             _keyNumber++;
         }
 
+        /// <summary>
+        /// 8
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="data"></param>
         public void WriteS64(string key, long data)
         {
-            //8
             BitStream.WriteWString(key, true, false);
             BitStream.Write((byte) 8);
             BitStream.Write(data);
             _keyNumber++;
         }
 
+        /// <summary>
+        /// 9
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="data"></param>
         public void WriteId(string key, long data)
         {
-            //9
             BitStream.WriteWString(key, true, false);
             BitStream.Write((byte) 9);
             BitStream.Write(data);
             _keyNumber++;
         }
 
+        /// <summary>
+        /// 7
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="data"></param>
         public void WriteBool(string key, bool data)
         {
-            //7
             BitStream.WriteWString(key, true, false);
             BitStream.Write((byte) 7);
             if (data) BitStream.Write((byte) 1);
@@ -64,9 +84,13 @@ namespace ImaginationServer.Common
             _keyNumber++;
         }
 
+        /// <summary>
+        /// 0
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="data"></param>
         public void WriteWString(string key, string data)
         {
-            //0
             BitStream.WriteWString(key, true, false);
             BitStream.Write((byte) 0);
             BitStream.Write((uint) data.Length);
@@ -74,9 +98,13 @@ namespace ImaginationServer.Common
             _keyNumber++;
         }
 
+        /// <summary>
+        /// 13
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="data"></param>
         public void WriteBytes(string key, WBitStream data)
         {
-            //13
             BitStream.WriteWString(key, true, false);
             BitStream.Write((byte) 13);
             BitStream.Write(data.GetNumberOfBytesUsed());
