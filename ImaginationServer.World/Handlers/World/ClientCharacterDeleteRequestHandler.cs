@@ -15,10 +15,13 @@ namespace ImaginationServer.World.Handlers.World
     {
         public override void Handle(BinaryReader reader, string address)
         {
-            var id = reader.ReadInt64(); // The object id of the character
-            var character = DbUtils.GetCharacter(id); // Retrieve the character from the database
-
             var client = LuServer.CurrentServer.Clients[address];
+            if (!client.Authenticated) return;
+
+            var id = reader.ReadInt64(); // The object id of the characte
+            Console.WriteLine(id);
+
+            var character = DbUtils.GetCharacter(id); // Retrieve the character from the database
 
             Console.WriteLine($"{client.Username} requested to delete their character {character.Minifig.Name}.");
 

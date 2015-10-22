@@ -21,8 +21,13 @@ namespace ImaginationServer.Common.Data
         public int GmLevel { get; set; }
         public long Reputation { get; set; }
 
-        public List<BackpackItem> Items { get; set; }
+        public BackpackItem[] Items { get; set; }
         public uint Level { get; set; }
         public List<Mission> Missions { get; set; }
+
+        public void AddItem(BackpackItem backpackItem)
+        {
+            Items[backpackItem.Slot] = backpackItem;
+        }
     }
 }

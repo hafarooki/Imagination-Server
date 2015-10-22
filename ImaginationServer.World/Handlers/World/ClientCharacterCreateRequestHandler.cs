@@ -92,10 +92,11 @@ namespace ImaginationServer.World.Handlers.World
                     MaxImagination = 0,
                     GmLevel = 0,
                     Reputation = 0,
-                    Items = new List<BackpackItem>()
+                    Items = new BackpackItem[200]
                 };
 
-                character.Items.Add(new BackpackItem(WorldPackets.FindCharShirtID(shirtColor, shirtStyle)));
+                character.AddItem(new BackpackItem { ObjId = WorldPackets.FindCharShirtID(shirtColor, shirtStyle), Count = 1, Linked = false, Slot = 0});
+                //character.AddItem(WorldPackets.);
 
                 DbUtils.AddCharacter(character); // Add the character to the database.
 

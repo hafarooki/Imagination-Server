@@ -144,5 +144,23 @@ namespace ImaginationServer.Common
         {
             Multiplexer.GetSubscriber().Publish(((ushort)code).ToString(), data);
         }
+
+        public void SendGameMessage(string address, long objId, ushort messageId)
+        {
+            using (var gameMessage = CreateGameMessage(objId, messageId))
+            {
+                Send(gameMessage, WPacketPriority.SystemPriority, WPacketReliability.ReliableOrdered, 0, address, false);
+            }
+        }
+
+        public static WBitStream CreateGameMessage(long objId, ushort messageId)
+        {
+            var gameMessage = new WBitStream();
+
+            gameMessage.Write(objId);
+            gameMessage.Write(messageId);
+
+            return gameMessage;
+        }
     }
 }

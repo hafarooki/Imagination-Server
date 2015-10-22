@@ -68,7 +68,9 @@ void ImaginationServerWorldPackets::WorldPackets::SendCharacterListResponse(Stri
 		bitStream.Write((unsigned short)1); // number of items to follow
 
 		// equipped item LOTs (order of items doesn’t matter? I think it reads them in order so if we accidentally put 2 shirts the second one will be the one shown.)
-		bitStream.Write(FindCharShirtID(character->Minifig->ShirtColor, character->Minifig->ShirtStyle));
+		for each (auto item in character->Items) {
+			bitStream.Write(item.ObjId); // pretty sure you write this
+		}
 
 		charId++;
 	}

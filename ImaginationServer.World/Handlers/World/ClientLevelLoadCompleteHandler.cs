@@ -23,6 +23,7 @@ namespace ImaginationServer.World.Handlers.World
 
             Console.WriteLine(
                 $"Got clientside level load complete packet from {client.Username}. Zone: {zone}, Instance: {instance}, Clone: {clone}.");
+            var character = DbUtils.GetCharacter(client.Character);
 
             using (var bitStream = new WBitStream())
             {
@@ -30,8 +31,6 @@ namespace ImaginationServer.World.Handlers.World
 
                 using (var ldf = new Ldf())
                 {
-                    var character = DbUtils.GetCharacter(client.Character);
-
                     // TODO: Improve LDF code here
                     ldf.WriteS64("accountID", 0);
                     ldf.WriteS32("chatmode", 0);
@@ -56,6 +55,15 @@ namespace ImaginationServer.World.Handlers.World
                     LuServer.CurrentServer.Send(bitStream, WPacketPriority.SystemPriority,
                         WPacketReliability.ReliableOrdered, 0, address, false);
                 }
+            }
+
+            LuServer.CurrentServer.SendGameMessage(address, character.Id, 1642);
+            LuServer.CurrentServer.SendGameMessage(address, character.Id, 509);
+            using (var gameMessage = LuServer.CreateGameMessage(character.Id, 472))
+            {
+                gameMessage.Write((uint) 185);
+                gameMessage.Write((byte) 0);
+                LuServer.CurrentServer.Send(gameMessage, WPacketPriority.SystemPriority, WPacketReliability.ReliableOrdered, 0, address, false);
             }
         }
 
@@ -117,7 +125,7 @@ namespace ImaginationServer.World.Handlers.World
                 writer.WriteStartElement("pet"); // <pet> 
                 writer.WriteEndElement(); // </pet>
 
-                if (character.Missions.Any())
+                if (character.Missions?.Any() ?? false)
                 {
                     writer.WriteStartElement("mis"); // <mis>
                     writer.WriteStartElement("done"); // <done>

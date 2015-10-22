@@ -14,6 +14,8 @@ using namespace ImaginationServer::Common::Data;
 
 namespace ImaginationServerWorldPackets {
 
+	// From LUNI, mostly
+
 	public enum class CharCreatePantsColor : unsigned long {
 		PANTS_BRIGHT_RED = 2508,
 		PANTS_BRIGHT_ORANGE = 2509,

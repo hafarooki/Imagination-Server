@@ -17,7 +17,7 @@ namespace ImaginationServer.Common
         /// <returns>The key where the username assigned to that ID should be stored.</returns>
         public static string GetIdKey(long id, bool notRaw = false)
         {
-            return $"characters:IDMAP:{id - 1152921504606846994}";
+            return $"characters:IDMAP:{id - (notRaw ? 0 : 1152921504606846994)}";
         }
 
         /// <summary>
@@ -106,10 +106,11 @@ namespace ImaginationServer.Common
         ///     Gets a character from their ID.
         /// </summary>
         /// <param name="id">The character ID.</param>
+        /// <param name="notRaw">Is this not raw?</param>
         /// <returns>The character</returns>
-        public static Character GetCharacter(long id)
+        public static Character GetCharacter(long id, bool notRaw = false)
         {
-            return GetCharacter(GetCharacterName(id));
+            return GetCharacter(GetCharacterName(id, notRaw));
         }
 
         /// <summary>
