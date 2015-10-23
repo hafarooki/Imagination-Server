@@ -15,14 +15,18 @@ namespace ImaginationServer.World.Handlers.World
     {
         public override void Handle(BinaryReader reader, string address)
         {
+            var client = LuServer.CurrentServer.Clients[address];
+
+            if (!client.Authenticated) return;
+
             var zone = (ZoneId) reader.ReadUInt16();
             var instance = reader.ReadUInt16();
             var clone = reader.ReadInt32();
 
-            var client = LuServer.CurrentServer.Clients[address];
-
             Console.WriteLine(
                 $"Got clientside level load complete packet from {client.Username}. Zone: {zone}, Instance: {instance}, Clone: {clone}.");
+
+            var account = DbUtils.GetAccount(client.Username);
             var character = DbUtils.GetCharacter(client.Character);
 
             using (var bitStream = new WBitStream())
@@ -32,14 +36,16 @@ namespace ImaginationServer.World.Handlers.World
                 using (var ldf = new Ldf())
                 {
                     // TODO: Improve LDF code here
-                    ldf.WriteS64("accountID", 0);
+                    ldf.WriteS64("accountID", account.Id);
                     ldf.WriteS32("chatmode", 0);
                     ldf.WriteBool("editor_enabled", false);
                     ldf.WriteS32("editor_level", 0);
                     ldf.WriteBool("freetrial", false);
                     ldf.WriteS32("gmlevel", character.GmLevel);
                     ldf.WriteBool("legoclub", true);
-                    ldf.WriteS64("levelid", 0);
+                    var levelid = character.ZoneId + (((long) character.MapInstance) << 16) +
+                                  (((long) character.MapClone) << 32);
+                    ldf.WriteS64("levelid", levelid);
                     ldf.WriteWString("name", character.Minifig.Name);
                     ldf.WriteId("objid", character.Id);
                     ldf.WriteFloat("position.x", character.Position[0]);
@@ -63,13 +69,14 @@ namespace ImaginationServer.World.Handlers.World
             {
                 gameMessage.Write((uint) 185);
                 gameMessage.Write((byte) 0);
-                LuServer.CurrentServer.Send(gameMessage, WPacketPriority.SystemPriority, WPacketReliability.ReliableOrdered, 0, address, false);
+                LuServer.CurrentServer.Send(gameMessage, WPacketPriority.SystemPriority,
+                    WPacketReliability.ReliableOrdered, 0, address, false);
             }
         }
 
         private static WBitStream GenXmlData(Character character)
         {
-            using(var str = new StringWriter())
+            using (var str = new StringWriter())
             using (var writer = new XmlTextWriter(str))
             {
                 writer.WriteStartDocument(); // <xml>
@@ -110,7 +117,7 @@ namespace ImaginationServer.World.Handlers.World
 
                 writer.WriteStartElement("mf"); // <mf>
                 writer.WriteEndElement(); // </mf>
-                
+
                 writer.WriteStartElement("char"); // <char>
                 writer.WriteAttributeString("cc", "100"); // cc="100"
                 writer.WriteEndElement(); // </char>
@@ -151,8 +158,8 @@ namespace ImaginationServer.World.Handlers.World
                 writer.WriteEndDocument(); // ends document
                 var bitStream = new WBitStream();
                 bitStream.WriteChars(str.ToString());
-                
-                //XElement.Parse(str.ToString()).Save("Temp/" + character.Minifig.Name + ".xmldata.xml");
+
+                XElement.Parse(str.ToString()).Save("Temp/" + character.Minifig.Name + ".xmldata.xml");
 
                 return bitStream;
             }

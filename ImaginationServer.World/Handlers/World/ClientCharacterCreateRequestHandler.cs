@@ -106,7 +106,7 @@ namespace ImaginationServer.World.Handlers.World
                 var next = long.Parse(LuServer.CurrentServer.Multiplexer.GetDatabase().StringGet("LastUserId"));
                     // Get the last character id
                 LuServer.CurrentServer.Multiplexer.GetDatabase()
-                    .StringSet(DbUtils.GetIdKey(next), character.Minifig.Name.ToLower()); // Match the name to the id
+                    .StringSet(DbUtils.GetIdKey(next, true), character.Minifig.Name.ToLower()); // Match the name to the id
                 next += 1; // Add one to the id, so the next character will have a different id.
                 LuServer.CurrentServer.Multiplexer.GetDatabase().StringSet("LastUserId", next);
                     // Update the ID (Luckily, for simple strings, there actually IS a set method!)
