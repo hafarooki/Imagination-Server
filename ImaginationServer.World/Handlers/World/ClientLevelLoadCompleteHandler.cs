@@ -152,7 +152,7 @@ namespace ImaginationServer.World.Handlers.World
                 var bitStream = new WBitStream();
                 bitStream.WriteChars(str.ToString());
                 
-                XElement.Parse(str.ToString()).Save("Temp/" + character.Minifig.Name + ".xmldata.xml");
+                //XElement.Parse(str.ToString()).Save("Temp/" + character.Minifig.Name + ".xmldata.xml");
 
                 return bitStream;
             }

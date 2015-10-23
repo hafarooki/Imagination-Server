@@ -50,6 +50,8 @@ namespace ImaginationServer.Common
         /// </summary>
         public ConnectionMultiplexer Multiplexer { get; }
 
+        public const bool LogUnknownPackets = true;
+
         /// <summary>
         /// Main constructor
         /// </summary>
@@ -72,6 +74,11 @@ namespace ImaginationServer.Common
             Multiplexer = ConnectionMultiplexer.Connect("127.0.0.1:6379");
             CacheClient = new StackExchangeRedisCacheClient(Multiplexer, new NewtonsoftSerializer());
             Directory.CreateDirectory("Temp");
+
+            if (LogUnknownPackets)
+            {
+                Directory.CreateDirectory("Packets");
+            }
 
             //Multiplexer.GetSubscriber().Subscribe("Kill", (channel, value) =>
             //{
@@ -102,6 +109,10 @@ namespace ImaginationServer.Common
                     if (!Handlers.ContainsKey(tuple))
                     {
                         Console.WriteLine("Unhandled packet received! 53-{0}-00-{1}", tuple.Item1.ToString("X"), tuple.Item2.ToString("X"));
+                        if (LogUnknownPackets)
+                        {
+                            File.WriteAllBytes("Packets/" + tuple.Item1 + "-" + tuple.Item2 + ".bin", bytes);
+                        }
                         return;
                     }
 
