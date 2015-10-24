@@ -39,6 +39,7 @@ public ref class WBitStream
 	void Write(WBitStream^ value, unsigned int length);
 
 	unsigned long GetNumberOfBytesUsed();
+	cli::array<unsigned char>^ GetBytes();
 
 	//unsigned char ReadByte();
 	//unsigned short ReadUShort();

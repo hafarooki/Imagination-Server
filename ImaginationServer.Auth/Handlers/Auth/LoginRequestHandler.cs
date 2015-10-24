@@ -65,7 +65,22 @@ namespace ImaginationServer.Auth.Handlers.Auth
                 // TODO: Store user key
             }
 
-            SendLoginResponse(address, valid, RandomString(66));
+            //SendLoginResponse(address, valid, RandomString(66));
+            using (var bitStream = new WBitStream())
+            {
+                bitStream.WriteHeader(PacketEnums.RemoteConnection.Client, 0);
+
+                bitStream.Write(valid);
+                bitStream.WriteString("Talk_Like_A_Pirate", 33);
+                for (var i = 0; i < 7; i++)
+                {
+                    bitStream.WriteString("_", 0, 33);
+                }
+                bitStream.Write((ushort)1);
+                bitStream.Write((ushort)10);
+                bitStream.Write((ushort)64);
+                bitStream.WriteWString(RandomString(66), false, true);
+            }
         }
 
         private string RandomString(int length,

@@ -2,6 +2,7 @@
 #include "WBitStream.h"
 
 using namespace System::Runtime::InteropServices;
+using namespace cli;
 
 WBitStream::WBitStream()
 {
@@ -145,6 +146,14 @@ void WBitStream::MarshalString(String ^ s, wstring& os) {
 		(const wchar_t*)(Marshal::StringToHGlobalUni(s)).ToPointer();
 	os = chars;
 	Marshal::FreeHGlobal(IntPtr((void*)chars));
+}
+
+cli::array<unsigned char>^ WBitStream::GetBytes() {
+	auto data = Instance->GetData();
+	cli::array<unsigned char>^ data_array = gcnew cli::array<unsigned char>(Instance->GetNumberOfBytesUsed());
+	for (int i = 0; i < data_array->Length; ++i)
+		data_array[i] = data[i];
+	return data_array;
 }
 
 //unsigned char WBitStream::ReadByte()

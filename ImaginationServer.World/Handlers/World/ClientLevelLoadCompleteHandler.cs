@@ -60,6 +60,7 @@ namespace ImaginationServer.World.Handlers.World
                     ldf.WriteToPacket(bitStream);
                     LuServer.CurrentServer.Send(bitStream, WPacketPriority.SystemPriority,
                         WPacketReliability.ReliableOrdered, 0, address, false);
+                    File.WriteAllBytes("Temp/" + character.Minifig.Name + ".world_2a.bin", bitStream.GetBytes());
                 }
             }
 

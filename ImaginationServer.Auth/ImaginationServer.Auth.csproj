@@ -39,9 +39,6 @@
     <StartupObject>ImaginationServer.Auth.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ImaginationServer.Core">
-      <HintPath>..\Debug\ImaginationServer.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -82,6 +79,10 @@
     <ProjectReference Include="..\ImaginationServer.Common\ImaginationServer.Common.csproj">
       <Project>{9E791210-0A94-428D-B483-46EB198942E2}</Project>
       <Name>ImaginationServer.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ImaginationServer.Core\ImaginationServer.Core.vcxproj">
+      <Project>{b556a656-2380-4e15-9fa9-25d555ae0fcc}</Project>
+      <Name>ImaginationServer.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
