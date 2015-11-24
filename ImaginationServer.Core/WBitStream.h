@@ -11,7 +11,7 @@ using namespace System;
 public ref class WBitStream
 {
 	void MarshalString(String^ value, string& output);
-	void MarshalString(String^ value, wstring& output);
+	//void MarshalString(String^ value, wstring& output);
 	public:
 	BitStream* Instance;
 
@@ -34,6 +34,7 @@ public ref class WBitStream
 	void Write(const char* value, int length, int maxLength);
 	void Write(char* value);
 	void Write(unsigned char* value);
+	void Write(cli::array<unsigned char>^ value);
 	void Write(wstring value, bool writeSize, bool nullChar);
 	void Write(Single value);
 	void Write(WBitStream^ value, unsigned int length);

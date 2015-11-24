@@ -9,12 +9,11 @@ namespace ImaginationServer.World.Handlers.World
 {
     public class ClientLoginRequestHandler : PacketHandler
     {
-        public override void Handle(BinaryReader reader, string address)
+        public override void Handle(BinaryReader reader, LuClient client)
         {
             var objectId = reader.ReadInt64(); // Read the object ID.
-            Console.WriteLine("Received Login Request from {0} - ObjectID = {1}", address, objectId);
+            Console.WriteLine("Received Login Request from {0} - ObjectID = {1}", client.Address, objectId);
 
-            var client = LuServer.CurrentServer.Clients[address]; // Get the client.
             var account = DbUtils.GetAccount(client.Username); // Get the account.
             var character = DbUtils.GetCharacter(objectId);
 
@@ -44,7 +43,7 @@ namespace ImaginationServer.World.Handlers.World
                 bitStream.Write((byte) 0); // Don't say that this was a mythran dimensional shift, because it wasn't.
 
                 LuServer.CurrentServer.Send(bitStream, WPacketPriority.SystemPriority,
-                    WPacketReliability.ReliableOrdered, 0, address, false); // Send the redirect packet.
+                    WPacketReliability.ReliableOrdered, 0, client.Address, false); // Send the redirect packet.
             }
         }
 

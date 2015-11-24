@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using ImaginationServer.Common;
@@ -13,10 +14,8 @@ namespace ImaginationServer.World.Handlers.World
 {
     public class ClientLevelLoadCompleteHandler : PacketHandler
     {
-        public override void Handle(BinaryReader reader, string address)
+        public override void Handle(BinaryReader reader, LuClient client)
         {
-            var client = LuServer.CurrentServer.Clients[address];
-
             if (!client.Authenticated) return;
 
             var zone = (ZoneId) reader.ReadUInt16();
@@ -59,26 +58,26 @@ namespace ImaginationServer.World.Handlers.World
                     bitStream.Write((byte) 0);
                     ldf.WriteToPacket(bitStream);
                     LuServer.CurrentServer.Send(bitStream, WPacketPriority.SystemPriority,
-                        WPacketReliability.ReliableOrdered, 0, address, false);
+                        WPacketReliability.ReliableOrdered, 0, client.Address, false);
                     File.WriteAllBytes("Temp/" + character.Minifig.Name + ".world_2a.bin", bitStream.GetBytes());
                 }
             }
 
-            LuServer.CurrentServer.SendGameMessage(address, character.Id, 1642);
-            LuServer.CurrentServer.SendGameMessage(address, character.Id, 509);
+            LuServer.CurrentServer.SendGameMessage(client.Address, character.Id, 1642);
+            LuServer.CurrentServer.SendGameMessage(client.Address, character.Id, 509);
             using (var gameMessage = LuServer.CreateGameMessage(character.Id, 472))
             {
                 gameMessage.Write((uint) 185);
                 gameMessage.Write((byte) 0);
                 LuServer.CurrentServer.Send(gameMessage, WPacketPriority.SystemPriority,
-                    WPacketReliability.ReliableOrdered, 0, address, false);
+                    WPacketReliability.ReliableOrdered, 0, client.Address, false);
             }
         }
 
         private static WBitStream GenXmlData(Character character)
         {
-            using (var str = new StringWriter())
-            using (var writer = new XmlTextWriter(str))
+            using (var str = new MemoryStream())
+            using (var writer = new XmlTextWriter(str, Encoding.UTF8))
             {
                 writer.WriteStartDocument(); // <xml>
                 writer.WriteStartElement("obj"); // <obj>
@@ -158,9 +157,10 @@ namespace ImaginationServer.World.Handlers.World
                 writer.WriteEndElement(); // </obj>
                 writer.WriteEndDocument(); // ends document
                 var bitStream = new WBitStream();
-                bitStream.WriteChars(str.ToString());
+                bitStream.Write(str.ToArray());
 
-                XElement.Parse(str.ToString()).Save("Temp/" + character.Minifig.Name + ".xmldata.xml");
+                XElement.Parse(Encoding.UTF8.GetString(str.ToArray()))
+                    .Save("Temp/" + character.Minifig.Name + ".xmldata.xml");
 
                 return bitStream;
             }

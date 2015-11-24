@@ -9,7 +9,7 @@ namespace ImaginationServer.World.Handlers.World
 {
     internal class ClientValidationHandler : PacketHandler
     {
-        public override void Handle(BinaryReader reader, string address)
+        public override void Handle(BinaryReader reader, LuClient client)
         {
             var username = reader.ReadWString(66); // Read the username
             reader.BaseStream.Position = 74; // Set the position to 74, to get the user key.
@@ -18,8 +18,8 @@ namespace ImaginationServer.World.Handlers.World
             Console.WriteLine($"Got client validation request. Username: {username}, User Key: {userKey}.");
 
             // Set the user to authenticated
-            LuServer.CurrentServer.Clients[address].Authenticated = true;
-            LuServer.CurrentServer.Clients[address].Username = username;
+            client.Authenticated = true;
+            client.Username = username;
             // TODO: Verify user key (Maybe it should expire, instead of just being stored? Otherwise, I'd just cache it.)
 
             if (LuServer.CurrentServer.ServerId.HasFlag(ServerId.Character))
@@ -28,8 +28,7 @@ namespace ImaginationServer.World.Handlers.World
             // Get the selected character.
             var characterName =
                 LuServer.CurrentServer.CacheClient.Database.StringGet("cache:selectedcharacter:" + username.ToLower());
-
-            var client = LuServer.CurrentServer.Clients[address];
+            
             client.Character = characterName; // Store the selected character
 
             var character = DbUtils.GetCharacter(characterName);
@@ -50,7 +49,7 @@ namespace ImaginationServer.World.Handlers.World
 
                 // Send the packet
                 LuServer.CurrentServer.Send(bitStream, WPacketPriority.SystemPriority,
-                    WPacketReliability.ReliableOrdered, 0, address, false);
+                    WPacketReliability.ReliableOrdered, 0, client.Address, false);
 
                 Console.WriteLine($"Sent world info to client - ZoneId = {character.ZoneId}, Map Instance = {character.MapInstance}, Map Clone = {character.MapClone}");
             }

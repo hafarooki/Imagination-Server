@@ -10,14 +10,13 @@ namespace ImaginationServer.World.Handlers.World
 {
     public class ClientCharacterRenameRequestHandler : PacketHandler
     {
-        public override void Handle(BinaryReader reader, string address)
+        public override void Handle(BinaryReader reader, LuClient client)
         {
             // Read packet
             var objectId = reader.ReadInt64();
             var newName = reader.ReadWString(66);
 
             // Gather info
-            var client = LuServer.CurrentServer.Clients[address];
             var account = GetAccount(client.Username);
             var character = GetCharacter(objectId);
 
@@ -58,7 +57,7 @@ namespace ImaginationServer.World.Handlers.World
 
                 // Send the packet
                 LuServer.CurrentServer.Send(bitStream, WPacketPriority.SystemPriority,
-                    WPacketReliability.ReliableOrdered, 0, address, false);
+                    WPacketReliability.ReliableOrdered, 0, client.Address, false);
             }
         }
     }

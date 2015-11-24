@@ -13,9 +13,8 @@ namespace ImaginationServer.World.Handlers.World
 {
     public class ClientCharacterDeleteRequestHandler : PacketHandler
     {
-        public override void Handle(BinaryReader reader, string address)
+        public override void Handle(BinaryReader reader, LuClient client)
         {
-            var client = LuServer.CurrentServer.Clients[address];
             if (!client.Authenticated) return;
 
             var id = reader.ReadInt64(); // The object id of the characte
@@ -28,7 +27,7 @@ namespace ImaginationServer.World.Handlers.World
             using (var bitStream = new WBitStream()) // Create the new bitstream
             {
                 bitStream.WriteHeader(RemoteConnection.Client, (uint) MsgClientDeleteCharacterResponse); // Always write the packet header!
-                if (!string.Equals(character.Owner, LuServer.CurrentServer.Clients[address].Username,
+                if (!string.Equals(character.Owner, client.Username,
                         StringComparison.CurrentCultureIgnoreCase)) // You can't delete someone else's character!
                 {
                     bitStream.Write((byte) 0x02); // Maybe that's the fail code?
@@ -41,7 +40,7 @@ namespace ImaginationServer.World.Handlers.World
                     Console.WriteLine("Successfully deleted character.");
                 }
 
-                LuServer.CurrentServer.Send(bitStream, SystemPriority, ReliableOrdered, 0, address, false); // Send the packet
+                LuServer.CurrentServer.Send(bitStream, SystemPriority, ReliableOrdered, 0, client.Address, false); // Send the packet
             }
         }
     }

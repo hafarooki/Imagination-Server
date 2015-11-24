@@ -14,10 +14,8 @@ namespace ImaginationServer.World.Handlers.World
 {
     public class ClientCharacterCreateRequestHandler : PacketHandler
     {
-        public override void Handle(BinaryReader reader, string address)
+        public override void Handle(BinaryReader reader, LuClient client)
         {
-            var client = LuServer.CurrentServer.Clients[address]; // Get the client from the address.
-
             if (!client.Authenticated) return; // You need to have an account and be signed into it to make a character!
 
             var name = reader.ReadWString(66); // Read the name of the new character
@@ -121,10 +119,10 @@ namespace ImaginationServer.World.Handlers.World
                 bitStream.WriteHeader(RemoteConnection.Client, (uint)MsgClientCharacterCreateResponse); // Always write the packet header.
                 bitStream.Write((responseId)); // Write the response code.
                 LuServer.CurrentServer.Send(bitStream, SystemPriority,
-                    ReliableOrdered, 0, address, false); // Send the response.
+                    ReliableOrdered, 0, client.Address, false); // Send the response.
             }
 
-            if(responseId == 0x00) WorldPackets.SendCharacterListResponse(address, DbUtils.GetAccount(client.Username)); // Send the updated character list.
+            if(responseId == 0x00) WorldPackets.SendCharacterListResponse(client.Address, DbUtils.GetAccount(client.Username)); // Send the updated character list.
         }
     }
 }

@@ -118,7 +118,7 @@ namespace ImaginationServer.Common
 
                     reader.ReadByte();
 
-                    Handlers[tuple].Handle(reader, address);
+                    Handlers[tuple].Handle(reader, Clients[address]);
                 }
             }
         }

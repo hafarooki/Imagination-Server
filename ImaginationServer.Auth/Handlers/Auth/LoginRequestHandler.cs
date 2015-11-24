@@ -15,7 +15,7 @@ namespace ImaginationServer.Auth.Handlers.Auth
 {
     public class LoginRequestHandler : PacketHandler
     {
-        public override void Handle(BinaryReader reader, string address)
+        public override void Handle(BinaryReader reader, LuClient client)
         {
             var loginRequest = new LoginRequest(reader);
             WriteLine($"{loginRequest.Username} sent authentication request.");
@@ -54,7 +54,7 @@ namespace ImaginationServer.Auth.Handlers.Auth
                     break;
                 default:
                     WriteLine(
-                        "FATAL: Magically, the valid variable was not 0x01, 0x06, or 0x02! (Like, how is that even possible..?)");
+                        "FATAL: Magically, the valid variable was not 0x01, 0x06, or 0x02! (Like, how is that even possible..? I'm only checking because resharper is making me.)");
                     break;
             }
 
@@ -65,7 +65,10 @@ namespace ImaginationServer.Auth.Handlers.Auth
                 // TODO: Store user key
             }
 
-            //SendLoginResponse(address, valid, RandomString(66));
+            // Use C++ auth for now (I hope to eliminate this sometime)
+            SendLoginResponse(client.Address, valid, RandomString(66));
+            // C# auth, not working atm
+/*
             using (var bitStream = new WBitStream())
             {
                 bitStream.WriteHeader(PacketEnums.RemoteConnection.Client, 0);
@@ -76,15 +79,73 @@ namespace ImaginationServer.Auth.Handlers.Auth
                 {
                     bitStream.WriteString("_", 0, 33);
                 }
+                // client version
                 bitStream.Write((ushort)1);
                 bitStream.Write((ushort)10);
                 bitStream.Write((ushort)64);
-                bitStream.WriteWString(RandomString(66), false, true);
+                //bitStream.WriteWString(RandomString(32), false, true); // user key
+                bitStream.WriteString(RandomString(66), 66, 66);
+                bitStream.WriteString("localhost", 33); // redirect ip
+                bitStream.WriteString("localhost", 33); // chat ip
+                bitStream.Write((ushort)2006); // redirect port
+                bitStream.Write((ushort)2003); // chat port
+                bitStream.WriteString("localhost", 33); // another ip
+                bitStream.WriteString("00000000-0000-0000-0000-000000000000",  37); // possible guid
+                bitStream.Write((ushort)0); // zero short
+
+                // localization
+                bitStream.Write((byte)0x55);
+                bitStream.Write((byte)0x53);
+                bitStream.Write((byte)0x00);
+
+                bitStream.Write((byte)0); // first login subscription
+                bitStream.Write((byte)0); // subscribed
+                bitStream.Write((ulong)0); // zero long
+                bitStream.Write((ushort)0); // error message length
+                bitStream.WriteString("T", 0, 1); // error message
+                bitStream.Write((ushort)324); // extra data length
+
+                CreateExtraPacketData(0, 0, 2803442767, bitStream);
+                CreateExtraPacketData(7, 37381, 2803442767, bitStream);
+                CreateExtraPacketData(8, 6, 2803442767, bitStream);
+                CreateExtraPacketData(9, 0, 2803442767, bitStream);
+                CreateExtraPacketData(10, 0, 2803442767, bitStream);
+                CreateExtraPacketData(11, 1, 2803442767, bitStream);
+                CreateExtraPacketData(14, 1, 2803442767, bitStream);
+                CreateExtraPacketData(15, 0, 2803442767, bitStream);
+                CreateExtraPacketData(17, 1, 2803442767, bitStream);
+                CreateExtraPacketData(5, 0, 2803442767, bitStream);
+                CreateExtraPacketData(6, 1, 2803442767, bitStream);
+                CreateExtraPacketData(20, 1, 2803442767, bitStream);
+                CreateExtraPacketData(19, 30854, 2803442767, bitStream);
+                CreateExtraPacketData(21, 0, 2803442767, bitStream);
+                CreateExtraPacketData(22, 0, 2803442767, bitStream);
+                CreateExtraPacketData(23, 4114, 2803442767, bitStream);
+                CreateExtraPacketData(27, 4114, 2803442767, bitStream);
+                CreateExtraPacketData(28, 1, 2803442767, bitStream);
+                CreateExtraPacketData(29, 0, 2803442767, bitStream);
+                CreateExtraPacketData(30, 30854, 2803442767, bitStream);
+
+                File.WriteAllBytes("Temp/loginresponse.bin", bitStream.GetBytes());
+
+                LuServer.CurrentServer.Send(bitStream, WPacketPriority.SystemPriority,
+                    WPacketReliability.ReliableOrdered, 0, client.Address, false); // Send the packet.
             }
+*/
+        }
+
+        private static void CreateExtraPacketData(uint stampId, int bracketNum, uint afterNum, WBitStream bitStream)
+        {
+            const uint zeroPacket = 0;
+
+            bitStream.Write(stampId);
+            bitStream.Write(bracketNum);
+            bitStream.Write(afterNum);
+            bitStream.Write(zeroPacket);
         }
 
         private string RandomString(int length,
-            string allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+            string allowedChars = "0123456789abcdef")
         {
             if (length < 0) throw new ArgumentOutOfRangeException(nameof(length), "length cannot be less than zero.");
             if (string.IsNullOrEmpty(allowedChars)) throw new ArgumentException("allowedChars may not be empty.");

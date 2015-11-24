@@ -9,7 +9,7 @@ namespace ImaginationServer.World.Handlers.World
 {
     public class ClientGameMsgHandler : PacketHandler
     {
-        private Dictionary<ushort, GameMsgHandler> _handlers;
+        private readonly Dictionary<ushort, GameMsgHandler> _handlers;
 
         public ClientGameMsgHandler()
         {
@@ -21,7 +21,7 @@ namespace ImaginationServer.World.Handlers.World
             // TODO: Add handlers
         } 
 
-        public override void Handle(BinaryReader reader, string address)
+        public override void Handle(BinaryReader reader, LuClient client)
         {
             var objectId = reader.ReadInt64();
             //var flags = "";

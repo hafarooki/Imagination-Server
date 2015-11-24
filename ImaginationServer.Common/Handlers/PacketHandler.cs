@@ -9,6 +9,6 @@ namespace ImaginationServer.Common.Handlers
 {
     public abstract class PacketHandler
     {
-        public abstract void Handle(BinaryReader reader, string address);
+        public abstract void Handle(BinaryReader reader, LuClient sender);
     }
 }

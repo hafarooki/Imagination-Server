@@ -7,7 +7,7 @@ namespace ImaginationServer.World.Handlers.World
 {
     public class ClientRoutePacketHandler : PacketHandler
     {
-        public override void Handle(BinaryReader reader, string address)
+        public override void Handle(BinaryReader reader, LuClient client)
         {
             var subPacketLength = reader.ReadUInt32();
             var remoteConnection = (PacketEnums.RemoteConnection) reader.ReadUInt16();

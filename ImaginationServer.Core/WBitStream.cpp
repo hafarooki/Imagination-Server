@@ -48,13 +48,14 @@ void WBitStream::Write(long long value)
 {
 	Instance->Write(value);
 }
-
+;
 void WBitStream::WriteChars(String^ value)
 {
 	string chars = (char*)(void*)Marshal::StringToHGlobalAnsi(value);
+	cout << chars.c_str() << endl;
 	for (unsigned long i = 0; i < chars.size(); i++) {
 		Instance->Write(chars.at(i));
-	}
+}
 }
 
 void WBitStream::Write(WBitStream^ value, unsigned int length) {
@@ -77,22 +78,22 @@ void WBitStream::Write(Single value)
 
 void WBitStream::WriteString(String^ value, int length, int maxLength)
 {
-	auto chars = (char*)(void*)Marshal::StringToHGlobalAnsi(value);
-	Instance->Write(chars, length);
+	string chars = (char*)(void*)Marshal::StringToHGlobalAnsi(value);
+	cout << chars.c_str() << endl;
+	Instance->Write(chars.c_str(), length);
 	int remaining = maxLength - length;
 	for (int i = 0; i < remaining; i++) Instance->Write((unsigned char)0);
 }
 
 void WBitStream::WriteWString(String^ value, bool writeSize, bool nullChar)
 {
-	wstring str;
-	MarshalString(value, str);
-	if (writeSize) Instance->Write((unsigned char)(str.size() * 2));
+	wstring str = (wchar_t*)(void*)Marshal::StringToHGlobalUni(value);
 	if(nullChar) str.append(L"\0");
-	for (unsigned int k = 0; k < str.size(); k++)
+	if (writeSize) Instance->Write((unsigned char)(str.length() + (nullChar ? 1 : 0)) * 2);
+	for (auto i = 0; i < str.size(); i++)
 	{
-		Instance->Write(str.at(k));
-	}
+		Instance->Write(str[i]);
+}
 }
 
 void WBitStream::Write(char * value, int length)
@@ -122,6 +123,14 @@ void WBitStream::Write(unsigned char * value)
 	Instance->Write(value);
 }
 
+void WBitStream::Write(cli::array<unsigned char>^ value)
+{
+	unsigned char* native;
+	for (int i = 0; i < value->Length; ++i)
+		native[i] = value[i];
+	Write(native);
+}
+
 void WBitStream::Write(wstring str, bool writeSize, bool nullChar)
 {
 	if (writeSize) Instance->Write((unsigned char)(str.size() * 2));
@@ -129,30 +138,30 @@ void WBitStream::Write(wstring str, bool writeSize, bool nullChar)
 	for (unsigned int k = 0; k < str.size(); k++)
 	{
 		Instance->Write(str.at(k));
-	}
+}
 }
 
 void WBitStream::MarshalString(String ^ s, string& os) {
 	using namespace Runtime::InteropServices;
 	const char* chars =
-		(const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
+	(const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
 	os = chars;
 	Marshal::FreeHGlobal(IntPtr((void*)chars));
 }
 
-void WBitStream::MarshalString(String ^ s, wstring& os) {
-	using namespace Runtime::InteropServices;
-	const wchar_t* chars =
-		(const wchar_t*)(Marshal::StringToHGlobalUni(s)).ToPointer();
-	os = chars;
-	Marshal::FreeHGlobal(IntPtr((void*)chars));
-}
+//void WBitStream::MarshalString(String ^ s, wstring& os) {
+//	using namespace Runtime::InteropServices;
+//	const wchar_t* chars =
+//		(const wchar_t*)(Marshal::StringToHGlobalUni(s)).ToPointer();
+//	os = chars;
+//	Marshal::FreeHGlobal(IntPtr((void*)chars));
+//}
 
 cli::array<unsigned char>^ WBitStream::GetBytes() {
 	auto data = Instance->GetData();
 	cli::array<unsigned char>^ data_array = gcnew cli::array<unsigned char>(Instance->GetNumberOfBytesUsed());
 	for (int i = 0; i < data_array->Length; ++i)
-		data_array[i] = data[i];
+	data_array[i] = data[i];
 	return data_array;
 }
 
@@ -204,3 +213,5 @@ cli::array<unsigned char>^ WBitStream::GetBytes() {
 //	Instance->Read(value);
 //	return gcnew String(value.c_str());
 //}
+
+
