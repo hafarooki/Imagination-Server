@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using ImaginationServer.Common;
 using ImaginationServer.Common.Packets;
-using static System.Console;
 
 namespace ImaginationServer.Auth.Packets.Auth
 {

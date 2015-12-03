@@ -6,6 +6,7 @@
 #include <BitStream.h>
 
 using namespace System;
+using namespace ImaginationServer::Common;
 using namespace RakNet;
 
 namespace ImaginationServerAuthPackets {
@@ -21,7 +22,7 @@ namespace ImaginationServerAuthPackets {
 			bitStream->Write(zeroPacket);
 		}
 	public:
-		static void SendLoginResponse(String^ address, unsigned char success, String^ userkey);
+		static void SendLoginResponse(String^ address, unsigned char success, String^ userkey, LuServer^ peer);
 
 		static void WriteStringToBitStream(const char* myString, int stringSize, int maxChars, RakNet::BitStream* output)
 		{

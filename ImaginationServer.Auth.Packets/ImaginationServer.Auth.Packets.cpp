@@ -12,7 +12,7 @@
 using namespace ImaginationServer::Common;
 using namespace RakNet;
 
-void ImaginationServerAuthPackets::AuthPackets::SendLoginResponse(String ^ address, unsigned char success, String^ userKey)
+void ImaginationServerAuthPackets::AuthPackets::SendLoginResponse(String ^ address, unsigned char success, String^ userKey, LuServer^ server)
 {
 	BitStream bitStream;
 	CreatePacketHeader(ID_USER_PACKET_ENUM, 5, 0, &bitStream);
@@ -62,7 +62,6 @@ void ImaginationServerAuthPackets::AuthPackets::SendLoginResponse(String ^ addre
 	CreateExtraPacketData(29, 0, 2803442767, &bitStream);
 	CreateExtraPacketData(30, 30854, 2803442767, &bitStream);
 
-	auto server = LuServer::CurrentServer;
 	auto split = address->Split(':');
 	SystemAddress unmanaged;
 	unmanaged.SetBinaryAddress((char*)(System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(split[0])).ToPointer());

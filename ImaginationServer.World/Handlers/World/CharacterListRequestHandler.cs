@@ -5,7 +5,6 @@ using ImaginationServer.Common.Data;
 using ImaginationServer.Common.Handlers;
 using ImaginationServerWorldPackets;
 using Newtonsoft.Json;
-using static ImaginationServer.Common.LuServer;
 
 namespace ImaginationServer.World.Handlers.World
 {
@@ -13,13 +12,18 @@ namespace ImaginationServer.World.Handlers.World
     {
         public override void Handle(BinaryReader reader, LuClient client)
         {
-            if (!client.Authenticated) return; // Make sure they've authenticated first!
-            var account = CurrentServer.CacheClient.Get<Account>("accounts:" + client.Username.ToLower());
-                // Retrieve their account
-            WorldPackets.SendCharacterListResponse(client.Address, account);
-                // Call the C++ code that generates and sends the character list packet of the specified account
+            using (var database = new DbUtils())
+            {
+                if (!client.Authenticated) return; // Make sure they've authenticated first!
 
-            Console.WriteLine($"Sent character list packet to {client.Username}. Users: " + JsonConvert.SerializeObject(account.Characters));
+                // Retrieve their account
+                var account = database.GetAccount(client.Username);
+                // Call the C++ code that generates and sends the character list packet of the specified account
+                WorldPackets.SendCharacterListResponse(client.Address, account, WorldServer.Server);
+
+                Console.WriteLine($"Sent character list packet to {client.Username}. Users: " +
+                                  JsonConvert.SerializeObject(account.Characters));
+            }
         }
     }
 }

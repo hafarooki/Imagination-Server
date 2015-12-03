@@ -2,20 +2,22 @@
 {
     public class Minifig
     {
-        public string Name;
-        public uint Name1 { get; set; }
-        public uint Name2 { get; set; }
-        public uint Name3 { get; set; }
+        public virtual long Id { get; set; }
 
-        public uint ShirtColor { get; set; }
-        public uint ShirtStyle { get; set; }
-        public uint PantsColor { get; set; }
-        public uint HairStyle { get; set; }
-        public uint HairColor { get; set; }
-        public uint Lh { get; set; }
-        public uint Rh { get; set; }
-        public uint Eyebrows { get; set; }
-        public uint Eyes { get; set; }
-        public uint Mouth { get; set; }
+        public virtual string Name { get; set; }
+        public virtual uint Name1 { get; set; }
+        public virtual uint Name2 { get; set; }
+        public virtual uint Name3 { get; set; }
+
+        public virtual uint ShirtColor { get; set; }
+        public virtual uint ShirtStyle { get; set; }
+        public virtual uint PantsColor { get; set; }
+        public virtual uint HairStyle { get; set; }
+        public virtual uint HairColor { get; set; }
+        public virtual uint Lh { get; set; }
+        public virtual uint Rh { get; set; }
+        public virtual uint Eyebrows { get; set; }
+        public virtual uint Eyes { get; set; }
+        public virtual uint Mouth { get; set; }
     }
 }

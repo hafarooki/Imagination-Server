@@ -52,34 +52,27 @@ void BaseServer::Start()
 	_peer->SetMaximumIncomingConnections(_maxConnections);
 	OnStart();
 	Packet *packet;
+}
 
-	_terminate = false;
-
-	while(!_terminate)
+void BaseServer::Service()
+{
+	auto packet = _peer->Receive();
+	if (!packet) return;
+	switch (packet->data[0])
 	{
-		if (Environment::HasShutdownStarted)
-		{
-			Stop();
-			break;
-		}
-		packet = _peer->Receive();
-		if (!packet) continue;
-		switch(packet->data[0])
-		{
-		case ID_USER_PACKET_ENUM:
-			OnReceived(native_to_managed_array(packet->data, packet->length), packet->length, gcnew String(packet->systemAddress.ToString()));
-			break;
-		case ID_DISCONNECTION_NOTIFICATION:
-		case ID_CONNECTION_LOST:
-			OnDisconnect(gcnew String(packet->systemAddress.ToString()));
-			break;
-		case ID_NEW_INCOMING_CONNECTION:
-			OnConnect(gcnew String(packet->systemAddress.ToString()));
-			break;
-		default:
-			Console::WriteLine("Unknown RakNet packet received! {0}", packet->data[0]);
-			break;
-		}
+	case ID_USER_PACKET_ENUM:
+		OnReceived(native_to_managed_array(packet->data, packet->length), packet->length, gcnew String(packet->systemAddress.ToString()));
+		break;
+	case ID_DISCONNECTION_NOTIFICATION:
+	case ID_CONNECTION_LOST:
+		OnDisconnect(gcnew String(packet->systemAddress.ToString()));
+		break;
+	case ID_NEW_INCOMING_CONNECTION:
+		OnConnect(gcnew String(packet->systemAddress.ToString()));
+		break;
+	default:
+		Console::WriteLine("Unknown RakNet packet received! {0}", packet->data[0]);
+		break;
 	}
 }
 
@@ -102,7 +95,6 @@ void BaseServer::SendInitPacket(bool auth, String^ address)
 
 void BaseServer::Stop()
 {
-	_terminate = true;
 
 	OnStop();
 	RakNetworkFactory::DestroyRakPeerInterface(_peer);

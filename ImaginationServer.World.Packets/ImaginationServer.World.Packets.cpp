@@ -11,7 +11,7 @@ using namespace ImaginationServer::Common;
 using namespace ImaginationServer::Common::Data;
 using namespace System::Runtime::InteropServices;
 
-void ImaginationServerWorldPackets::WorldPackets::SendCharacterListResponse(String ^ address, Account^ account)
+void ImaginationServerWorldPackets::WorldPackets::SendCharacterListResponse(String ^ address, Account^ account, LuServer^ server)
 {
 	BitStream bitStream;
 	CreatePacketHeader(ID_USER_PACKET_ENUM, 5, (unsigned long)PacketEnums::WorldServerPacketId::MsgClientCharacterListResponse, &bitStream);
@@ -20,9 +20,10 @@ void ImaginationServerWorldPackets::WorldPackets::SendCharacterListResponse(Stri
 
 	int charId = 0;
 
+	auto database = gcnew DbUtils();
 	for each(auto name in account->Characters)
 	{
-		auto character = LuServer::CurrentServer->CacheClient->Get<Character^>("characters:" + name->ToLower());
+		auto character = database->GetCharacter(name);
 		bitStream.Write(character->Id); // Character ID (=ChildID from replica packets = objID in xml data from chardata)
 		bitStream.Write((unsigned long)0); // ???
 		//std::string username = (char*)(Marshal::StringToHGlobalAnsi(character->Minifig->Name)).ToPointer();
@@ -55,8 +56,6 @@ void ImaginationServerWorldPackets::WorldPackets::SendCharacterListResponse(Stri
 		bitStream.Write(character->Minifig->HairColor); // Hair color
 		bitStream.Write(character->Minifig->Lh); // “lh”, see “<mf />” row in the xml data from chardata packet (no idea what it is)
 		bitStream.Write(character->Minifig->Rh); // “rh”, see “<mf />” row in the xml data from chardata packet (no idea what it is)
-		//bitStream.Write((unsigned long)0); // tmp
-		//bitStream.Write((unsigned long)0); // tmp
 		bitStream.Write(character->Minifig->Eyebrows); // Eyebrows
 		bitStream.Write(character->Minifig->Eyes); // Eyes
 		bitStream.Write(character->Minifig->Mouth); // Mouth
@@ -69,16 +68,15 @@ void ImaginationServerWorldPackets::WorldPackets::SendCharacterListResponse(Stri
 
 		// equipped item LOTs (order of items doesn’t matter? I think it reads them in order so if we accidentally put 2 shirts the second one will be the one shown.)
 		for each (auto item in character->Items) {
-			bitStream.Write(item.ObjId); // pretty sure you write this
+			bitStream.Write(item->Id); // pretty sure you write this
 		}
 
 		charId++;
 	}
-
-	auto server = LuServer::CurrentServer->GetPeer();
+	
 	auto split = address->Split(':');
 	SystemAddress unmanaged;
 	unmanaged.SetBinaryAddress((char*)(System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(split[0])).ToPointer());
 	unmanaged.port = (unsigned short)std::strtoul((char*)(System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(split[1])).ToPointer(), NULL, 0);
-	server->Send(&bitStream, SYSTEM_PRIORITY, RELIABLE_ORDERED, 0, unmanaged, false);
+	server->GetPeer()->Send(&bitStream, SYSTEM_PRIORITY, RELIABLE_ORDERED, 0, unmanaged, false);
 }

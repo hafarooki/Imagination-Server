@@ -16,61 +16,64 @@ namespace ImaginationServer.World.Handlers.World
     {
         public override void Handle(BinaryReader reader, LuClient client)
         {
-            if (!client.Authenticated) return;
-
-            var zone = (ZoneId) reader.ReadUInt16();
-            var instance = reader.ReadUInt16();
-            var clone = reader.ReadInt32();
-
-            Console.WriteLine(
-                $"Got clientside level load complete packet from {client.Username}. Zone: {zone}, Instance: {instance}, Clone: {clone}.");
-
-            var account = DbUtils.GetAccount(client.Username);
-            var character = DbUtils.GetCharacter(client.Character);
-
-            using (var bitStream = new WBitStream())
+            using (var database = new DbUtils())
             {
-                bitStream.WriteHeader(RemoteConnection.Client, (uint) MsgClientCreateCharacter);
+                if (!client.Authenticated) return;
 
-                using (var ldf = new Ldf())
+                var zone = (ZoneId) reader.ReadUInt16();
+                var instance = reader.ReadUInt16();
+                var clone = reader.ReadInt32();
+
+                Console.WriteLine(
+                    $"Got clientside level load complete packet from {client.Username}. Zone: {zone}, Instance: {instance}, Clone: {clone}.");
+
+                var account = database.GetAccount(client.Username);
+                var character = database.GetCharacter(client.Character);
+
+                using (var bitStream = new WBitStream())
                 {
-                    // TODO: Improve LDF code here
-                    ldf.WriteS64("accountID", account.Id);
-                    ldf.WriteS32("chatmode", 0);
-                    ldf.WriteBool("editor_enabled", false);
-                    ldf.WriteS32("editor_level", 0);
-                    ldf.WriteBool("freetrial", false);
-                    ldf.WriteS32("gmlevel", character.GmLevel);
-                    ldf.WriteBool("legoclub", true);
-                    var levelid = character.ZoneId + (((long) character.MapInstance) << 16) +
-                                  (((long) character.MapClone) << 32);
-                    ldf.WriteS64("levelid", levelid);
-                    ldf.WriteWString("name", character.Minifig.Name);
-                    ldf.WriteId("objid", character.Id);
-                    ldf.WriteFloat("position.x", character.Position[0]);
-                    ldf.WriteFloat("position.y", character.Position[1]);
-                    ldf.WriteFloat("position.z", character.Position[2]);
-                    ldf.WriteS64("reputation", character.Reputation);
-                    ldf.WriteS32("template", 1);
-                    using (var xmlData = GenXmlData(character)) ldf.WriteBytes("xmlData", xmlData);
+                    bitStream.WriteHeader(RemoteConnection.Client, (uint) MsgClientCreateCharacter);
 
-                    bitStream.Write(ldf.GetSize() + 1);
-                    bitStream.Write((byte) 0);
-                    ldf.WriteToPacket(bitStream);
-                    LuServer.CurrentServer.Send(bitStream, WPacketPriority.SystemPriority,
-                        WPacketReliability.ReliableOrdered, 0, client.Address, false);
-                    File.WriteAllBytes("Temp/" + character.Minifig.Name + ".world_2a.bin", bitStream.GetBytes());
+                    using (var ldf = new Ldf())
+                    {
+                        // TODO: Improve LDF code here
+                        ldf.WriteS64("accountID", account.Id);
+                        ldf.WriteS32("chatmode", 0);
+                        ldf.WriteBool("editor_enabled", false);
+                        ldf.WriteS32("editor_level", 0);
+                        ldf.WriteBool("freetrial", false);
+                        ldf.WriteS32("gmlevel", character.GmLevel);
+                        ldf.WriteBool("legoclub", true);
+                        var levelid = character.ZoneId + (((long) character.MapInstance) << 16) +
+                                      (((long) character.MapClone) << 32);
+                        ldf.WriteS64("levelid", levelid);
+                        ldf.WriteWString("name", character.Minifig.Name);
+                        ldf.WriteId("objid", character.Id);
+                        ldf.WriteFloat("position.x", character.Position[0]);
+                        ldf.WriteFloat("position.y", character.Position[1]);
+                        ldf.WriteFloat("position.z", character.Position[2]);
+                        ldf.WriteS64("reputation", character.Reputation);
+                        ldf.WriteS32("template", 1);
+                        using (var xmlData = GenXmlData(character)) ldf.WriteBytes("xmlData", xmlData);
+
+                        bitStream.Write(ldf.GetSize() + 1);
+                        bitStream.Write((byte) 0);
+                        ldf.WriteToPacket(bitStream);
+                        WorldServer.Server.Send(bitStream, WPacketPriority.SystemPriority,
+                            WPacketReliability.ReliableOrdered, 0, client.Address, false);
+                        File.WriteAllBytes("Temp/" + character.Minifig.Name + ".world_2a.bin", bitStream.GetBytes());
+                    }
                 }
-            }
 
-            LuServer.CurrentServer.SendGameMessage(client.Address, character.Id, 1642);
-            LuServer.CurrentServer.SendGameMessage(client.Address, character.Id, 509);
-            using (var gameMessage = LuServer.CreateGameMessage(character.Id, 472))
-            {
-                gameMessage.Write((uint) 185);
-                gameMessage.Write((byte) 0);
-                LuServer.CurrentServer.Send(gameMessage, WPacketPriority.SystemPriority,
-                    WPacketReliability.ReliableOrdered, 0, client.Address, false);
+                WorldServer.Server.SendGameMessage(client.Address, character.GetObjectId(), 1642);
+                WorldServer.Server.SendGameMessage(client.Address, character.GetObjectId(), 509);
+                using (var gameMessage = LuServer.CreateGameMessage(character.GetObjectId(), 472))
+                {
+                    gameMessage.Write((uint) 185);
+                    gameMessage.Write((byte) 0);
+                    WorldServer.Server.Send(gameMessage, WPacketPriority.SystemPriority,
+                        WPacketReliability.ReliableOrdered, 0, client.Address, false);
+                }
             }
         }
 

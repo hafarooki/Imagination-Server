@@ -6,7 +6,6 @@ using System.Security.Cryptography;
 using System.Text;
 using ImaginationServer.Auth.Packets.Auth;
 using ImaginationServer.Common;
-using ImaginationServer.Common.Data;
 using ImaginationServer.Common.Handlers;
 using static System.Console;
 using static ImaginationServerAuthPackets.AuthPackets;
@@ -17,57 +16,55 @@ namespace ImaginationServer.Auth.Handlers.Auth
     {
         public override void Handle(BinaryReader reader, LuClient client)
         {
-            var loginRequest = new LoginRequest(reader);
-            WriteLine($"{loginRequest.Username} sent authentication request.");
-
-            byte valid = 0x01;
-            if (!LuServer.CurrentServer.CacheClient.Exists("accounts:" + loginRequest.Username.ToLower()))
+            using (var database = new DbUtils())
             {
-                valid = 0x06;
-            }
+                var loginRequest = new LoginRequest(reader);
+                WriteLine($"{loginRequest.Username} sent authentication request.");
 
-            if (valid == 0x01)
-            {
-                var account =
-                    LuServer.CurrentServer.CacheClient.Get<Account>("accounts:" + loginRequest.Username.ToLower());
-                var hash =
-                    SHA512.Create()
-                        .ComputeHash(Encoding.Unicode.GetBytes(loginRequest.Password).Concat(account.Salt).ToArray());
-                if (!account.Password.SequenceEqual(hash)) valid = 0x06;
-            }
+                byte valid = 0x01;
+                if (!database.AccountExists(loginRequest.Username))
+                {
+                    valid = 0x06;
+                }
 
-            if (valid == 0x01 &&
-                LuServer.CurrentServer.CacheClient.Get<Account>($"accounts:{loginRequest.Username.ToLower()}").Banned)
-                valid = 0x02;
+                if (valid == 0x01)
+                {
+                    var account = database.GetAccount(loginRequest.Username);
+                    var hash =
+                        SHA512.Create()
+                            .ComputeHash(Encoding.Unicode.GetBytes(loginRequest.Password).Concat(account.Salt).ToArray());
+                    if (!account.Password.SequenceEqual(hash)) valid = 0x06;
+                    if (valid == 0x01 && account.Banned) valid = 0x02;
+                }
 
-            var message = "derp";
-            switch (valid)
-            {
-                case 0x01:
-                    message = "was successful.";
-                    break;
-                case 0x06:
-                    message = "failed: invalid credentials.";
-                    break;
-                case 0x02:
-                    message = "failed: banned.";
-                    break;
-                default:
-                    WriteLine(
-                        "FATAL: Magically, the valid variable was not 0x01, 0x06, or 0x02! (Like, how is that even possible..? I'm only checking because resharper is making me.)");
-                    break;
-            }
+                var message = "screwed up.";
+                switch (valid)
+                {
+                    case 0x01:
+                        message = "was successful.";
+                        break;
+                    case 0x06:
+                        message = "failed: invalid credentials.";
+                        break;
+                    case 0x02:
+                        message = "failed: banned.";
+                        break;
+                    default:
+                        WriteLine(
+                            "FATAL: Magically, the valid variable was not 0x01, 0x06, or 0x02! (How is that even possible..? I'm only checking because resharper is making me.)");
+                        break;
+                }
 
-            WriteLine("User login " + message);
+                WriteLine("User login " + message);
 
-            if (valid == 0x01)
-            {
-                // TODO: Store user key
-            }
+                if (valid == 0x01)
+                {
+                    // TODO: Store user key
+                }
 
-            // Use C++ auth for now (I hope to eliminate this sometime)
-            SendLoginResponse(client.Address, valid, RandomString(66));
-            // C# auth, not working atm
+                // Use C++ auth for now (I hope to eliminate this sometime)
+                SendLoginResponse(client.Address, valid, RandomString(66), AuthServer.Server);
+                // C# auth, not working atm
 /*
             using (var bitStream = new WBitStream())
             {
@@ -132,8 +129,10 @@ namespace ImaginationServer.Auth.Handlers.Auth
                     WPacketReliability.ReliableOrdered, 0, client.Address, false); // Send the packet.
             }
 */
+            }
         }
 
+/*
         private static void CreateExtraPacketData(uint stampId, int bracketNum, uint afterNum, WBitStream bitStream)
         {
             const uint zeroPacket = 0;
@@ -143,6 +142,7 @@ namespace ImaginationServer.Auth.Handlers.Auth
             bitStream.Write(afterNum);
             bitStream.Write(zeroPacket);
         }
+*/
 
         private string RandomString(int length,
             string allowedChars = "0123456789abcdef")
@@ -172,9 +172,9 @@ namespace ImaginationServer.Auth.Handlers.Auth
                         // random value falls into the last group and the last group is
                         // too small to choose from the entire allowedCharSet, ignore
                         // the value in order to avoid biasing the result.
-                        var outOfRangeStart = byteSize - (byteSize%allowedCharSet.Length);
+                        var outOfRangeStart = byteSize - (byteSize % allowedCharSet.Length);
                         if (outOfRangeStart <= buf[i]) continue;
-                        result.Append(allowedCharSet[buf[i]%allowedCharSet.Length]);
+                        result.Append(allowedCharSet[buf[i] % allowedCharSet.Length]);
                     }
                 }
                 return result.ToString();

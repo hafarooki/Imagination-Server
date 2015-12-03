@@ -1,12 +1,10 @@
-﻿using StackExchange.Redis;
-
-namespace ImaginationServer.Common.Data
+﻿namespace ImaginationServer.Common.Data
 {
-    public struct BackpackItem
+    public class BackpackItem
     {
-        public long ObjId { get; set; }
-        public int Slot { get; set; }
-        public int Count { get; set; }
-        public bool Linked { get; set; }
+        public virtual long Id { get; set; }
+        public virtual int Slot { get; set; }
+        public virtual int Count { get; set; }
+        public virtual bool Linked { get; set; }
     }
 }

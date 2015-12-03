@@ -10,6 +10,7 @@ using namespace RakNet;
 using namespace System;
 using namespace System::Collections::Generic;
 using namespace cli;
+using namespace ImaginationServer::Common;
 using namespace ImaginationServer::Common::Data;
 
 namespace ImaginationServerWorldPackets {
@@ -59,7 +60,7 @@ namespace ImaginationServerWorldPackets {
 	public ref class WorldPackets
 	{
 	public:
-		static void SendCharacterListResponse(String^ address, Account^ account);
+		static void SendCharacterListResponse(String^ address, Account^ account, LuServer^ peer);
 
 		static unsigned long FindCharShirtID(unsigned long shirtColor, unsigned long shirtStyle) {
 			unsigned long shirtID = 0;

@@ -42,6 +42,7 @@ public:
 	void SendInitPacket(bool auth, String^ address);
 	void Start();
 	void Stop();
+	void Service();
 
 	RakPeerInterface* GetPeer();
 
