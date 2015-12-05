@@ -7,7 +7,6 @@ namespace ImaginationServer.Common.Data
         public virtual long Id { get; set; }
 
         public virtual string Owner { get; set; }
-        public virtual Minifig Minifig { get; set; }
         public virtual float[] Position { get; set; }
         public virtual ushort ZoneId { get; set; }
         public virtual ushort MapInstance { get; set; }
@@ -20,6 +19,22 @@ namespace ImaginationServer.Common.Data
         public virtual float MaxImagination { get; set; }
         public virtual int GmLevel { get; set; }
         public virtual long Reputation { get; set; }
+
+        public virtual string Name { get; set; }
+        public virtual uint Name1 { get; set; }
+        public virtual uint Name2 { get; set; }
+        public virtual uint Name3 { get; set; }
+
+        public virtual uint ShirtColor { get; set; }
+        public virtual uint ShirtStyle { get; set; }
+        public virtual uint PantsColor { get; set; }
+        public virtual uint HairStyle { get; set; }
+        public virtual uint HairColor { get; set; }
+        public virtual uint Lh { get; set; }
+        public virtual uint Rh { get; set; }
+        public virtual uint Eyebrows { get; set; }
+        public virtual uint Eyes { get; set; }
+        public virtual uint Mouth { get; set; }
 
         public virtual IList<BackpackItem> Items { get; set; }
         public virtual uint Level { get; set; }

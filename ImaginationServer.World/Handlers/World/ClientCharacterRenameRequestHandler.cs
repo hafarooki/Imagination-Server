@@ -22,7 +22,7 @@ namespace ImaginationServer.World.Handlers.World
                 var character = database.GetCharacter(objectId);
 
                 Console.WriteLine(
-                    $"Got character rename request from {client.Username}. Old name: {character.Minifig.Name}. New name: {newName}");
+                    $"Got character rename request from {client.Username}. Old name: {character.Name}. New name: {newName}");
 
                 using (var bitStream = new WBitStream()) // Create packet
                 {
@@ -31,7 +31,7 @@ namespace ImaginationServer.World.Handlers.World
 
                     // Make sure they own the accounta
                     if (
-                        !string.Equals(account.Username, character.Minifig.Name,
+                        !string.Equals(account.Username, character.Name,
                             StringComparison.CurrentCultureIgnoreCase))
                     {
                         Console.WriteLine("Failed to rename character: You can't rename someone else!");
@@ -46,7 +46,7 @@ namespace ImaginationServer.World.Handlers.World
                     {
                         try
                         {
-                            character.Minifig.Name = newName; // Set their new name
+                            character.Name = newName; // Set their new name
                             database.UpdateCharacter(character); // Update the character
                             bitStream.Write((byte) 0x00); // Success code, everything worked just fine.
                             Console.WriteLine("Successfully renamed character!");

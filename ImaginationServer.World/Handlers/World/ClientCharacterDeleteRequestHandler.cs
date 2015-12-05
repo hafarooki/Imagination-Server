@@ -24,7 +24,7 @@ namespace ImaginationServer.World.Handlers.World
 
                 var character = database.GetCharacter(id); // Retrieve the character from the database
 
-                Console.WriteLine($"{client.Username} requested to delete their character {character.Minifig.Name}.");
+                Console.WriteLine($"{client.Username} requested to delete their character {character.Name}.");
 
                 using (var bitStream = new WBitStream()) // Create the new bitstream
                 {

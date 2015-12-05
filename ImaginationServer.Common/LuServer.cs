@@ -74,7 +74,14 @@ namespace ImaginationServer.Common
 
                     reader.ReadByte();
 
-                    Handlers[tuple].Handle(reader, Clients[address]);
+                    try
+                    {
+                        Handlers[tuple].Handle(reader, Clients[address]);
+                    }
+                    catch(Exception exception)
+                    {
+                        Console.WriteLine(exception);
+                    }
                 }
             }
         }

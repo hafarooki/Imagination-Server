@@ -28,10 +28,12 @@ namespace ImaginationServer.World.Handlers.World
                     return;
                 }
 
-                account.SelectedCharacter = character.Minifig.Name;
+                account.SelectedCharacter = character.Name;
                 database.UpdateAccount(account);
 
-                Console.WriteLine("User has selected character {0}. Sending them to zone {1}.", character.Minifig.Name,
+                client.OutOfChar = true;
+
+                Console.WriteLine("User has selected character {0}. Sending them to zone {1}.", character.Name,
                     character.ZoneId);
 
                 //using (var bitStream = new WBitStream()) // Create the redirect packet
@@ -40,7 +42,7 @@ namespace ImaginationServer.World.Handlers.World
                 //    // Always write the header.
                 //    bitStream.WriteString("127.0.0.1", 33);
                 //    // Write the IP to redirect to (TODO: Make this the broadcast IP)
-                //    bitStream.Write(ResolvePortFromZone((ZoneId) character.ZoneId));
+                //    bitStream.Write(Resol vePortFromZone((ZoneId) character.ZoneId));
                 //    // Write the port of the server. (For now, this is 2006 + the zone id)
                 //    bitStream.Write((byte) 0);
                 //        // Don't say that this was a mythran dimensional shift, because it wasn't.

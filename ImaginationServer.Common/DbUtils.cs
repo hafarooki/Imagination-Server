@@ -42,7 +42,7 @@ namespace ImaginationServer.Common
         /// <returns>Whether or not this character actually exists.</returns>
         public bool CharacterExists(string username)
         {
-            return Session.CreateCriteria<Character>().List<Character>().Any(x => x.Minifig.Name == username);
+            return Session.CreateCriteria<Character>().List<Character>().Any(x => x.Name == username);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace ImaginationServer.Common
         {
             using (var transaction = Session.BeginTransaction())
             {
-                Session.SaveOrUpdate(character);
+                Session.Save(character);
                 transaction.Commit();
             }
         }
@@ -66,7 +66,7 @@ namespace ImaginationServer.Common
         {
             using (var transaction = Session.BeginTransaction())
             {
-                Session.SaveOrUpdate(character);
+                Session.Update(character);
                 transaction.Commit();
             }
         }
@@ -80,7 +80,7 @@ namespace ImaginationServer.Common
             if (character.Owner == null || !AccountExists(character.Owner))
                 return; // No need to do anything else if there is no valid account assigned to the specified character.
             var account = GetAccount(character.Owner);
-            account.Characters.Remove(character.Minifig.Name);
+            account.Characters.Remove(character.Name);
             UpdateAccount(account);
             using (var transaction = Session.BeginTransaction())
             {
@@ -109,7 +109,7 @@ namespace ImaginationServer.Common
         /// <returns>The character</returns>
         public Character GetCharacter(string name)
         {
-            return Session.CreateCriteria<Character>().List<Character>().Single(x => x.Minifig.Name == name);
+            return Session.CreateCriteria<Character>().List<Character>().Single(x => x.Name == name);
         }
 
         #endregion

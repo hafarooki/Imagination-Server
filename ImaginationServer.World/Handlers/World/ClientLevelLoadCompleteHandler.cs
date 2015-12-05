@@ -47,7 +47,7 @@ namespace ImaginationServer.World.Handlers.World
                         var levelid = character.ZoneId + (((long) character.MapInstance) << 16) +
                                       (((long) character.MapClone) << 32);
                         ldf.WriteS64("levelid", levelid);
-                        ldf.WriteWString("name", character.Minifig.Name);
+                        ldf.WriteWString("name", character.Name);
                         ldf.WriteId("objid", character.Id);
                         ldf.WriteFloat("position.x", character.Position[0]);
                         ldf.WriteFloat("position.y", character.Position[1]);
@@ -61,7 +61,7 @@ namespace ImaginationServer.World.Handlers.World
                         ldf.WriteToPacket(bitStream);
                         WorldServer.Server.Send(bitStream, WPacketPriority.SystemPriority,
                             WPacketReliability.ReliableOrdered, 0, client.Address, false);
-                        File.WriteAllBytes("Temp/" + character.Minifig.Name + ".world_2a.bin", bitStream.GetBytes());
+                        File.WriteAllBytes("Temp/" + character.Name + ".world_2a.bin", bitStream.GetBytes());
                     }
                 }
 
@@ -163,7 +163,7 @@ namespace ImaginationServer.World.Handlers.World
                 bitStream.Write(str.ToArray());
 
                 XElement.Parse(Encoding.UTF8.GetString(str.ToArray()))
-                    .Save("Temp/" + character.Minifig.Name + ".xmldata.xml");
+                    .Save("Temp/" + character.Name + ".xmldata.xml");
 
                 return bitStream;
             }

@@ -26,9 +26,9 @@ void ImaginationServerWorldPackets::WorldPackets::SendCharacterListResponse(Stri
 		auto character = database->GetCharacter(name);
 		bitStream.Write(character->Id); // Character ID (=ChildID from replica packets = objID in xml data from chardata)
 		bitStream.Write((unsigned long)0); // ???
-		//std::string username = (char*)(Marshal::StringToHGlobalAnsi(character->Minifig->Name)).ToPointer();
+		//std::string username = (char*)(Marshal::StringToHGlobalAnsi(character->Name)).ToPointer();
 		std::wstring username(L"");
-		for each(auto chr in character->Minifig->Name->ToCharArray())
+		for each(auto chr in character->Name->ToCharArray())
 		{
 			username.push_back(chr);
 		}
@@ -49,16 +49,16 @@ void ImaginationServerWorldPackets::WorldPackets::SendCharacterListResponse(Stri
  				bitStream.Write(zeroChar); 
  			} 
  		} 
-		bitStream.Write(character->Minifig->ShirtColor); // Shirt color
-		bitStream.Write(character->Minifig->ShirtStyle); // Shirt style
-		bitStream.Write(character->Minifig->PantsColor); // Pants color
-		bitStream.Write(character->Minifig->HairStyle); // Hair style
-		bitStream.Write(character->Minifig->HairColor); // Hair color
-		bitStream.Write(character->Minifig->Lh); // “lh”, see “<mf />” row in the xml data from chardata packet (no idea what it is)
-		bitStream.Write(character->Minifig->Rh); // “rh”, see “<mf />” row in the xml data from chardata packet (no idea what it is)
-		bitStream.Write(character->Minifig->Eyebrows); // Eyebrows
-		bitStream.Write(character->Minifig->Eyes); // Eyes
-		bitStream.Write(character->Minifig->Mouth); // Mouth
+		bitStream.Write(character->ShirtColor); // Shirt color
+		bitStream.Write(character->ShirtStyle); // Shirt style
+		bitStream.Write(character->PantsColor); // Pants color
+		bitStream.Write(character->HairStyle); // Hair style
+		bitStream.Write(character->HairColor); // Hair color
+		bitStream.Write(character->Lh); // “lh”, see “<mf />” row in the xml data from chardata packet (no idea what it is)
+		bitStream.Write(character->Rh); // “rh”, see “<mf />” row in the xml data from chardata packet (no idea what it is)
+		bitStream.Write(character->Eyebrows); // Eyebrows
+		bitStream.Write(character->Eyes); // Eyes
+		bitStream.Write(character->Mouth); // Mouth
 		bitStream.Write((unsigned long)0); // ???
 		bitStream.Write(character->ZoneId); // last zone ID
 		bitStream.Write(character->MapInstance); // (very likely) map instance

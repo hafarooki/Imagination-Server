@@ -58,24 +58,20 @@ namespace ImaginationServer.World.Handlers.World
                     // Create the new character
                     var character = new Character
                     {
-                        // Object ID, starts at 1152921504606846994 (Thanks to Darwin for that number)
-                        Minifig = new Minifig // Initialize the minifig customization
-                        {
-                            Name = name,
-                            Eyebrows = eyebrows,
-                            Eyes = eyes,
-                            HairColor = hairColor,
-                            HairStyle = hairStyle,
-                            Lh = lh,
-                            Rh = rh,
-                            Mouth = mouth,
-                            Name1 = name1,
-                            Name2 = name2,
-                            Name3 = name3,
-                            PantsColor = pantsColor,
-                            ShirtColor = shirtColor,
-                            ShirtStyle = shirtStyle
-                        },
+                        Name = name,
+                        Eyebrows = eyebrows,
+                        Eyes = eyes,
+                        HairColor = hairColor,
+                        HairStyle = hairStyle,
+                        Lh = lh,
+                        Rh = rh,
+                        Mouth = mouth,
+                        Name1 = name1,
+                        Name2 = name2,
+                        Name3 = name3,
+                        PantsColor = pantsColor,
+                        ShirtColor = shirtColor,
+                        ShirtStyle = shirtStyle,
                         // Initialize the other character data
                         Position = ZonePositions.VentureExplorer,
                         Owner = client.Username,
@@ -104,7 +100,7 @@ namespace ImaginationServer.World.Handlers.World
 
                     database.AddCharacter(character); // Add the character to the database.
 
-                    account.Characters.Add(character.Minifig.Name); // Add the character to the account
+                    account.Characters.Add(character.Name); // Add the character to the account
                     database.UpdateAccount(account); // Update the account
                 }
 

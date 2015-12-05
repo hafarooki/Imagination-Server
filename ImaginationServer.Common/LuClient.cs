@@ -11,5 +11,6 @@
         public bool Authenticated { get; set; }
         public string Username { get; set; }
         public string Character { get; set; }
+        public bool OutOfChar { get; set; }
     }
 }

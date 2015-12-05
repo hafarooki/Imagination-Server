@@ -24,6 +24,8 @@ namespace ImaginationServer.World.Handlers.World
                 client.Username = username;
                 // TODO: Verify user key (Maybe it should expire, instead of just being stored? Otherwise, I'd just cache it.)
 
+                if (!client.OutOfChar) return;
+
                 var account = database.GetAccount(client.Username);
                 client.Character = account.SelectedCharacter; // Store the selected character
 

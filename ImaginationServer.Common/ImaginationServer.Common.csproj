@@ -87,7 +87,6 @@
     <Compile Include="Data\BackpackItem.cs" />
     <Compile Include="Data\Account.cs" />
     <Compile Include="Data\Character.cs" />
-    <Compile Include="Data\Minifig.cs" />
     <Compile Include="Data\Mission.cs" />
     <Compile Include="DbUtils.cs" />
     <Compile Include="DisconnectId.cs" />
