@@ -84,7 +84,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\BackpackItem.cs" />
+    <Compile Include="BackpackItem.cs" />
     <Compile Include="Data\Account.cs" />
     <Compile Include="Data\Character.cs" />
     <Compile Include="Data\Mission.cs" />

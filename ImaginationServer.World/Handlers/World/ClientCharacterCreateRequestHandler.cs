@@ -86,16 +86,17 @@ namespace ImaginationServer.World.Handlers.World
                         MaxImagination = 0,
                         GmLevel = 0,
                         Reputation = 0,
-                        Items = new List<BackpackItem>()
+                        Items = new List<string>()
                     };
 
-                    character.AddItem(new BackpackItem
-                    {
-                        Id = WorldPackets.FindCharShirtID(shirtColor, shirtStyle),
-                        Count = 1,
-                        Linked = false,
-                        Slot = 0
-                    });
+                    character.Items.Add(
+                        new BackpackItem
+                        {
+                            Lot = WorldPackets.FindCharShirtID(shirtColor, shirtStyle),
+                            Linked = false,
+                            Count = 1,
+                            Slot = 0
+                        }.ToJson());
                     //character.AddItem(WorldPackets.);
 
                     database.AddCharacter(character); // Add the character to the database.

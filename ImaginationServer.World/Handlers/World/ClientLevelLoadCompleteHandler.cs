@@ -65,9 +65,9 @@ namespace ImaginationServer.World.Handlers.World
                     }
                 }
 
-                WorldServer.Server.SendGameMessage(client.Address, character.GetObjectId(), 1642);
-                WorldServer.Server.SendGameMessage(client.Address, character.GetObjectId(), 509);
-                using (var gameMessage = LuServer.CreateGameMessage(character.GetObjectId(), 472))
+                WorldServer.Server.SendGameMessage(client.Address, Character.GetObjectId(character), 1642);
+                WorldServer.Server.SendGameMessage(client.Address, Character.GetObjectId(character), 509);
+                using (var gameMessage = LuServer.CreateGameMessage(Character.GetObjectId(character), 472))
                 {
                     gameMessage.Write((uint) 185);
                     gameMessage.Write((byte) 0);

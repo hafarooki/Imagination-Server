@@ -36,18 +36,13 @@ namespace ImaginationServer.Common.Data
         public virtual uint Eyes { get; set; }
         public virtual uint Mouth { get; set; }
 
-        public virtual IList<BackpackItem> Items { get; set; }
+        public virtual IList<string> Items { get; set; }
         public virtual uint Level { get; set; }
         public virtual IList<Mission> Missions { get; set; }
 
-        public virtual void AddItem(BackpackItem backpackItem)
+        public static long GetObjectId(Character character)
         {
-            Items.Add(backpackItem);
-        }
-
-        public virtual long GetObjectId()
-        {
-            return Id + 1152921504606846994;
+            return character.Id + 1152921504606846994;
         }
     }
 }

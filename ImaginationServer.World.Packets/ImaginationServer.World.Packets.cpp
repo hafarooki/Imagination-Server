@@ -68,7 +68,7 @@ void ImaginationServerWorldPackets::WorldPackets::SendCharacterListResponse(Stri
 
 		// equipped item LOTs (order of items doesn’t matter? I think it reads them in order so if we accidentally put 2 shirts the second one will be the one shown.)
 		for each (auto item in character->Items) {
-			bitStream.Write(item->Id); // pretty sure you write this
+			bitStream.Write(BackpackItem::FromJson(item)->Lot); // pretty sure you write this
 		}
 
 		charId++;
