@@ -22,7 +22,7 @@ namespace ImaginationServer.World.Handlers.World
                 var id = reader.ReadInt64(); // The object id of the characte
                 Console.WriteLine(id);
 
-                var character = database.GetCharacter(id); // Retrieve the character from the database
+                var character = database.GetCharacter(id, true); // Retrieve the character from the database
 
                 Console.WriteLine($"{client.Username} requested to delete their character {character.Name}.");
 

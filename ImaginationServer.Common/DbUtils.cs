@@ -98,7 +98,7 @@ namespace ImaginationServer.Common
         public Character GetCharacter(long id, bool notRaw = false)
         {
             var characterId = id;
-            if (!notRaw) characterId -= 1152921504606846994;
+            if (notRaw) characterId -= 1152921504606846994;
             return Session.Get<Character>(characterId);
         }
 

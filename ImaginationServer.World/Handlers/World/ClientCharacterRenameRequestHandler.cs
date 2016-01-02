@@ -19,7 +19,7 @@ namespace ImaginationServer.World.Handlers.World
 
                 // Gather info
                 var account = database.GetAccount(client.Username);
-                var character = database.GetCharacter(objectId);
+                var character = database.GetCharacter(objectId, true);
 
                 Console.WriteLine(
                     $"Got character rename request from {client.Username}. Old name: {character.Name}. New name: {newName}");

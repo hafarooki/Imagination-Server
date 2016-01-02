@@ -28,7 +28,7 @@ namespace ImaginationServer.World.Handlers.World
                     $"Got clientside level load complete packet from {client.Username}. Zone: {zone}, Instance: {instance}, Clone: {clone}.");
 
                 var account = database.GetAccount(client.Username);
-                var character = database.GetCharacter(client.Character);
+                var character = database.GetCharacter(account.SelectedCharacter);
 
                 using (var bitStream = new WBitStream())
                 {
@@ -79,94 +79,61 @@ namespace ImaginationServer.World.Handlers.World
 
         private static WBitStream GenXmlData(Character character)
         {
-            using (var str = new MemoryStream())
-            using (var writer = new XmlTextWriter(str, Encoding.UTF8))
+            var xml = "";
+            xml += "<?xml version=\"1.0\"?>";
+
+            xml += "<obj v=\"1\">";
+            xml += "<buff/>";
+            xml += "<skil/>";
+
+            xml += "<inv>";
+            xml += "<bag>";
+            xml += "<b t=\"0\"> m=\"24\"/>";
+            xml += "</bag>";
+
+            xml += "<items>";
+            xml += "<in>";
+
+            // TODO: Write items
+
+            //foreach (var item in character.Items)
+            //{
+            //    writer.WriteStartElement("i"); // <i>
+            //    writer.WriteAttributeString("l", item.);
+            //    writer.WriteEndElement(); // </i>
+            //}
+
+            xml += "</in>";
+            xml += "</items>";
+
+            xml += "</inv>";
+
+            xml += "<mf/>";
+
+            xml += "<chars cc=\"100\"></char>";
+
+            xml += $"<lvl l=\"{character.Level}\"/>";
+
+            xml += "<flag/>";
+            xml += "<pet/>";
+            
+            if (character.Missions?.Any() ?? false)
             {
-                writer.WriteStartDocument(); // <xml>
-                writer.WriteStartElement("obj"); // <obj>
-                writer.WriteAttributeString("v", "1"); // id="1"
-
-                writer.WriteStartElement("buff"); // <buff>
-                writer.WriteEndElement(); // </buff>
-
-                writer.WriteStartElement("skil"); // <skil>
-                writer.WriteEndElement(); // </skil>
-
-                writer.WriteStartElement("inv"); // <inv>
-
-                writer.WriteStartElement("bag"); // <bag>
-                writer.WriteStartElement("b"); // <b>
-                writer.WriteAttributeString("t", "0"); // t="0"
-                writer.WriteAttributeString("m", "24"); // m="24"
-                writer.WriteEndElement(); // </b>
-                writer.WriteEndElement(); // </bag>
-
-                writer.WriteStartElement("items"); // <items>
-                writer.WriteStartElement("in"); // <in>
-
-                // TODO: Write items
-
-                //foreach (var item in character.Items)
-                //{
-                //    writer.WriteStartElement("i"); // <i>
-                //    writer.WriteAttributeString("l", item.);
-                //    writer.WriteEndElement(); // </i>
-                //}
-
-                writer.WriteEndElement(); // </in>
-                writer.WriteEndElement(); // </items>
-
-                writer.WriteEndElement(); // </inv>
-
-                writer.WriteStartElement("mf"); // <mf>
-                writer.WriteEndElement(); // </mf>
-
-                writer.WriteStartElement("char"); // <char>
-                writer.WriteAttributeString("cc", "100"); // cc="100"
-                writer.WriteEndElement(); // </char>
-
-                writer.WriteStartElement("lvl"); // <lvl>
-                writer.WriteAttributeString("l", character.Level.ToString()); // l="<character's level?>"
-                writer.WriteEndElement(); // </lvl>
-
-                writer.WriteStartElement("flag"); // <flag> 
-                writer.WriteEndElement(); // </flag>
-
-                writer.WriteStartElement("pet"); // <pet> 
-                writer.WriteEndElement(); // </pet>
-
-                if (character.Missions?.Any() ?? false)
-                {
-                    writer.WriteStartElement("mis"); // <mis>
-                    writer.WriteStartElement("done"); // <done>
-                    foreach (var mission in character.Missions)
-                    {
-                        writer.WriteStartElement("m"); // <m>
-                        writer.WriteAttributeString("id", mission.Id.ToString()); // id="<id>"
-                        writer.WriteAttributeString("cts", mission.Timestamp.ToString()); // cts="<timestamp>"
-                        writer.WriteAttributeString("cct", mission.Count.ToString()); // cct="<count>"
-                        writer.WriteEndElement(); // </m>
-                    }
-                    writer.WriteEndElement(); // </done>
-                    writer.WriteEndElement(); // </mis>
-                }
-
-                writer.WriteStartElement("mnt"); // <mnt> 
-                writer.WriteEndElement(); // </mnt>
-
-                writer.WriteStartElement("dest"); // <dest> 
-                writer.WriteEndElement(); // </dest>
-
-                writer.WriteEndElement(); // </obj>
-                writer.WriteEndDocument(); // ends document
-                var bitStream = new WBitStream();
-                bitStream.Write(str.ToArray());
-
-                XElement.Parse(Encoding.UTF8.GetString(str.ToArray()))
-                    .Save("Temp/" + character.Name + ".xmldata.xml");
-
-                return bitStream;
+                xml += "<mis>";
+                xml += "<done>";
+                xml = character.Missions.Aggregate(xml, (current, mission) => current + $"<m id=\"{mission.Id}\" cts=\"{mission.Timestamp}\" cct=\"{mission.Count}\"/>");
+                xml += "</done>";
+                xml += "</mis>";
             }
+
+            xml += "<mnt/>";
+            xml += "<dest/>";
+            xml += "</obj>";
+            var bitStream = new WBitStream();
+            Console.WriteLine(xml);
+            bitStream.WriteChars(xml);
+
+            return bitStream;
         }
     }
 }

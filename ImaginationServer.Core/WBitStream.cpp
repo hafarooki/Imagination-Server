@@ -48,14 +48,14 @@ void WBitStream::Write(long long value)
 {
 	Instance->Write(value);
 }
-;
+
 void WBitStream::WriteChars(String^ value)
 {
 	string chars = (char*)(void*)Marshal::StringToHGlobalAnsi(value);
 	cout << chars.c_str() << endl;
 	for (unsigned long i = 0; i < chars.size(); i++) {
 		Instance->Write(chars.at(i));
-}
+	}
 }
 
 void WBitStream::Write(WBitStream^ value, unsigned int length) {
@@ -88,12 +88,12 @@ void WBitStream::WriteString(String^ value, int length, int maxLength)
 void WBitStream::WriteWString(String^ value, bool writeSize, bool nullChar)
 {
 	wstring str = (wchar_t*)(void*)Marshal::StringToHGlobalUni(value);
-	if(nullChar) str.append(L"\0");
-	if (writeSize) Instance->Write((unsigned char)(str.length() + (nullChar ? 1 : 0)) * 2);
+	if (nullChar) str.append(L"\0");
+	if (writeSize) Instance->Write((unsigned char)(str.length() * 2));
 	for (auto i = 0; i < str.size(); i++)
 	{
 		Instance->Write(str[i]);
-}
+	}
 }
 
 void WBitStream::Write(char * value, int length)
@@ -127,7 +127,7 @@ void WBitStream::Write(cli::array<unsigned char>^ value)
 {
 	unsigned char* native;
 	for (int i = 0; i < value->Length; ++i)
-		native[i] = value[i];
+	native[i] = value[i];
 	Write(native);
 }
 
@@ -213,5 +213,7 @@ cli::array<unsigned char>^ WBitStream::GetBytes() {
 //	Instance->Read(value);
 //	return gcnew String(value.c_str());
 //}
+
+
 
 

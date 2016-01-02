@@ -24,7 +24,7 @@ void ImaginationServerWorldPackets::WorldPackets::SendCharacterListResponse(Stri
 	for each(auto name in account->Characters)
 	{
 		auto character = database->GetCharacter(name);
-		bitStream.Write(character->Id); // Character ID (=ChildID from replica packets = objID in xml data from chardata)
+		bitStream.Write(Character::GetObjectId(character)); // Character ID (=ChildID from replica packets = objID in xml data from chardata)
 		bitStream.Write((unsigned long)0); // ???
 		//std::string username = (char*)(Marshal::StringToHGlobalAnsi(character->Name)).ToPointer();
 		std::wstring username(L"");
