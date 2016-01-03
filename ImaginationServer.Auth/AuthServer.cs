@@ -41,7 +41,7 @@ namespace ImaginationServer.Auth
                             WriteLine("accountexists <username>");
                             WriteLine("ban <username>");
                             WriteLine("unban <username>");
-                            WriteLine("printinfo <character or account> <username> [clipboard]");
+                            WriteLine("printinfo <a for account, anything else for character> <username> [clipboard]");
                             WriteLine("deletecharacter <username>");
                             break;
                         case "deletecharacter":
@@ -67,9 +67,14 @@ namespace ImaginationServer.Auth
                             {
                                 var type = cmdArgs[0];
                                 var username = cmdArgs[1];
-                                if (!database.AccountExists(username))
+                                if (type == "a" && !database.AccountExists(username))
                                 {
-                                    WriteLine("Account/character does not exist.");
+                                    WriteLine("Account does not exist.");
+                                    continue;
+                                }
+                                else if (type != "a" && !database.CharacterExists(username))
+                                {
+                                    WriteLine("Character does not exist!");
                                     continue;
                                 }
                                 var account =

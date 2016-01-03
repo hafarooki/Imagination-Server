@@ -19,6 +19,7 @@ namespace ImaginationServer.Common.Data
         public virtual float MaxImagination { get; set; }
         public virtual int GmLevel { get; set; }
         public virtual long Reputation { get; set; }
+        public virtual int BackpackSpace { get; set; }
 
         public virtual string Name { get; set; }
         public virtual uint Name1 { get; set; }
@@ -38,7 +39,7 @@ namespace ImaginationServer.Common.Data
 
         public virtual IList<string> Items { get; set; }
         public virtual uint Level { get; set; }
-        public virtual IList<Mission> Missions { get; set; }
+        public virtual IList<string> Missions { get; set; }
 
         public static long GetObjectId(Character character)
         {

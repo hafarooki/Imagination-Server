@@ -5,6 +5,8 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using ImaginationServer.Common;
+using ImaginationServer.Common.CdClientData;
+using ImaginationServer.Common.CharacterData;
 using ImaginationServer.Common.Data;
 using ImaginationServer.Common.Handlers;
 using static ImaginationServer.Common.PacketEnums;
@@ -48,7 +50,7 @@ namespace ImaginationServer.World.Handlers.World
                                       (((long) character.MapClone) << 32);
                         ldf.WriteS64("levelid", levelid);
                         ldf.WriteWString("name", character.Name);
-                        ldf.WriteId("objid", character.Id);
+                        ldf.WriteId("objid", Character.GetObjectId(character));
                         ldf.WriteFloat("position.x", character.Position[0]);
                         ldf.WriteFloat("position.y", character.Position[1]);
                         ldf.WriteFloat("position.z", character.Position[2]);
@@ -79,61 +81,64 @@ namespace ImaginationServer.World.Handlers.World
 
         private static WBitStream GenXmlData(Character character)
         {
-            var xml = "";
-            xml += "<?xml version=\"1.0\"?>";
-
-            xml += "<obj v=\"1\">";
-            xml += "<buff/>";
-            xml += "<skil/>";
-
-            xml += "<inv>";
-            xml += "<bag>";
-            xml += "<b t=\"0\"> m=\"24\"/>";
-            xml += "</bag>";
-
-            xml += "<items>";
-            xml += "<in>";
-
-            // TODO: Write items
-
-            //foreach (var item in character.Items)
-            //{
-            //    writer.WriteStartElement("i"); // <i>
-            //    writer.WriteAttributeString("l", item.);
-            //    writer.WriteEndElement(); // </i>
-            //}
-
-            xml += "</in>";
-            xml += "</items>";
-
-            xml += "</inv>";
-
-            xml += "<mf/>";
-
-            xml += "<chars cc=\"100\"></char>";
-
-            xml += $"<lvl l=\"{character.Level}\"/>";
-
-            xml += "<flag/>";
-            xml += "<pet/>";
-            
-            if (character.Missions?.Any() ?? false)
+            using(var cdclient = new CdClientDb())
             {
-                xml += "<mis>";
-                xml += "<done>";
-                xml = character.Missions.Aggregate(xml, (current, mission) => current + $"<m id=\"{mission.Id}\" cts=\"{mission.Timestamp}\" cct=\"{mission.Count}\"/>");
-                xml += "</done>";
-                xml += "</mis>";
+                var xml = "";
+                xml += "<?xml version=\"1.0\"?>";
+
+                xml += "<obj v=\"1\">";
+                xml += "<buff/>";
+                xml += "<skil/>";
+
+                xml += "<inv>";
+                xml += "<bag>";
+                xml += "<b t=\"0\"> m=\"24\"/>";
+                xml += "</bag>";
+
+                xml += "<items>";
+                xml += "<in>";
+
+                // TODO: Write items
+
+                //foreach (var item in character.Items)
+                //{
+                //    writer.WriteStartElement("i"); // <i>
+                //    writer.WriteAttributeString("l", item.);
+                //    writer.WriteEndElement(); // </i>
+                //}
+
+                xml += "</in>";
+                xml += "</items>";
+
+                xml += "</inv>";
+
+                xml += "<mf/>";
+
+                xml += "<chars cc=\"100\"></char>";
+
+                xml += $"<lvl l=\"{character.Level}\"/>";
+
+                xml += "<flag/>";
+                xml += "<pet/>";
+
+                if (character.Missions?.Any() ?? false)
+                {
+                    xml += "<mis>";
+                    xml += "<done>";
+                    xml = character.Missions.Select(mission => CharacterMission.FromJson(mission)).Aggregate(xml, (current, missionData) => current + $"<m id=\"{missionData.Id}\" cts=\"{missionData.Timestamp}\" cct=\"{missionData.Count}\"/>");
+                    xml += "</done>";
+                    xml += "</mis>";
+                }
+
+                xml += "<mnt/>";
+                xml += "<dest/>";
+                xml += "</obj>";
+                var bitStream = new WBitStream();
+                Console.WriteLine(xml);
+                bitStream.WriteChars(xml);
+
+                return bitStream;
             }
-
-            xml += "<mnt/>";
-            xml += "<dest/>";
-            xml += "</obj>";
-            var bitStream = new WBitStream();
-            Console.WriteLine(xml);
-            bitStream.WriteChars(xml);
-
-            return bitStream;
         }
     }
 }

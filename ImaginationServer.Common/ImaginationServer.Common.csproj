@@ -84,10 +84,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BackpackItem.cs" />
+    <Compile Include="CharacterData\BackpackItem.cs" />
+    <Compile Include="CdClientData\MissionMap.cs" />
+    <Compile Include="CdClientDb.cs" />
+    <Compile Include="CharacterData\CharacterMission.cs" />
     <Compile Include="Data\Account.cs" />
+    <Compile Include="Data\AccountMap.cs" />
     <Compile Include="Data\Character.cs" />
-    <Compile Include="Data\Mission.cs" />
+    <Compile Include="Data\CharacterMap.cs" />
+    <Compile Include="CdClientData\Mission.cs" />
     <Compile Include="DbUtils.cs" />
     <Compile Include="DisconnectId.cs" />
     <Compile Include="ExtensionMethods.cs" />
@@ -99,6 +104,11 @@
     <Compile Include="PacketEnums.cs" />
     <Compile Include="Packets\OutgoingPacket.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SessionHelper.cs" />
     <Compile Include="ZoneChecksums.cs" />
     <Compile Include="ZonePositions.cs" />
@@ -107,6 +117,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Resources\CDClient.sqlite" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Imagination Server Logo.ico" />
@@ -116,6 +127,12 @@
       <Project>{b556a656-2380-4e15-9fa9-25d555ae0fcc}</Project>
       <Name>ImaginationServer.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.98.1\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.98.1\build\net46\System.Data.SQLite.Core.targets')" />

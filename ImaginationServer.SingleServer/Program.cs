@@ -16,6 +16,9 @@ namespace ImaginationServer.SingleServer
                 Console.WriteLine("Setting up database...");
                 SessionHelper.Init();
                 Console.WriteLine(" ->OK");
+                Console.WriteLine("Setting up CDClient Database...");
+                CdClientDb.Init();
+                Console.WriteLine(" ->OK");
             }
             catch(FluentConfigurationException exception)
             {

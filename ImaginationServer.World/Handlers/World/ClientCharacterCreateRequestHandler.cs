@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using ImaginationServer.Common;
+using ImaginationServer.Common.CharacterData;
 using ImaginationServer.Common.Data;
 using ImaginationServer.Common.Handlers;
 using ImaginationServerWorldPackets;
@@ -78,15 +79,18 @@ namespace ImaginationServer.World.Handlers.World
                         MapInstance = 0,
                         MapClone = 0,
                         ZoneId = (ushort) ZoneId.VentureExplorer,
-                        Armor = 2,
-                        MaxArmor = 2,
+                        Armor = 0,
+                        MaxArmor = 0,
                         Health = 4,
                         MaxHealth = 4,
                         Imagination = 0,
                         MaxImagination = 0,
                         GmLevel = 0,
                         Reputation = 0,
-                        Items = new List<string>()
+                        Items = new List<string>(),
+                        BackpackSpace = 20,
+                        Level = 0,
+                        Missions = new List<string>()
                     };
 
                     character.Items.Add(
@@ -106,8 +110,7 @@ namespace ImaginationServer.World.Handlers.World
                 }
 
                 // Output the code
-                Console.WriteLine("Got character create request from {0}. Response Code: {1}", client.Username,
-                    responseId);
+                Console.WriteLine($"Got character create request from {client.Username}. Response Code: {responseId}");
 
                 // Create the response
                 using (var bitStream = new WBitStream())

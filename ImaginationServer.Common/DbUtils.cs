@@ -46,14 +46,14 @@ namespace ImaginationServer.Common
         }
 
         /// <summary>
-        ///     Adds a character to the database.
+        ///     Adds/updates a character to the database.
         /// </summary>
         /// <param name="character">The character to add.</param>
         public void AddCharacter(Character character)
         {
             using (var transaction = Session.BeginTransaction())
             {
-                Session.Save(character);
+                Session.SaveOrUpdate(character);
                 transaction.Commit();
             }
         }
@@ -62,11 +62,12 @@ namespace ImaginationServer.Common
         ///     Update the data for an existing character.
         /// </summary>
         /// <param name="character">The character to update.</param>
+        [Obsolete("AddCharacter saves/updates.")]
         public void UpdateCharacter(Character character)
         {
             using (var transaction = Session.BeginTransaction())
             {
-                Session.Update(character);
+                Session.SaveOrUpdate(character);
                 transaction.Commit();
             }
         }
