@@ -92,7 +92,7 @@ namespace ImaginationServer.World.Handlers.World
 
                 xml += "<inv>";
                 xml += "<bag>";
-                xml += "<b t=\"0\"> m=\"24\"/>";
+                xml += "<b t=\"0\" m=\"24\"/>";
                 xml += "</bag>";
 
                 xml += "<items>";
