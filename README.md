@@ -1,5 +1,5 @@
 # Imagination-Server
-A non-LUNI based server for LEGO Universe, that will almost definitely die.
+A C# server for LEGO Universe, that will almost definitely die.
 
 ## More Info
-Unlike other servers, this server is not only not a fork of LUNI, it runs on managed code (C#). This will be using Redis for both the NoSQL/keystore database, as well as its Pub/Sub features, for server to server communication.
+Unlike (most) other LEGO Universe servers, this uses C#, a managed, Object-Oriented programming language. It is run as a single application, and uses SQLite with Fluent NHibernate for storing data.
