@@ -9,6 +9,7 @@
 
 using namespace ImaginationServer::Common;
 using namespace ImaginationServer::Common::Data;
+using namespace ImaginationServer::Common::CharacterData;
 using namespace System::Runtime::InteropServices;
 
 void ImaginationServerWorldPackets::WorldPackets::SendCharacterListResponse(String ^ address, Account^ account, LuServer^ server)

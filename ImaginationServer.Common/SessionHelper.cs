@@ -23,9 +23,7 @@ namespace ImaginationServer.Common
                 )
                 .Mappings(
                     m =>
-                        m.AutoMappings.Add(
-                            AutoMap.AssemblyOf<Account>()
-                                .Where(x => x.Namespace?.StartsWith("ImaginationServer.Common.Data") ?? false)))
+                        m.FluentMappings.Add<AccountMap>().Add<CharacterMap>())
                 .ExposeConfiguration(Config).BuildSessionFactory();
         }
 
