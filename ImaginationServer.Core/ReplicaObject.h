@@ -11,8 +11,8 @@ class ReplicaMember;
 public ref class ReplicaObject
 {
 	ReplicaMember *_member;
-	BaseServer^ _server;
 public:
+	BaseServer^ Server;
 	long long ObjectId;
 	String^ Name;
 	unsigned long Lot;

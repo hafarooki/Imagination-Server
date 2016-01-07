@@ -4,14 +4,14 @@
 
 ReplicaObject::ReplicaObject(BaseServer^ server)
 {
-	_server = server;
+	Server = server;
 	_member = new ReplicaMember(this);
 	Components = gcnew List<ReplicaComponent^>();
 }
 
 ReplicaObject::~ReplicaObject()
 {
-	_server->GetReplicaManager()->DereferencePointer(_member);
+	Server->GetReplicaManager()->DereferencePointer(_member);
 	delete(_member);
 }
 

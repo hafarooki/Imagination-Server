@@ -11,6 +11,7 @@ ReplicaReturnResult ReplicaMember::SendConstruction(RakNetTime currentTime, Syst
 	auto managedBitstream = gcnew WBitStream(outBitStream);
 	_replicaObject->WriteToPacket(managedBitstream, ReplicaPacketType::Construction);
 	delete(managedBitstream);
+	_replicaObject->Server->GetReplicaManager()->SetScope(this, true, systemAddress, false);
 	return REPLICA_PROCESSING_DONE;
 }
 ReplicaReturnResult ReplicaMember::SendDestruction(RakNet::BitStream *outBitStream, SystemAddress systemAddress, bool *includeTimestamp)
