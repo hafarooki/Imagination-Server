@@ -1,13 +1,13 @@
 #pragma once
-#pragma make_public(RakPeerInterface)
-#pragma make_public(ReplicaManager)
 
-#include "Stdafx.h"
 #include <RakPeerInterface.h>
 #include <iostream>
 #include "WBitStream.h"
 #include "WPacketPriority.h"
 #include <NetworkIDManager.h>
+#include <ReplicaManager.h>
+#pragma make_public(RakPeerInterface)
+#pragma make_public(ReplicaManager)
 
 using namespace RakNet;
 using namespace System;
@@ -17,6 +17,8 @@ public ref class BaseServer abstract
 	bool _terminate;
 
 	RakPeerInterface *_peer;
+	ReplicaManager *_replicaManager;
+	NetworkIDManager *_networkIdManager;
 
 	int _port;
 	int _maxConnections;
@@ -45,6 +47,7 @@ public:
 	void Service();
 
 	RakPeerInterface* GetPeer();
+	ReplicaManager* GetReplicaManager();
 
 	void Send(WBitStream^ bitStream, WPacketPriority priority, WPacketReliability reliability, char orderingChannel, String^ systemAddress, bool broadcast);
 };

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Stdafx.h"
 #include <iostream>
 #include <BitStream.h>
 
@@ -12,10 +11,12 @@ public ref class WBitStream
 {
 	void MarshalString(String^ value, string& output);
 	//void MarshalString(String^ value, wstring& output);
+	bool _destroyBitstream;
 	public:
 	BitStream* Instance;
 
 	WBitStream();
+	WBitStream(BitStream* instance);
 	WBitStream(unsigned char* bytes, const int length, bool copyData);
 	~WBitStream();
 
@@ -37,6 +38,7 @@ public ref class WBitStream
 	void Write(cli::array<unsigned char>^ value);
 	void Write(wstring value, bool writeSize, bool nullChar);
 	void Write(Single value);
+	void Write(bool value);
 	void Write(WBitStream^ value, unsigned int length);
 
 	unsigned long GetNumberOfBytesUsed();

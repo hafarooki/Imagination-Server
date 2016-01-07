@@ -114,7 +114,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -139,20 +139,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseServer.h" />
+    <ClInclude Include="ReplicaComponent.h" />
+    <ClInclude Include="ReplicaMember.h" />
+    <ClInclude Include="ReplicaObject.h" />
+    <ClInclude Include="ReplicaPacketType.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Stdafx.h" />
     <ClInclude Include="WBitStream.h" />
     <ClInclude Include="WPacketPriority.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="BaseServer.cpp" />
-    <ClCompile Include="Stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="ReplicaMember.cpp" />
+    <ClCompile Include="ReplicaObject.cpp" />
     <ClCompile Include="WBitStream.cpp" />
   </ItemGroup>
   <ItemGroup>

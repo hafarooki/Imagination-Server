@@ -1,5 +1,3 @@
-#include "Stdafx.h"
-
 #include <RakNetworkFactory.h>
 #include <MessageIdentifiers.h>
 #include <RSACrypt.h>
@@ -33,6 +31,11 @@ RakPeerInterface* BaseServer::GetPeer()
 	return _peer;
 }
 
+ReplicaManager* BaseServer::GetReplicaManager()
+{
+	return _replicaManager;
+}
+
 void BaseServer::Start()
 {
 	_peer = RakNetworkFactory::GetRakPeerInterface();
@@ -50,6 +53,20 @@ void BaseServer::Start()
 	SocketDescriptor socketDescriptor = SocketDescriptor(_port, _address);
 	_peer->Startup(_maxConnections, 30, &socketDescriptor, 1);
 	_peer->SetMaximumIncomingConnections(_maxConnections);
+	
+	ReplicaManager replicaManager;
+	NetworkIDManager networkIdManager;
+
+	_peer->AttachPlugin(&replicaManager);
+	_peer->SetNetworkIDManager(&networkIdManager);
+
+	replicaManager.SetAutoParticipateNewConnections(true);
+	replicaManager.SetAutoSerializeInScope(true);
+
+	networkIdManager.SetIsNetworkIDAuthority(true);
+
+	_replicaManager = &replicaManager;
+	_networkIdManager = &networkIdManager;
 	OnStart();
 	Packet *packet;
 }
@@ -95,7 +112,8 @@ void BaseServer::SendInitPacket(bool auth, String^ address)
 
 void BaseServer::Stop()
 {
-
 	OnStop();
 	RakNetworkFactory::DestroyRakPeerInterface(_peer);
+	RakNetworkFactory::DestroyReplicaManager(_replicaManager);
+	delete(_networkIdManager);
 }

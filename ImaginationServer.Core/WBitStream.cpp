@@ -1,4 +1,3 @@
-#include "Stdafx.h"
 #include "WBitStream.h"
 
 using namespace System::Runtime::InteropServices;
@@ -7,16 +6,24 @@ using namespace cli;
 WBitStream::WBitStream()
 {
 	Instance = new BitStream();
+	_destroyBitstream = true;
 }
 
 WBitStream::WBitStream(unsigned char* bytes, const int length, bool copyData)
 {
 	Instance = new BitStream(bytes, length, copyData);
+	_destroyBitstream = true;
+}
+
+WBitStream::WBitStream(BitStream* bitStream)
+{
+	_destroyBitstream = false;
+	Instance = bitStream;
 }
 
 WBitStream::~WBitStream()
 {
-	delete Instance;
+	if (_destroyBitstream) delete Instance;
 }
 
 void WBitStream::Write(unsigned char value)
@@ -119,6 +126,11 @@ void WBitStream::Write(char * value)
 }
 
 void WBitStream::Write(unsigned char * value)
+{
+	Instance->Write(value);
+}
+
+void WBitStream::Write(bool value)
 {
 	Instance->Write(value);
 }
