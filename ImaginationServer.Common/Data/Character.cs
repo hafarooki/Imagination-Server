@@ -37,7 +37,7 @@ namespace ImaginationServer.Common.Data
         public virtual uint Eyes { get; set; }
         public virtual uint Mouth { get; set; }
 
-        public virtual IList<string> Items { get; set; }
+        public virtual IList<BackpackItem> Items { get; set; }
         public virtual uint Level { get; set; }
         public virtual IList<string> Missions { get; set; }
 

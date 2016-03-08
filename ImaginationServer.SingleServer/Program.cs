@@ -11,6 +11,11 @@ namespace ImaginationServer.SingleServer
         private static void Main(string[] args)
         {
             Console.WriteLine("Starting Imagination Server!");
+            Console.WriteLine("Loading config...");
+            Config.Init();
+            Console.WriteLine($"Address: {Config.Current.Address}");
+            Console.WriteLine($"Encrypt Packets: {Config.Current.EncryptPackets}");
+            Console.WriteLine(" ->OK");
             try
             {
                 Console.WriteLine("Setting up database...");
@@ -25,18 +30,20 @@ namespace ImaginationServer.SingleServer
                 Console.WriteLine(exception.Message);
                 Console.WriteLine(exception.InnerException);
                 foreach(var reason in exception.PotentialReasons) Console.WriteLine(" - " + reason);
+                Console.ReadKey(true);
+                Environment.Exit(-1);
             }
             Console.WriteLine("Starting Auth...");
-            AuthServer.Init();
+            AuthServer.Init(Config.Current.Address);
             Console.WriteLine(" ->OK");
             Console.WriteLine("Starting World...");
-            WorldServer.Init();
+            WorldServer.Init(Config.Current.Address);
             Console.WriteLine(" ->OK");
             Console.WriteLine("Beginning message receiving...");
             while (!Environment.HasShutdownStarted)
             {
-                AuthServer.Service();
                 WorldServer.Service();
+                AuthServer.Service();
             }
         }
     }

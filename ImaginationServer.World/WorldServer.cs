@@ -1,6 +1,7 @@
 ﻿using System;
 using ImaginationServer.Common;
 using ImaginationServer.World.Handlers.World;
+using ImaginationServer.World.Replica.Objects;
 using static ImaginationServer.Common.PacketEnums;
 using static ImaginationServer.Common.PacketEnums.ClientWorldPacketId;
 
@@ -10,9 +11,9 @@ namespace ImaginationServer.World
     {
         public static LuServer Server { get; private set; }
 
-        public static void Init()
+        public static void Init(string address)
         {
-            Server = new LuServer(2006, 1000, "127.0.0.1");
+            Server = new LuServer(2006, 1000, address);
             Server.AddHandler((ushort) RemoteConnection.World, (uint) MsgWorldClientValidation,
                 new ClientValidationHandler());
             Server.AddHandler((ushort) RemoteConnection.World, (uint) MsgWorldClientLoginRequest,
@@ -31,7 +32,7 @@ namespace ImaginationServer.World
                 new ClientGameMsgHandler());
             Server.AddHandler((ushort) RemoteConnection.World, (uint) MsgWorldClientRoutePacket,
                 new ClientRoutePacketHandler());
-            Server.Start();
+            Server.Start(Config.Current.EncryptPackets);
         }
 
         public static void Service()

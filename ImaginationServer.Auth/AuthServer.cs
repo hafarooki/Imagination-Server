@@ -14,11 +14,11 @@ namespace ImaginationServer.Auth
     {
         public static LuServer Server;
 
-        public static void Init()
+        public static void Init(string address)
         {
-            Server = new LuServer(1001, 1000, "127.0.0.1");
+            Server = new LuServer(1001, 1000, address);
             Server.AddHandler((byte) RemoteConnection.Auth, (byte) MsgAuthLoginRequest, new LoginRequestHandler());
-            Server.Start();
+            Server. Start(Config.Current.EncryptPackets);
             new Thread(Command).Start();
         }
 

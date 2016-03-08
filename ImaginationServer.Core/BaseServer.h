@@ -14,15 +14,12 @@ using namespace System;
 
 public ref class BaseServer abstract
 {
-	bool _terminate;
-
 	RakPeerInterface *_peer;
 	ReplicaManager *_replicaManager;
 	NetworkIDManager *_networkIdManager;
 
 	int _port;
 	int _maxConnections;
-	char* _address;
 
 	cli::array<unsigned char>^ native_to_managed_array(unsigned char* native, unsigned int length)
 	{
@@ -39,12 +36,13 @@ protected:
 	virtual void OnReceived(cli::array<unsigned char>^ bytes, unsigned int length, String^ address) = 0;
 	virtual void OnDisconnect(String^ address) = 0;
 	virtual void OnConnect(String^ address) = 0;
-
+	 
 public:
 	void SendInitPacket(bool auth, String^ address);
-	void Start();
+	void Start(bool encrypt);
 	void Stop();
 	void Service();
+	char* Address;
 
 	RakPeerInterface* GetPeer();
 	ReplicaManager* GetReplicaManager();
@@ -62,13 +60,13 @@ struct InitPacket {
 
 	InitPacket() {}
 
-	InitPacket(bool isAuth) {
+	InitPacket(BaseServer^ server, bool isAuth) {
 		// Set the variables
 		versionId = 171022;
 		unknown1 = 147;
 		remoteConnectionType = isAuth ? 1 : 4; // Make sure to set this!!!! Determines whether remoteConnectionType should be 1 or 4
 		processId = 5136;
 		unknown2 = 65535;
-		ipString = "127.0.0.1";
+		ipString = server->Address;
 	}
 };

@@ -87,7 +87,7 @@ namespace ImaginationServer.World.Handlers.World
                         MaxImagination = 0,
                         GmLevel = 0,
                         Reputation = 0,
-                        Items = new List<string>(),
+                        Items = new List<BackpackItem>(),
                         BackpackSpace = 20,
                         Level = 0,
                         Missions = new List<string>()
@@ -100,7 +100,7 @@ namespace ImaginationServer.World.Handlers.World
                             Linked = false,
                             Count = 1,
                             Slot = 0
-                        }.ToJson());
+                        });
                     //character.AddItem(WorldPackets.);
 
                     database.AddCharacter(character); // Add the character to the database.

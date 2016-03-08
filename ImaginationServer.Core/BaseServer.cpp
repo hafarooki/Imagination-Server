@@ -13,17 +13,16 @@ BaseServer::BaseServer(int port, int maxConnections, String^ address)
 {
 	_port = port;
 	_maxConnections = maxConnections;
-	_address = (char*)(Marshal::StringToHGlobalAnsi(address)).ToPointer();
+	Address = (char*)(Marshal::StringToHGlobalAnsi(address)).ToPointer();
 }
 
 void BaseServer::Send(WBitStream^ bitStream, WPacketPriority priority, WPacketReliability reliability, char orderingChannel, String^ systemAddress, bool broadcast)
 {	
 	auto split = systemAddress->Split(':');
-	auto unmanaged = new SystemAddress();
-	unmanaged->SetBinaryAddress((char*)(Marshal::StringToHGlobalAnsi(split[0])).ToPointer());
-	unmanaged->port = (unsigned short) strtoul((char*)(Marshal::StringToHGlobalAnsi(split[1])).ToPointer(), NULL, 0);
-	_peer->Send(bitStream->Instance, static_cast<PacketPriority>(priority), static_cast<PacketReliability>(reliability), orderingChannel, *unmanaged, broadcast);
-	delete unmanaged;
+	SystemAddress unmanaged;
+	unmanaged.SetBinaryAddress((char*)(Marshal::StringToHGlobalAnsi(split[0])).ToPointer());
+	unmanaged.port = (unsigned short) strtoul((char*)(Marshal::StringToHGlobalAnsi(split[1])).ToPointer(), NULL, 0);
+	_peer->Send(bitStream->Instance, static_cast<PacketPriority>(priority), static_cast<PacketReliability>(reliability), orderingChannel, unmanaged, broadcast);
 }
 
 RakPeerInterface* BaseServer::GetPeer()
@@ -36,44 +35,44 @@ ReplicaManager* BaseServer::GetReplicaManager()
 	return _replicaManager;
 }
 
-void BaseServer::Start()
+void BaseServer::Start(bool encrypt)
 {
 	_peer = RakNetworkFactory::GetRakPeerInterface();
 	
 	// Initialize Security
 	_peer->SetIncomingPassword("3.25 ND1", 8);
-	big::u32 e; RSA_BIT_SIZE n;
-	BIGHALFSIZE(RSA_BIT_SIZE, p); BIGHALFSIZE(RSA_BIT_SIZE, q);
-	big::RSACrypt<RSA_BIT_SIZE> rsaCrypt;
-	rsaCrypt.generateKeys();
-	rsaCrypt.getPublicKey(e, n);
-	rsaCrypt.getPrivateKey(p, q);
-	_peer->InitializeSecurity(0, 0, (char*)p, (char*)q);
+	if (encrypt)
+	{
+		big::u32 e; RSA_BIT_SIZE n;
+		BIGHALFSIZE(RSA_BIT_SIZE, p); BIGHALFSIZE(RSA_BIT_SIZE, q);
+		big::RSACrypt<RSA_BIT_SIZE> rsaCrypt;
+		rsaCrypt.generateKeys();
+		rsaCrypt.getPublicKey(e, n);
+		rsaCrypt.getPrivateKey(p, q);
+		_peer->InitializeSecurity(0, 0, (char*)p, (char*)q);
+	}
 
-	SocketDescriptor socketDescriptor = SocketDescriptor(_port, _address);
+	SocketDescriptor socketDescriptor = SocketDescriptor(_port, Address);
 	_peer->Startup(_maxConnections, 30, &socketDescriptor, 1);
 	_peer->SetMaximumIncomingConnections(_maxConnections);
 	
-	ReplicaManager replicaManager;
-	NetworkIDManager networkIdManager;
+	_replicaManager = new ReplicaManager();
+	_networkIdManager = new NetworkIDManager();
 
-	_peer->AttachPlugin(&replicaManager);
-	_peer->SetNetworkIDManager(&networkIdManager);
+	_replicaManager->SetAutoParticipateNewConnections(true);
+	_replicaManager->SetAutoSerializeInScope(true);
 
-	replicaManager.SetAutoParticipateNewConnections(true);
-	replicaManager.SetAutoSerializeInScope(true);
+	_networkIdManager->SetIsNetworkIDAuthority(true);
 
-	networkIdManager.SetIsNetworkIDAuthority(true);
-
-	_replicaManager = &replicaManager;
-	_networkIdManager = &networkIdManager;
+	_peer->AttachPlugin(_replicaManager);
+	_peer->SetNetworkIDManager(_networkIdManager);
 	OnStart();
-	Packet *packet;
 }
 
 void BaseServer::Service()
 {
-	auto packet = _peer->Receive();
+	auto packet = GetPeer()
+		->Receive();
 	if (!packet) return;
 	switch (packet->data[0])
 	{
@@ -96,7 +95,7 @@ void BaseServer::Service()
 void BaseServer::SendInitPacket(bool auth, String^ address)
 {
 	auto split = address->Split(':');
-	InitPacket initPacket(auth);
+	InitPacket initPacket(this, auth);
 	auto unmanaged = new SystemAddress();
 	unmanaged->SetBinaryAddress((char*)(Marshal::StringToHGlobalAnsi(split[0])).ToPointer());
 	unmanaged->port = (unsigned short)strtoul((char*)(Marshal::StringToHGlobalAnsi(split[1])).ToPointer(), NULL, 0);

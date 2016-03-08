@@ -84,12 +84,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CharacterData\BackpackItem.cs" />
+    <Compile Include="Config.cs" />
+    <Compile Include="Data\BackpackItem.cs" />
     <Compile Include="CdClientData\MissionMap.cs" />
     <Compile Include="CdClientDb.cs" />
     <Compile Include="CharacterData\CharacterMission.cs" />
     <Compile Include="Data\Account.cs" />
     <Compile Include="Data\AccountMap.cs" />
+    <Compile Include="Data\BackpackItemMap.cs" />
     <Compile Include="Data\Character.cs" />
     <Compile Include="Data\CharacterMap.cs" />
     <Compile Include="CdClientData\Mission.cs" />
@@ -132,6 +134,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

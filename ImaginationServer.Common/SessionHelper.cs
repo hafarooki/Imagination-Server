@@ -23,7 +23,7 @@ namespace ImaginationServer.Common
                 )
                 .Mappings(
                     m =>
-                        m.FluentMappings.Add<AccountMap>().Add<CharacterMap>())
+                        m.FluentMappings.Add<AccountMap>().Add<CharacterMap>().Add<BackpackItemMap>())
                 .ExposeConfiguration(Config).BuildSessionFactory();
         }
 

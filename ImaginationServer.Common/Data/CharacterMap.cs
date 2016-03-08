@@ -27,7 +27,7 @@ namespace ImaginationServer.Common.Data
             Map(x => x.GmLevel);
             Map(x => x.Reputation);
             Map(x => x.Level);
-            HasMany(x => x.Items).Element("Item").Cascade.AllDeleteOrphan();
+            HasMany(x => x.Items).Cascade.All();
             HasMany(x => x.Missions).Element("Mission").Cascade.AllDeleteOrphan();
             Map(x => x.BackpackSpace);
 

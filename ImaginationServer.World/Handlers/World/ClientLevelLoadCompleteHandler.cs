@@ -9,6 +9,7 @@ using ImaginationServer.Common.CdClientData;
 using ImaginationServer.Common.CharacterData;
 using ImaginationServer.Common.Data;
 using ImaginationServer.Common.Handlers;
+using ImaginationServer.World.Replica.Objects;
 using static ImaginationServer.Common.PacketEnums;
 using static ImaginationServer.Common.PacketEnums.WorldServerPacketId;
 
@@ -76,6 +77,9 @@ namespace ImaginationServer.World.Handlers.World
                     WorldServer.Server.Send(gameMessage, WPacketPriority.SystemPriority,
                         WPacketReliability.ReliableOrdered, 0, client.Address, false);
                 }
+
+                var playerObject = new PlayerObject(Character.GetObjectId(character), character.Name);
+                playerObject.Construct(WorldServer.Server, client.Address);
             }
         }
 

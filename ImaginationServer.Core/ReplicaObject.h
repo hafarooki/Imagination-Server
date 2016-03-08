@@ -25,6 +25,7 @@ public:
 	List<ReplicaComponent^>^ Components;
 
 	void WriteToPacket(WBitStream^ bitStream, ReplicaPacketType type);
+	void Construct(BaseServer^ server, String^ address);
 
 	ReplicaMember* GetMember() { return _member; }
 };
