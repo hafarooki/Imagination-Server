@@ -2,7 +2,7 @@
 A C# server for LEGO Universe, that will almost definitely die.
 
 ## More Info
-Unlike (most) other LEGO Universe servers, this uses C#, a managed, Object-Oriented programming language. It is run as a single application, and uses SQLite with Fluent NHibernate for storing data.
+Unlike (most) other LEGO Universe servers, this uses C#, a managed, Object-Oriented programming language. The purpose of it is to show that it is possible to do this. It is run as a single application, and uses SQLite with Fluent NHibernate for storing data.
 
 ## Modules
 ### Base
